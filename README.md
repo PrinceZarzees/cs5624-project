@@ -40,7 +40,7 @@ Sizes and counts are set in `configs/data_splits.json`.
 
 **Tasks** (`src/graphharness/tasks.py`): `shortest_path`, `connected_components`, `cycle_detection`, `diameter` (polynomial) and `max_clique` (NP-hard). Graphs come from Erdős–Rényi, Barabási–Albert and Watts–Strogatz generators, with random node ids so the agent cannot rely on labels like 0..n.
 
-**GraphArena:** the data is `dataset.zip` in the [GraphArena Google Drive folder](https://drive.google.com/drive/folders/1mvJSUTrfOX13wgpkyb3w8s_SJqipnb1c) (linked from [squareRoot3/GraphArena](https://github.com/squareRoot3/GraphArena)). Download, unzip and convert it in one step:
+**GraphArena:** the data is [`dataset.zip`](https://drive.google.com/file/d/1NjULkBbM3kS15Q_1YVcPmTQ-DWiNJM9r/view) (~1.4 GB) in the [GraphArena Google Drive folder](https://drive.google.com/drive/folders/1mvJSUTrfOX13wgpkyb3w8s_SJqipnb1c) (linked from [squareRoot3/GraphArena](https://github.com/squareRoot3/GraphArena)). Download, unzip and convert it in one step:
 ```bash
 pip install gdown
 python -m graphharness.grapharena_adapter --download

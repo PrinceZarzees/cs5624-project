@@ -50,6 +50,7 @@ from .tasks import as_json_value, get_task
 
 GA_DRIVE_FOLDER = "https://drive.google.com/drive/folders/1mvJSUTrfOX13wgpkyb3w8s_SJqipnb1c"
 GA_ZIP_NAME = "dataset.zip"
+GA_ZIP_ID = "1NjULkBbM3kS15Q_1YVcPmTQ-DWiNJM9r"  # dataset.zip in that folder, ~1.4 GB
 
 GA_TO_OURS = {
     "Distance": "shortest_path",
@@ -127,8 +128,8 @@ def convert_dataset(dataset_dir: Path, difficulty: str, limit: int | None = None
 def download_zip(raw_dir: Path) -> Path:
     """Download GraphArena's dataset.zip from Google Drive into raw_dir.
 
-    Only dataset.zip is fetched; the same folder also has much larger
-    source.zip and results.zip that we do not need.
+    Only dataset.zip (~1.4 GB) is fetched by its file id; the same folder
+    also has source.zip and results.zip, which we do not need.
     """
     zip_path = raw_dir / GA_ZIP_NAME
     if zip_path.exists():
@@ -139,22 +140,18 @@ def download_zip(raw_dir: Path) -> Path:
     except ImportError:
         raise SystemExit("--download needs gdown: pip install gdown") from None
 
-    print(f"listing {GA_DRIVE_FOLDER}")
-    try:
-        files = gdown.download_folder(url=GA_DRIVE_FOLDER, skip_download=True, quiet=True)
-        file_id = next(f.id for f in files if Path(f.path).name == GA_ZIP_NAME)
-    except StopIteration:
-        raise SystemExit(f"{GA_ZIP_NAME} not found in the GraphArena Drive folder") from None
-    except Exception as e:  # network / proxy / Google rate limit
-        raise SystemExit(
-            f"could not reach Google Drive ({e}).\n"
-            f"Download {GA_ZIP_NAME} in a browser from\n  {GA_DRIVE_FOLDER}\n"
-            f"then run: python -m graphharness.grapharena_adapter --zip path/to/{GA_ZIP_NAME}"
-        ) from None
-
     raw_dir.mkdir(parents=True, exist_ok=True)
     tmp = zip_path.with_suffix(".zip.part")
-    gdown.download(id=file_id, output=str(tmp), quiet=False, resume=True)
+    print(f"downloading {GA_ZIP_NAME} (~1.4 GB)")
+    try:
+        gdown.download(id=GA_ZIP_ID, output=str(tmp), quiet=False, resume=True)
+    except Exception as e:  # network / proxy / Google rate limit
+        raise SystemExit(
+            f"could not download from Google Drive ({e}).\n"
+            f"Download {GA_ZIP_NAME} in a browser from\n"
+            f"  https://drive.google.com/file/d/{GA_ZIP_ID}/view\n"
+            f"then run: python -m graphharness.grapharena_adapter --zip path/to/{GA_ZIP_NAME}"
+        ) from None
     tmp.rename(zip_path)
     return zip_path
 
