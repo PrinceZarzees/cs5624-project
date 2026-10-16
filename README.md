@@ -40,9 +40,14 @@ Sizes and counts are set in `configs/data_splits.json`.
 
 **Tasks** (`src/graphharness/tasks.py`): `shortest_path`, `connected_components`, `cycle_detection`, `diameter` (polynomial) and `max_clique` (NP-hard). Graphs come from Erdős–Rényi, Barabási–Albert and Watts–Strogatz generators, with random node ids so the agent cannot rely on labels like 0..n.
 
-**GraphArena:** download `dataset.zip` from the [GraphArena Google Drive](https://github.com/squareRoot3/GraphArena), unzip it, then run
-`python -m graphharness.grapharena_adapter --dataset-dir path/to/dataset`.
-This converts Distance, Connected, Diameter and MCP into the same format (`data/ga_easy.jsonl`, `data/ga_hard.jsonl`).
+**GraphArena:** the data is `dataset.zip` in the [GraphArena Google Drive folder](https://drive.google.com/drive/folders/1mvJSUTrfOX13wgpkyb3w8s_SJqipnb1c) (linked from [squareRoot3/GraphArena](https://github.com/squareRoot3/GraphArena)). Download, unzip and convert it in one step:
+```bash
+pip install gdown
+python -m graphharness.grapharena_adapter --download
+```
+If the download fails (Google Drive rate limits, or a network that blocks `drive.google.com`), download `dataset.zip` in a browser and run
+`python -m graphharness.grapharena_adapter --zip path/to/dataset.zip` (or `--dataset-dir path/to/unzipped/dataset`).
+This converts Distance, Connected, Diameter and MCP into the same format (`data/ga_easy.jsonl`, `data/ga_hard.jsonl`); raw files are kept in `data/grapharena/` (ignored by git).
 
 ### Record format
 One JSON object per line:

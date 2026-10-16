@@ -1,12 +1,21 @@
 """Convert GraphArena problems into our common JSONL format.
 
 GraphArena's processed data is a set of pickle files (``Distance_easy.pkl``,
-``MCP_hard.pkl``, ...) inside ``dataset.zip`` from the Google Drive link in
-https://github.com/squareRoot3/GraphArena. Download and unzip it, then:
+``MCP_hard.pkl``, ...) inside ``dataset.zip``, which lives in a Google Drive
+folder linked from https://github.com/squareRoot3/GraphArena. There are three
+ways to get it:
 
-    python -m graphharness.grapharena_adapter --dataset-dir path/to/dataset --out data
+    # 1. download + unzip + convert in one step (needs `pip install gdown`)
+    python -m graphharness.grapharena_adapter --download
 
-This writes ``data/ga_easy.jsonl`` and ``data/ga_hard.jsonl``.
+    # 2. you downloaded dataset.zip by hand in a browser
+    python -m graphharness.grapharena_adapter --zip ~/Downloads/dataset.zip
+
+    # 3. you already unzipped it
+    python -m graphharness.grapharena_adapter --dataset-dir path/to/dataset
+
+Raw files go to ``data/grapharena/`` (ignored by git) and the converted
+problems to ``data/ga_easy.jsonl`` and ``data/ga_hard.jsonl``.
 
 Only the GraphArena tasks that match our tasks are converted:
 
@@ -30,6 +39,7 @@ from __future__ import annotations
 
 import argparse
 import pickle
+import zipfile
 from pathlib import Path
 
 import networkx as nx
@@ -37,6 +47,9 @@ import networkx as nx
 from .data_loader import DEFAULT_DATA_DIR, save_jsonl
 from .generators import graph_to_json
 from .tasks import as_json_value, get_task
+
+GA_DRIVE_FOLDER = "https://drive.google.com/drive/folders/1mvJSUTrfOX13wgpkyb3w8s_SJqipnb1c"
+GA_ZIP_NAME = "dataset.zip"
 
 GA_TO_OURS = {
     "Distance": "shortest_path",
@@ -111,16 +124,87 @@ def convert_dataset(dataset_dir: Path, difficulty: str, limit: int | None = None
     return records
 
 
+def download_zip(raw_dir: Path) -> Path:
+    """Download GraphArena's dataset.zip from Google Drive into raw_dir.
+
+    Only dataset.zip is fetched; the same folder also has much larger
+    source.zip and results.zip that we do not need.
+    """
+    zip_path = raw_dir / GA_ZIP_NAME
+    if zip_path.exists():
+        print(f"using existing {zip_path}")
+        return zip_path
+    try:
+        import gdown
+    except ImportError:
+        raise SystemExit("--download needs gdown: pip install gdown") from None
+
+    print(f"listing {GA_DRIVE_FOLDER}")
+    try:
+        files = gdown.download_folder(url=GA_DRIVE_FOLDER, skip_download=True, quiet=True)
+        file_id = next(f.id for f in files if Path(f.path).name == GA_ZIP_NAME)
+    except StopIteration:
+        raise SystemExit(f"{GA_ZIP_NAME} not found in the GraphArena Drive folder") from None
+    except Exception as e:  # network / proxy / Google rate limit
+        raise SystemExit(
+            f"could not reach Google Drive ({e}).\n"
+            f"Download {GA_ZIP_NAME} in a browser from\n  {GA_DRIVE_FOLDER}\n"
+            f"then run: python -m graphharness.grapharena_adapter --zip path/to/{GA_ZIP_NAME}"
+        ) from None
+
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    tmp = zip_path.with_suffix(".zip.part")
+    gdown.download(id=file_id, output=str(tmp), quiet=False, resume=True)
+    tmp.rename(zip_path)
+    return zip_path
+
+
+def unzip(zip_path: Path, raw_dir: Path) -> Path:
+    """Unzip zip_path into raw_dir (skipped if already done) and return raw_dir."""
+    if find_dataset_dir(raw_dir, missing_ok=True) is None:
+        print(f"unzipping {zip_path} -> {raw_dir}")
+        with zipfile.ZipFile(zip_path) as z:
+            z.extractall(raw_dir)
+    return raw_dir
+
+
+def find_dataset_dir(root: Path, missing_ok: bool = False) -> Path | None:
+    """Return the folder under root that holds the GraphArena *.pkl files.
+
+    The zip may unpack to ``dataset/`` or straight into root, so look for it.
+    """
+    root = Path(root)
+    for path in sorted(root.rglob("*_easy.pkl")):
+        if "__MACOSX" not in path.parts and path.name.split("_")[0] in GA_TO_OURS:
+            return path.parent
+    if missing_ok:
+        return None
+    raise SystemExit(f"no GraphArena *_easy.pkl / *_hard.pkl files found under {root}")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--dataset-dir", required=True, help="folder with GraphArena *.pkl files")
+    src = ap.add_mutually_exclusive_group(required=True)
+    src.add_argument("--download", action="store_true", help=f"download {GA_ZIP_NAME} from Google Drive")
+    src.add_argument("--zip", help=f"path to a {GA_ZIP_NAME} you downloaded yourself")
+    src.add_argument("--dataset-dir", help="folder with already unzipped GraphArena *.pkl files")
     ap.add_argument("--out", default=str(DEFAULT_DATA_DIR))
+    ap.add_argument("--raw-dir", help="where to put the zip and unzipped files (default: <out>/grapharena)")
     ap.add_argument("--limit", type=int, help="max problems per task (default: all)")
     args = ap.parse_args(argv)
 
+    raw_dir = Path(args.raw_dir or Path(args.out) / "grapharena")
+    if args.download:
+        dataset_dir = find_dataset_dir(unzip(download_zip(raw_dir), raw_dir))
+    elif args.zip:
+        dataset_dir = find_dataset_dir(unzip(Path(args.zip), raw_dir))
+    else:
+        dataset_dir = find_dataset_dir(Path(args.dataset_dir))
+    print(f"GraphArena files: {dataset_dir}")
+
     for difficulty in ("easy", "hard"):
         print(f"GraphArena {difficulty}:")
-        records = convert_dataset(Path(args.dataset_dir), difficulty, args.limit)
+        records = convert_dataset(dataset_dir, difficulty, args.limit)
         if records:
             path = Path(args.out) / f"ga_{difficulty}.jsonl"
             save_jsonl(records, path)

@@ -1,5 +1,6 @@
 import json
 import pickle
+import zipfile
 
 import networkx as nx
 
@@ -7,6 +8,7 @@ from graphharness import build_data
 from graphharness.data_loader import load_jsonl, load_split, to_graph
 from graphharness.encoding import build_prompt
 from graphharness.evaluate_answer import score_response
+from graphharness import grapharena_adapter
 from graphharness.grapharena_adapter import convert_dataset
 
 TINY_CONFIG = {
@@ -109,3 +111,21 @@ def test_grapharena_adapter(tmp_path):
     assert sp["answer"]["length"] == sp["meta"]["grapharena_exact_answer"] == 3
     s = score_response(sp, "[Ann Lee, Bo Chen, Cy Park, Smith, John]")
     assert s["correct"], s["note"]
+
+
+def test_grapharena_from_zip(tmp_path):
+    # dataset.zip unpacks to a "dataset/" folder; --zip should find the pickles inside it
+    G = nx.path_graph(4)
+    nx.set_node_attributes(G, {i: f"node {i}" for i in G}, "name")
+    zip_path = tmp_path / "dataset.zip"
+    with zipfile.ZipFile(zip_path, "w") as z:
+        z.writestr("dataset/Connected_easy.pkl", pickle.dumps([{"id": 0, "graph": G, "exact_answer": 1}]))
+        z.writestr("dataset/Diameter_hard.pkl", pickle.dumps([{"id": 0, "graph": G, "exact_answer": 3}]))
+        z.writestr("__MACOSX/dataset/._Connected_easy.pkl", b"junk")
+    out = tmp_path / "out"
+    grapharena_adapter.main(["--zip", str(zip_path), "--out", str(out)])
+    assert (out / "grapharena" / "dataset" / "Connected_easy.pkl").exists()
+    easy, hard = load_jsonl(out / "ga_easy.jsonl"), load_jsonl(out / "ga_hard.jsonl")
+    assert [r["task"] for r in easy] == ["connected_components"]
+    assert [r["task"] for r in hard] == ["diameter"]
+    assert hard[0]["answer"]["diameter"] == 3
