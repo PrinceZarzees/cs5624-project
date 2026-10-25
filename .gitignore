@@ -6,11 +6,26 @@ __pycache__/
 dist/
 build/
 .eggs/
+*.egg
 
 # Virtual environments
 .venv/
 venv/
 env/
+
+# LaTeX
+*.aux
+*.log
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.out
+
+# OS
+.DS_Store
+Thumbs.db
 
 # IDE
 .vscode/
@@ -38,3 +53,6 @@ Thumbs.db
 # Experiment results (large)
 experiments/results/
 
+# Additional generated data
+data/*.csv
+data/grapharena/

@@ -1,0 +1,114 @@
+{
+  "seed": 5624,
+  "tasks": [
+    "shortest_path",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "max_clique"
+  ],
+  "files": {
+    "train.jsonl": {
+      "n_range": [
+        4,
+        50
+      ],
+      "count": 300,
+      "per_task": {
+        "shortest_path": 60,
+        "connected_components": 60,
+        "cycle_detection": 60,
+        "diameter": 60,
+        "max_clique": 60
+      },
+      "min_nodes": 4,
+      "max_nodes": 50,
+      "sha256": "296aa555a1edcd91b79beae677753b4aee16f850961fde3f00e684f2f7411fde"
+    },
+    "val.jsonl": {
+      "n_range": [
+        4,
+        50
+      ],
+      "count": 150,
+      "per_task": {
+        "shortest_path": 30,
+        "connected_components": 30,
+        "cycle_detection": 30,
+        "diameter": 30,
+        "max_clique": 30
+      },
+      "min_nodes": 4,
+      "max_nodes": 50,
+      "sha256": "0f09bc87001c4723f470f3ddc71415ee5cae7198343601783986af8c1c97a92c"
+    },
+    "test_small.jsonl": {
+      "n_range": [
+        4,
+        50
+      ],
+      "count": 150,
+      "per_task": {
+        "shortest_path": 30,
+        "connected_components": 30,
+        "cycle_detection": 30,
+        "diameter": 30,
+        "max_clique": 30
+      },
+      "min_nodes": 4,
+      "max_nodes": 50,
+      "sha256": "706cf500ec8ab0f6a2bb4c07474084ce98a8f774b43f29e1c7d6abcc4326f17d"
+    },
+    "test_medium.jsonl": {
+      "n_range": [
+        100,
+        300
+      ],
+      "count": 150,
+      "per_task": {
+        "shortest_path": 30,
+        "connected_components": 30,
+        "cycle_detection": 30,
+        "diameter": 30,
+        "max_clique": 30
+      },
+      "min_nodes": 100,
+      "max_nodes": 299,
+      "sha256": "9b247814d6e57372a0d1d9bf4473bd81b628b441d2522dc594cf46f4e9eb0ab3"
+    },
+    "test_large.jsonl": {
+      "n_range": [
+        500,
+        1000
+      ],
+      "count": 100,
+      "per_task": {
+        "shortest_path": 20,
+        "connected_components": 20,
+        "cycle_detection": 20,
+        "diameter": 20,
+        "max_clique": 20
+      },
+      "min_nodes": 501,
+      "max_nodes": 997,
+      "sha256": "236a111532c6a6bf1bd01ee5b4e2d2b433aaee9b9e8418f04c0eabae91feaee1"
+    },
+    "test_stress.jsonl": {
+      "n_range": [
+        2000,
+        2000
+      ],
+      "count": 50,
+      "per_task": {
+        "shortest_path": 10,
+        "connected_components": 10,
+        "cycle_detection": 10,
+        "diameter": 10,
+        "max_clique": 10
+      },
+      "min_nodes": 2000,
+      "max_nodes": 2000,
+      "sha256": "ba3cb19bee7efbc145f5f236c8e06a8a05db34f48ba57890502abf26ddf135b2"
+    }
+  }
+}

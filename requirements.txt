@@ -1,0 +1,6 @@
+networkx>=3.0
+pytest>=7
+gdown>=5
+numpy
+pandas
+matplotlib

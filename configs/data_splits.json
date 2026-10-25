@@ -1,0 +1,12 @@
+{
+  "seed": 5624,
+  "tasks": ["shortest_path", "connected_components", "cycle_detection", "diameter", "max_clique"],
+  "splits": {
+    "train":       {"n_range": [4, 50],      "per_task": 60},
+    "val":         {"n_range": [4, 50],      "per_task": 30},
+    "test_small":  {"n_range": [4, 50],      "per_task": 30},
+    "test_medium": {"n_range": [100, 300],   "per_task": 30},
+    "test_large":  {"n_range": [500, 1000],  "per_task": 20},
+    "test_stress": {"n_range": [2000, 2000], "per_task": 10}
+  }
+}
