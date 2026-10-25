@@ -21,6 +21,8 @@ env/
 # Data artifacts (regenerated via scripts)
 data/*.jsonl
 data/*.json
+data/*.pkl
+data/raw_grapharena/
 
 # Slurm logs
 *.out
@@ -35,3 +37,4 @@ Thumbs.db
 
 # Experiment results (large)
 experiments/results/
+

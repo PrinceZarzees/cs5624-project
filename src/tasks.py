@@ -181,14 +181,14 @@ def max_clique_question(G: nx.Graph, rng: random.Random) -> Tuple[str, Any, Dict
     if n <= 100:
         # Exact: enumerate all maximal cliques, find largest
         clique = max(nx.find_cliques(G), key=len, default=[])
+        clique_size = len(clique)
+        clique_nodes = sorted([int(n) for n in clique])
         is_exact = True
     else:
-        # Greedy approximation for large graphs
-        clique = nx.approximation.max_clique(G)
+        # Fast greedy approximation / lower bound for large graphs
+        clique_size = nx.approximation.large_clique_size(G)
+        clique_nodes = []
         is_exact = False
-
-    clique_size = len(clique)
-    clique_nodes = sorted([int(n) for n in clique])
 
     question = (
         "What is the size of the maximum clique in this graph? "
@@ -328,6 +328,31 @@ def verify_hamiltonian_path(answer: Any, ground_truth: Any, metadata: Dict) -> b
         return False
 
 
+def reachability_question(G: nx.Graph, rng: random.Random) -> Tuple[str, Any, Dict]:
+    """Check if there is a path between two nodes."""
+    nodes = list(G.nodes())
+    if len(nodes) < 2:
+        return ("Graph has fewer than 2 nodes.", False, {})
+    s, t = rng.sample(nodes, 2)
+    has_p = nx.has_path(G, s, t)
+    question = f"Is there a path from node {s} to node {t} in this graph? Return True or False."
+    return question, has_p, {"source": s, "target": t}
+
+
+def verify_reachability(answer: Any, ground_truth: Any, metadata: Dict) -> bool:
+    """Verify reachability answer."""
+    if isinstance(answer, bool):
+        return answer == ground_truth
+    if isinstance(answer, str):
+        return answer.strip().lower() in (
+            ("true", "yes", "1") if ground_truth else ("false", "no", "0")
+        )
+    try:
+        return bool(answer) == ground_truth
+    except (ValueError, TypeError):
+        return False
+
+
 # =========================================================================
 # Task Registry
 # =========================================================================
@@ -350,6 +375,12 @@ TASK_REGISTRY = {
         "verify_fn": verify_cycle_detection,
         "complexity": "polynomial",
         "description": "Detect whether the graph contains a cycle.",
+    },
+    "reachability": {
+        "question_fn": reachability_question,
+        "verify_fn": verify_reachability,
+        "complexity": "polynomial",
+        "description": "Determine if a path exists between two nodes.",
     },
     "max_clique": {
         "question_fn": max_clique_question,
@@ -415,3 +446,4 @@ def generate_task_instance(
         answer=answer,
         metadata=metadata,
     )
+

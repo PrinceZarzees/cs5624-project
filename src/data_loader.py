@@ -180,6 +180,101 @@ def generate_task_dataset(
 
 
 # ---------------------------------------------------------------------------
+# Benchmark Data Loaders (GraphQA & GraphArena)
+# ---------------------------------------------------------------------------
+
+def load_graphqa(
+    data_dir: str = "data",
+    split: str = "test",
+) -> List[TaskInstance]:
+    """
+    Load GraphQA tasks for a given split ('train', 'validation', 'test').
+    """
+    path = Path(data_dir) / f"tasks_graphqa_{split}.jsonl"
+    if not path.exists():
+        raise FileNotFoundError(f"GraphQA split file not found: {path}")
+    return load_tasks_jsonl(str(path))
+
+
+def load_grapharena(
+    data_dir: str = "data",
+    difficulty: str = "easy",
+    task: Optional[str] = None,
+) -> List[TaskInstance]:
+    """
+    Load GraphArena tasks.
+
+    Parameters
+    ----------
+    data_dir : str
+        Data directory path.
+    difficulty : str
+        'easy' or 'hard'.
+    task : str, optional
+        'distance', 'connected', or None for combined.
+    """
+    path = Path(data_dir)
+    if task:
+        fpath = path / f"tasks_grapharena_{task.lower()}_{difficulty}.jsonl"
+    else:
+        fpath = path / f"tasks_grapharena_{difficulty}.jsonl"
+
+    if not fpath.exists():
+        raise FileNotFoundError(f"GraphArena dataset file not found: {fpath}")
+    return load_tasks_jsonl(str(fpath))
+
+
+def get_full_dataset_summary(data_dir: str = "data") -> Dict[str, Any]:
+    """
+    Build a comprehensive summary across all datasets in the repository:
+    Synthetic (Small, Medium, Large, Stress), GraphQA, and GraphArena.
+    """
+    d = Path(data_dir)
+    summary: Dict[str, Any] = {
+        "synthetic": {},
+        "graphqa": {},
+        "grapharena": {},
+    }
+
+    # Synthetic splits
+    for split in ["small_train", "small_val", "medium", "large", "stress"]:
+        task_f = d / f"tasks_{split}.jsonl"
+        graph_f = d / f"graphs_{split}.jsonl" if (d / f"graphs_{split}.jsonl").exists() else d / f"graphs_{split.split('_')[0]}.jsonl"
+        if task_f.exists():
+            tasks = load_tasks_jsonl(str(task_f))
+            summary["synthetic"][split] = {
+                "n_tasks": len(tasks),
+                "task_types": sorted(list(set(t.task_type for t in tasks))),
+                "task_file": str(task_f),
+                "graph_file": str(graph_f) if graph_f.exists() else None,
+            }
+
+    # GraphQA splits
+    for split in ["train", "validation", "test"]:
+        task_f = d / f"tasks_graphqa_{split}.jsonl"
+        if task_f.exists():
+            tasks = load_tasks_jsonl(str(task_f))
+            summary["graphqa"][split] = {
+                "n_tasks": len(tasks),
+                "task_types": sorted(list(set(t.task_type for t in tasks))),
+                "file": str(task_f),
+            }
+
+    # GraphArena splits
+    for diff in ["easy", "hard"]:
+        task_f = d / f"tasks_grapharena_{diff}.jsonl"
+        if task_f.exists():
+            tasks = load_tasks_jsonl(str(task_f))
+            summary["grapharena"][diff] = {
+                "n_tasks": len(tasks),
+                "task_types": sorted(list(set(t.task_type for t in tasks))),
+                "file": str(task_f),
+            }
+
+    return summary
+
+
+# ---------------------------------------------------------------------------
 # Full pipeline: generate graphs + tasks + save everything
 # ---------------------------------------------------------------------------
 
@@ -239,11 +334,13 @@ def build_full_dataset(
         }
         print(f"  {split_name}: {len(graphs)} graphs → {len(tasks)} tasks")
 
-    # 4. Save summary
+    # 4. Save comprehensive summary across all datasets
+    full_summary = get_full_dataset_summary(output_dir)
+    full_summary["synthetic_generation"] = summary
     with open(out / "dataset_summary.json", "w") as f:
-        json.dump(summary, f, indent=2)
+        json.dump(full_summary, f, indent=2)
 
-    return summary
+    return full_summary
 
 
 # ---------------------------------------------------------------------------
@@ -276,3 +373,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

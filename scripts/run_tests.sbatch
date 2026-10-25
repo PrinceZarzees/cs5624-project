@@ -18,6 +18,9 @@ echo "Node:   $(hostname)"
 echo "Date:   $(date)"
 echo "============================================="
 
+# Ensure unbuffered Python output
+export PYTHONUNBUFFERED=1
+
 # Navigate to project root
 cd "${HOME}/cs5624"
 

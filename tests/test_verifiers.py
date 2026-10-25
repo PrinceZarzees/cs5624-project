@@ -477,6 +477,64 @@ class TestEvaluationPipeline:
 
 
 # =========================================================================
+# Reachability Task Tests
+# =========================================================================
+
+class TestReachability:
+
+    def test_reachability_connected(self, known_graph):
+        from src.tasks import reachability_question, verify_reachability
+        G = known_graph.to_networkx()
+        rng = random.Random(42)
+        q, ans, meta = reachability_question(G, rng)
+        assert ans is True
+        assert verify_reachability(True, ans, meta) is True
+
+    def test_reachability_verifier_strings(self):
+        from src.tasks import verify_reachability
+        assert verify_reachability("yes", True, {}) is True
+        assert verify_reachability("no", False, {}) is True
+        assert verify_reachability("true", True, {}) is True
+        assert verify_reachability("false", False, {}) is True
+
+
+# =========================================================================
+# Benchmark Ingestion Tests (GraphQA & GraphArena)
+# =========================================================================
+
+class TestBenchmarkIngestion:
+
+    def test_graphqa_test_split_exists_and_loads(self):
+        from src.data_loader import load_graphqa
+        tasks = load_graphqa("data", split="test")
+        assert len(tasks) > 0
+        assert all(isinstance(t, TaskInstance) for t in tasks)
+        task_types = set(t.task_type for t in tasks)
+        assert "shortest_path" in task_types
+        assert "cycle_detection" in task_types
+        assert "reachability" in task_types
+
+    def test_grapharena_easy_split_exists_and_loads(self):
+        from src.data_loader import load_grapharena
+        tasks = load_grapharena("data", difficulty="easy")
+        assert len(tasks) > 0
+        assert all(isinstance(t, TaskInstance) for t in tasks)
+        task_types = set(t.task_type for t in tasks)
+        assert "shortest_path" in task_types
+        assert "connected_components" in task_types
+
+    def test_dataset_summary_completeness(self):
+        from src.data_loader import get_full_dataset_summary
+        summary = get_full_dataset_summary("data")
+        assert "synthetic" in summary
+        assert "graphqa" in summary
+        assert "grapharena" in summary
+        assert len(summary["synthetic"]) >= 4
+        assert len(summary["graphqa"]) == 3
+        assert len(summary["grapharena"]) == 2
+
+
+# =========================================================================
 # Edge Case Tests
 # =========================================================================
 
@@ -524,3 +582,4 @@ class TestEdgeCases:
         rng = random.Random(42)
         q, ans, meta = max_clique_question(G, rng)
         assert ans == 10
+
