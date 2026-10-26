@@ -57,11 +57,31 @@ def test_components_count():
         assert task.solve(G, {})["count"] == nx.number_connected_components(G)
 
 
+def test_disconnected_shortest_path_is_scored_correctly():
+    task = get_task("shortest_path")
+    G = nx.Graph([(1, 2)])
+    G.add_nodes_from([3, 4])
+    params = {"source": 1, "target": 4}
+    truth = task.solve(G, params)
+    assert truth == {"length": -1, "path": []}
+    assert task.check(G, params, truth, []).correct
+
+
+def test_reachability_task():
+    task = get_task("reachability")
+    G = nx.path_graph(4)
+    params = {"source": 0, "target": 3}
+    truth = task.solve(G, params)
+    assert truth["reachable"]
+    assert task.check(G, params, truth, [0, 1, 2, 3]).correct
+
+
 # ---------- the true answer is always accepted ----------
 
 def truth_nodes(task_name, truth):
     return {
         "shortest_path": lambda t: t["path"],
+        "reachability": lambda t: t["path"],
         "connected_components": lambda t: t["representatives"],
         "cycle_detection": lambda t: t["cycle"],
         "diameter": lambda t: t["path"],

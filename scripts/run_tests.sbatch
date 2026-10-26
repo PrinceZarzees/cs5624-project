@@ -28,7 +28,7 @@ cd "${HOME}/cs5624"
 export PATH="${HOME}/.local/bin:${PATH}"
 
 # Run tests with verbose output
-python3 -m pytest tests/ -v --tb=long 2>&1
+python3 -m pytest -v --tb=long 2>&1
 
 echo ""
 echo "============================================="

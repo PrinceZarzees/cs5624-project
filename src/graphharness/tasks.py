@@ -97,11 +97,18 @@ def _sp_params(G, rng):
 
 
 def _sp_solve(G, p):
-    path = nx.shortest_path(G, p["source"], p["target"])
+    try:
+        path = nx.shortest_path(G, p["source"], p["target"])
+    except nx.NetworkXNoPath:
+        return {"length": -1, "path": []}
     return {"length": len(path) - 1, "path": path}
 
 
 def _sp_check(G, p, truth, nodes):
+    if truth["length"] == -1:
+        if not nodes:
+            return Check(True, True, -1)
+        return Check(False, False, None, "gave a path where no path exists")
     why = _is_simple_path(G, nodes)
     if why:
         return Check(False, False, None, why)
@@ -111,6 +118,40 @@ def _sp_check(G, p, truth, nodes):
     if length != truth["length"]:
         return Check(True, False, length, f"path has {length} edges, shortest is {truth['length']}")
     return Check(True, True, length)
+
+
+# --------------------------------------------------------------------------
+# reachability (GraphQA)
+# --------------------------------------------------------------------------
+
+def _reach_question(p):
+    s, t = p["source"], p["target"]
+    return f"Is there a path from node {s} to node {t}? If yes, give one path as a list; otherwise give []."
+
+
+def _reach_params(G, rng):
+    s, t = _pick_reachable_pair(G, rng)
+    return {"source": s, "target": t}
+
+
+def _reach_solve(G, p):
+    try:
+        return {"reachable": True, "path": nx.shortest_path(G, p["source"], p["target"])}
+    except nx.NetworkXNoPath:
+        return {"reachable": False, "path": []}
+
+
+def _reach_check(G, p, truth, nodes):
+    if not truth["reachable"]:
+        if not nodes:
+            return Check(True, True, 0)
+        return Check(False, False, None, "gave a path where no path exists")
+    why = _is_simple_path(G, nodes)
+    if why:
+        return Check(False, False, None, why)
+    if nodes[0] != p["source"] or nodes[-1] != p["target"]:
+        return Check(False, False, None, "path does not start/end at the given nodes")
+    return Check(True, True, len(nodes) - 1)
 
 
 # --------------------------------------------------------------------------
@@ -289,6 +330,7 @@ TASKS: dict[str, Task] = {
     t.name: t
     for t in [
         Task("shortest_path", "P", _sp_question, _sp_params, _sp_solve, _sp_check),
+        Task("reachability", "P", _reach_question, _reach_params, _reach_solve, _reach_check),
         Task("connected_components", "P", _cc_question, _cc_params, _cc_solve, _cc_check),
         Task("cycle_detection", "P", _cyc_question, _cyc_params, _cyc_solve, _cyc_check),
         Task("diameter", "P", _diam_question, _diam_params, _diam_solve, _diam_check),
