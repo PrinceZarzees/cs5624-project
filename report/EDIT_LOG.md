@@ -82,3 +82,9 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 | main.tex HDA results | human-reference/identifiability summary and reduced Qwen3-4B pilot table | `experiments/hda/{human_reference,identifiability.json,qwen_cpu_pilot2}` |
 | tables/hda/* | generated task, split, identifiability, human-reference and pilot tables | `hda_pipeline/scripts/make_hda_{tables,results}.py` |
 | main.tex protocol table | HDA input/tools/output summary | runbook 1.1--1.3 |
+
+## 2026-11-21 standalone HDA report
+
+| File | Change |
+|---|---|
+| `report/hda_report.tex` / `.pdf` | new 8-page report covering only the HDA runs: methods in detail, H0 verification, human reference, identifiability, Qwen3-4B Q4 pilot, hidden smoke, limitations and reproduction |
