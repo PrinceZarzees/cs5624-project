@@ -254,6 +254,10 @@ latency, and `delta_gen = accuracy(test_small) - accuracy(test_large)` per
 harness. `graphharness.analysis` prints size and task tables from any score
 files.
 
+## Full report
+
+[`report/EXPERIMENTAL_REPORT.md`](report/EXPERIMENTAL_REPORT.md) contains the consolidated methods and results, including all reviewer-driven experiments.
+
 ## Review-driven experiments
 
 `experiments/REVIEW_EXPERIMENTS.md` maps each reviewer comment to a controlled

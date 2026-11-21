@@ -1,5 +1,7 @@
 # Final report
 
+See [`EXPERIMENTAL_REPORT.md`](EXPERIMENTAL_REPORT.md) for the full methods-and-results report.
+
 This directory is for the final ACL-style paper and presentation material. The
 course requires human-written prose, so the repository only provides structure
 and generated tables/figures; it deliberately does not contain drafted paper
