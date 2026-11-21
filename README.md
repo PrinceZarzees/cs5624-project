@@ -254,6 +254,22 @@ latency, and `delta_gen = accuracy(test_small) - accuracy(test_large)` per
 harness. `graphharness.analysis` prints size and task tables from any score
 files.
 
+## Review-driven experiments
+
+`experiments/REVIEW_EXPERIMENTS.md` maps each reviewer comment to a controlled
+experiment: cheap rubric proxies (SkillLift-inspired), tool-access ablation,
+graph-characteristic stratification, GEPA/EvoSkill baselines, optimization-cost
+accounting, specialized-harness routing/decomposition, and RRSI-style
+regularization. Two analyses are already run:
+
+```bash
+python -m graphharness.characteristics --run "Bv2=experiments/qwen3_4b_scaling_full/scaling/baseline_b_v2/*/scores.jsonl"
+python -m graphharness.cost_analysis --run "from_A=experiments/qwen3_4b_opt_a/optimizer" --run "from_Bv2=experiments/qwen3_4b/optimizer"
+```
+
+Results are in `experiments/analysis_by_characteristics.md` and
+`experiments/optimization_costs.md`.
+
 ## Dataset and run inspection
 
 Before or after a long run, verify the data and inspect failure trajectories:

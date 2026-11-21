@@ -21,6 +21,9 @@ experiments/
   qwen3_4b_ablation_stress/ full test_stress rule ablation
   qwen3_4b_ablation_val/    full val rule ablation (H* selection)
   qwen3_4b_real_bench/      real GraphArena/GraphQA evaluation
+  analysis_by_characteristics.md  accuracy by density/topology/task
+  optimization_costs.md     optimizer token/time/cost accounting
+  REVIEW_EXPERIMENTS.md     review-driven experiment designs
   qwen3_4b_cpu/             Qwen3-4B Q4_K_M CPU fallback
   qwen2_5_7b_cpu_pilot/     Qwen2.5-7B Q4_K_M CPU pilot
   qwen2_5_7b_cpu/           full Qwen2.5-7B CPU fallback
