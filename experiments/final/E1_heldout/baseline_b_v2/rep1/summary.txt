@@ -1,0 +1,26 @@
+harness: baseline_b_v2    model: qwen3-4b    split: test_small_fresh
+problems: 150    errors: 0    duration: 85.0s    tokens: 881588
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small_fresh connected_components      30      27  100.0%    100.0%    100.0%
+test_small_fresh cycle_detection           30      28  100.0%     96.7%     96.7%
+test_small_fresh diameter                  30      30  100.0%    100.0%    100.0%
+test_small_fresh max_clique                30      27  100.0%     93.3%     76.7%
+test_small_fresh shortest_path             30      24  100.0%    100.0%    100.0%
+test_small_fresh ALL                      150      27  100.0%     98.0%     94.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       27   100.0%     98.0%     94.7%
+
+First failures:
+- cycle_detection/test_small_fresh/00010 (cycle_detection, n=7): unknown node(s): ['1', '3', '4', '1']
+- max_clique/test_small_fresh/00001 (max_clique, n=16): empty answer
+- max_clique/test_small_fresh/00004 (max_clique, n=39): clique of size 3, maximum is 5
+- max_clique/test_small_fresh/00007 (max_clique, n=49): unknown node(s): ['2', '3']
+- max_clique/test_small_fresh/00009 (max_clique, n=29): clique of size 3, maximum is 4
+- max_clique/test_small_fresh/00012 (max_clique, n=50): clique of size 3, maximum is 4
+- max_clique/test_small_fresh/00021 (max_clique, n=24): clique of size 2, maximum is 3
+- max_clique/test_small_fresh/00025 (max_clique, n=14): clique of size 5, maximum is 8

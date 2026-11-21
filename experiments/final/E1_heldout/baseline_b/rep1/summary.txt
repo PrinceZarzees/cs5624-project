@@ -1,0 +1,26 @@
+harness: baseline_b    model: qwen3-4b    split: test_small_fresh
+problems: 150    errors: 0    duration: 71.9s    tokens: 557410
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small_fresh connected_components      30      27  100.0%    100.0%    100.0%
+test_small_fresh cycle_detection           30      28  100.0%     93.3%     83.3%
+test_small_fresh diameter                  30      30  100.0%    100.0%    100.0%
+test_small_fresh max_clique                30      27  100.0%    100.0%     90.0%
+test_small_fresh shortest_path             30      24  100.0%    100.0%    100.0%
+test_small_fresh ALL                      150      27  100.0%     98.7%     94.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       27   100.0%     98.7%     94.7%
+
+First failures:
+- cycle_detection/test_small_fresh/00000 (cycle_detection, n=12): said no cycle, but the graph has one
+- cycle_detection/test_small_fresh/00020 (cycle_detection, n=15): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_small_fresh/00024 (cycle_detection, n=14): unknown node(s): ['2']
+- cycle_detection/test_small_fresh/00027 (cycle_detection, n=39): said no cycle, but the graph has one
+- cycle_detection/test_small_fresh/00029 (cycle_detection, n=14): said no cycle, but the graph has one
+- max_clique/test_small_fresh/00008 (max_clique, n=42): clique of size 6, maximum is 10
+- max_clique/test_small_fresh/00012 (max_clique, n=50): clique of size 3, maximum is 4
+- max_clique/test_small_fresh/00013 (max_clique, n=49): clique of size 6, maximum is 9

@@ -1,0 +1,26 @@
+# Final experiment job ledger
+
+All jobs use `--account=psgroup --partition=b200_normal_q --qos=owl_b200_normal_short`
+(1x B200 unless noted). Output logs are under `experiments/final/logs/`.
+
+| Job ID | Script | Exports | Purpose | Start | End | Status | Output |
+|---|---|---|---|---|---|---|---|
+| 1546227 | scripts/serve_vllm.sbatch | Qwen3-4B BF16, port 8000, 8k | standalone actor server | – | – | cancelled (blocked the self-contained E1/E2 job) | experiments/final/logs/actor_1546227.out |
+| 1546237 | scripts/final/run_e1_e2.sbatch | Qwen3-4B BF16, 8k, 8 workers | E1 held-out 3x + E2 scaling 2x + E2 tool-access 2x | 2026-11-21 10:08 | 2026-11-21 16:08 (limit) | RUNNING | experiments/final/E1_heldout, E2_repeats, E2_tool_access |
+| 1546238 | scripts/final/run_e3.sbatch | 2 GPUs, full grid | E3 full optimizer grid | – | – | cancelled (start projected 21:41, after the session) | – |
+| 1546342 | scripts/final/run_e4.sbatch | 2 GPUs | E4 full EvoSkill | – | – | cancelled (superseded by 1547527) | – |
+| 1546376 | scripts/final/run_e6.sbatch | Qwen3-4B BF16, 8k | E6 A/B/v2 on GraphArena easy/hard + GraphQA | 2026-11-21 10:53 | 2026-11-21 16:53 (limit) | RUNNING | experiments/final/E6_real_bench |
+| 1546388 | scripts/final/run_e3.sbatch | 1 GPU, full grid | E3 full optimizer grid | – | – | cancelled (start projected 16:53, 6 h, after the session) | – |
+| 1546394 | scripts/final/run_e4.sbatch | 1 GPU | E4 full EvoSkill | – | – | cancelled (start projected 22:54) | – |
+| 1547370 | scripts/final/run_e2_fixup.sbatch | Qwen3-4B BF16, 8k | E2 replacement repeat for Baseline B `test_stress` (rep1 had 6/50 no-prediction errors; reps 1 and 3 are flagged) | pending | | pending | experiments/final/E2_repeats/baseline_b/rep4 |
+| 1547527 | scripts/final/run_e3_lite.sbatch | 1 GPU, 4B actor + 7B critic | Reduced E3: SkillOpt/GEPA/RRSI/Meta-Harness from B, 6 rounds; EvoSkill from B, 4 rounds | pending | | pending | experiments/final/E3_optimizers, E4_evoskill |
+
+## Notes on job changes
+
+- `1546227` was cancelled because it held a GPU while the self-contained `1546237`
+  waited. `1546237` then started an hour earlier than the original projection.
+- The full E3/E4 jobs were projected to start after the interactive session ended
+  (21:41 / 22:54 and 16:53 + 6 h). They were replaced by `1547527`, which runs from
+  Baseline B only, 6 rounds, val 10/task, and adds one EvoSkill run.
+- No GPU experiment was run on a test split for tuning; optimizers read `train`
+  and `val` only.

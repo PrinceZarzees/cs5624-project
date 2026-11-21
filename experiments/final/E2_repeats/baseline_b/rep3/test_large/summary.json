@@ -1,0 +1,233 @@
+{
+  "harness": "baseline_b",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "model": "qwen3-4b",
+  "split": "test_large",
+  "started_at": "2026-11-21T15:42:34.196839+00:00",
+  "finished_at": "2026-11-21T15:43:46.897682+00:00",
+  "duration_s": 72.70084650098579,
+  "n": 100,
+  "overall": {
+    "split": "test_large",
+    "task": "ALL",
+    "n": 100,
+    "parsed": 1.0,
+    "feasible": 0.96,
+    "accuracy": 0.91,
+    "mean_nodes": 741.24
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 20,
+      "mean_nodes": 662.9,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "cycle_detection",
+      "n": 20,
+      "mean_nodes": 722.05,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.9
+    },
+    {
+      "task": "diameter",
+      "n": 20,
+      "mean_nodes": 712.15,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "max_clique",
+      "n": 20,
+      "mean_nodes": 829.5,
+      "parsed": 1.0,
+      "feasible": 0.85,
+      "accuracy": 0.65
+    },
+    {
+      "task": "shortest_path",
+      "n": 20,
+      "mean_nodes": 779.6,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "500-1000",
+      "n": 100,
+      "mean_nodes": 741.24,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.91
+    }
+  ],
+  "tokens": {
+    "prompt": 342295,
+    "completion": 45266,
+    "total": 387561,
+    "mean_total_per_problem": 3875.61
+  },
+  "tool_calls": 212,
+  "mean_agent_duration_s": 3.304343955759541,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "cycle_detection/test_large/00002",
+      "task": "cycle_detection",
+      "n_nodes": 893,
+      "parsed": true,
+      "feasible": true,
+      "note": "said no cycle, but the graph has one"
+    },
+    {
+      "id": "cycle_detection/test_large/00010",
+      "task": "cycle_detection",
+      "n_nodes": 855,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge from the last node back to the first"
+    },
+    {
+      "id": "max_clique/test_large/00000",
+      "task": "max_clique",
+      "n_nodes": 929,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 7"
+    },
+    {
+      "id": "max_clique/test_large/00001",
+      "task": "max_clique",
+      "n_nodes": 965,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/test_large/00005",
+      "task": "max_clique",
+      "n_nodes": 604,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/test_large/00012",
+      "task": "max_clique",
+      "n_nodes": 628,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 4"
+    },
+    {
+      "id": "max_clique/test_large/00013",
+      "task": "max_clique",
+      "n_nodes": 874,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/test_large/00016",
+      "task": "max_clique",
+      "n_nodes": 873,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 4"
+    },
+    {
+      "id": "max_clique/test_large/00019",
+      "task": "max_clique",
+      "n_nodes": 832,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 5"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_large",
+      "task": "connected_components",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 662.9
+    },
+    {
+      "split": "test_large",
+      "task": "cycle_detection",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.9,
+      "mean_nodes": 722.05
+    },
+    {
+      "split": "test_large",
+      "task": "diameter",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 712.15
+    },
+    {
+      "split": "test_large",
+      "task": "max_clique",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.85,
+      "accuracy": 0.65,
+      "mean_nodes": 829.5
+    },
+    {
+      "split": "test_large",
+      "task": "shortest_path",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 779.6
+    },
+    {
+      "split": "test_large",
+      "task": "ALL",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.91,
+      "mean_nodes": 741.24
+    }
+  ]
+}

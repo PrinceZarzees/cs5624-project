@@ -1,0 +1,368 @@
+{
+  "harness": "baseline_b_v2_text",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b_v2_text",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+      "For connected components, print `list(nx.connected_components(G))` and return one node from each component.",
+      "For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",
+      "Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",
+      "For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",
+      "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+      "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+      "Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results."
+    ],
+    "graph_view": "adjacency_list",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": false,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "No tools; adjacency list only."
+  },
+  "model": "qwen3-4b",
+  "split": "test_medium",
+  "started_at": "2026-11-21T16:14:56.053087+00:00",
+  "finished_at": "2026-11-21T16:15:48.466033+00:00",
+  "duration_s": 52.41294769398519,
+  "n": 150,
+  "overall": {
+    "split": "test_medium",
+    "task": "ALL",
+    "n": 150,
+    "parsed": 0.8866666666666667,
+    "feasible": 0.25333333333333335,
+    "accuracy": 0.14666666666666667,
+    "mean_nodes": 191.23333333333332
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 30,
+      "mean_nodes": 188.2,
+      "parsed": 0.8666666666666667,
+      "feasible": 0.36666666666666664,
+      "accuracy": 0.03333333333333333
+    },
+    {
+      "task": "cycle_detection",
+      "n": 30,
+      "mean_nodes": 202.83333333333334,
+      "parsed": 1.0,
+      "feasible": 0.5,
+      "accuracy": 0.5
+    },
+    {
+      "task": "diameter",
+      "n": 30,
+      "mean_nodes": 182.06666666666666,
+      "parsed": 0.9,
+      "feasible": 0.03333333333333333,
+      "accuracy": 0.0
+    },
+    {
+      "task": "max_clique",
+      "n": 30,
+      "mean_nodes": 194.16666666666666,
+      "parsed": 0.7666666666666667,
+      "feasible": 0.13333333333333333,
+      "accuracy": 0.0
+    },
+    {
+      "task": "shortest_path",
+      "n": 30,
+      "mean_nodes": 188.9,
+      "parsed": 0.9,
+      "feasible": 0.23333333333333334,
+      "accuracy": 0.2
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "100-300",
+      "n": 150,
+      "mean_nodes": 191.23333333333332,
+      "parsed": 0.8866666666666667,
+      "feasible": 0.25333333333333335,
+      "accuracy": 0.14666666666666667
+    }
+  ],
+  "tokens": {
+    "prompt": 1023020,
+    "completion": 108193,
+    "total": 1131213,
+    "mean_total_per_problem": 8505.36090225564
+  },
+  "tool_calls": 0,
+  "mean_agent_duration_s": 3.049420426601432,
+  "errors": 17,
+  "failures": [
+    {
+      "id": "shortest_path/test_medium/00000",
+      "task": "shortest_path",
+      "n_nodes": 130,
+      "parsed": true,
+      "feasible": false,
+      "note": "path repeats a node"
+    },
+    {
+      "id": "shortest_path/test_medium/00001",
+      "task": "shortest_path",
+      "n_nodes": 231,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 673 and 726"
+    },
+    {
+      "id": "shortest_path/test_medium/00002",
+      "task": "shortest_path",
+      "n_nodes": 163,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1410 and 1418"
+    },
+    {
+      "id": "shortest_path/test_medium/00003",
+      "task": "shortest_path",
+      "n_nodes": 135,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 262 and 484"
+    },
+    {
+      "id": "shortest_path/test_medium/00005",
+      "task": "shortest_path",
+      "n_nodes": 224,
+      "parsed": true,
+      "feasible": true,
+      "note": "path has 9 edges, shortest is 4"
+    },
+    {
+      "id": "shortest_path/test_medium/00006",
+      "task": "shortest_path",
+      "n_nodes": 107,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 376 and 496"
+    },
+    {
+      "id": "shortest_path/test_medium/00007",
+      "task": "shortest_path",
+      "n_nodes": 128,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 264 and 541"
+    },
+    {
+      "id": "shortest_path/test_medium/00008",
+      "task": "shortest_path",
+      "n_nodes": 127,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1129 and 1079"
+    },
+    {
+      "id": "shortest_path/test_medium/00009",
+      "task": "shortest_path",
+      "n_nodes": 141,
+      "parsed": true,
+      "feasible": false,
+      "note": "path repeats a node"
+    },
+    {
+      "id": "shortest_path/test_medium/00010",
+      "task": "shortest_path",
+      "n_nodes": 122,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 415 and 654"
+    },
+    {
+      "id": "shortest_path/test_medium/00012",
+      "task": "shortest_path",
+      "n_nodes": 281,
+      "parsed": true,
+      "feasible": false,
+      "note": "path does not start/end at the given nodes"
+    },
+    {
+      "id": "shortest_path/test_medium/00015",
+      "task": "shortest_path",
+      "n_nodes": 129,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1009 and 217"
+    },
+    {
+      "id": "shortest_path/test_medium/00016",
+      "task": "shortest_path",
+      "n_nodes": 268,
+      "parsed": true,
+      "feasible": false,
+      "note": "path does not start/end at the given nodes"
+    },
+    {
+      "id": "shortest_path/test_medium/00017",
+      "task": "shortest_path",
+      "n_nodes": 169,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 619 and 851"
+    },
+    {
+      "id": "shortest_path/test_medium/00019",
+      "task": "shortest_path",
+      "n_nodes": 259,
+      "parsed": true,
+      "feasible": false,
+      "note": "path repeats a node"
+    },
+    {
+      "id": "shortest_path/test_medium/00020",
+      "task": "shortest_path",
+      "n_nodes": 299,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_medium/00021",
+      "task": "shortest_path",
+      "n_nodes": 209,
+      "parsed": true,
+      "feasible": false,
+      "note": "path repeats a node"
+    },
+    {
+      "id": "shortest_path/test_medium/00022",
+      "task": "shortest_path",
+      "n_nodes": 146,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 863 and 91"
+    },
+    {
+      "id": "shortest_path/test_medium/00023",
+      "task": "shortest_path",
+      "n_nodes": 276,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 2679 and 1735"
+    },
+    {
+      "id": "shortest_path/test_medium/00024",
+      "task": "shortest_path",
+      "n_nodes": 189,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 218 and 820"
+    },
+    {
+      "id": "shortest_path/test_medium/00025",
+      "task": "shortest_path",
+      "n_nodes": 264,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_medium/00026",
+      "task": "shortest_path",
+      "n_nodes": 275,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_medium/00027",
+      "task": "shortest_path",
+      "n_nodes": 209,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1570 and 1578"
+    },
+    {
+      "id": "shortest_path/test_medium/00028",
+      "task": "shortest_path",
+      "n_nodes": 217,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1947 and 902"
+    },
+    {
+      "id": "connected_components/test_medium/00000",
+      "task": "connected_components",
+      "n_nodes": 247,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_medium",
+      "task": "connected_components",
+      "n": 30,
+      "parsed": 0.8666666666666667,
+      "feasible": 0.36666666666666664,
+      "accuracy": 0.03333333333333333,
+      "mean_nodes": 188.2
+    },
+    {
+      "split": "test_medium",
+      "task": "cycle_detection",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.5,
+      "accuracy": 0.5,
+      "mean_nodes": 202.83333333333334
+    },
+    {
+      "split": "test_medium",
+      "task": "diameter",
+      "n": 30,
+      "parsed": 0.9,
+      "feasible": 0.03333333333333333,
+      "accuracy": 0.0,
+      "mean_nodes": 182.06666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "max_clique",
+      "n": 30,
+      "parsed": 0.7666666666666667,
+      "feasible": 0.13333333333333333,
+      "accuracy": 0.0,
+      "mean_nodes": 194.16666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "shortest_path",
+      "n": 30,
+      "parsed": 0.9,
+      "feasible": 0.23333333333333334,
+      "accuracy": 0.2,
+      "mean_nodes": 188.9
+    },
+    {
+      "split": "test_medium",
+      "task": "ALL",
+      "n": 150,
+      "parsed": 0.8866666666666667,
+      "feasible": 0.25333333333333335,
+      "accuracy": 0.14666666666666667,
+      "mean_nodes": 191.23333333333332
+    }
+  ]
+}

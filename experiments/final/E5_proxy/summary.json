@@ -1,0 +1,12 @@
+{
+  "n": 17,
+  "spearman": 0.10704469032687154,
+  "pairwise": 0.625,
+  "top3_recall": false,
+  "best_actual": "baseline_b_v2-no-rule-8",
+  "top3": [
+    "baseline_b_v2-no-rule-1",
+    "baseline_b_v2-no-rule-12",
+    "baseline_b_v2-no-rule-11"
+  ]
+}

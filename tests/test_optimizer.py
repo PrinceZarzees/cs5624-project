@@ -201,3 +201,26 @@ def test_meta_harness_accepts_helper_preamble(tmp_path):
     assert summary["best_val_accuracy"] == 1.0
     assert "HELPER" in summary["best_harness"]["tool_preamble"]
     assert (tmp_path / "meta" / "best_harness.json").exists()
+
+
+def test_evoskill_accepts_a_skill(tmp_path):
+    from graphharness.evoskill import EvoSkillConfig, optimize_evoskill
+    train, val = build_train_val(tmp_path)
+    by_message = {BASELINE_A.user_message(r): truth_text(r) for r in train + val}
+    wrong = "<answer>[99999]</answer>"
+
+    def actor(messages):
+        if "EXPERT SKILL" not in messages[0]["content"]:
+            return wrong
+        return by_message.get(messages[-1]["content"], wrong)
+
+    def critic(messages):
+        return json.dumps({"skill": {"name": "verify", "trigger": "EXPERT SKILL",
+                                     "instruction": "verify the result"}, "reason": "test"})
+
+    summary = optimize_evoskill(
+        BASELINE_A, CallableModel(actor), CallableModel(critic), train, val,
+        tmp_path / "evo", EvoSkillConfig(rounds=1, train_per_task=2, val_per_task=2, seed=4),
+    )
+    assert summary["best_val_accuracy"] == 1.0
+    assert (tmp_path / "evo" / "best_harness.json").exists()

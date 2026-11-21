@@ -161,11 +161,13 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, default=5624)
     ap.add_argument("--out", default="experiments/review_meta_harness")
     ap.add_argument("--critic-model")
+    ap.add_argument("--critic-base-url")
     add_model_arguments(ap)
     args = ap.parse_args(argv)
     actor = build_model(args)
     critic_args = argparse.Namespace(**vars(args))
     critic_args.model = args.critic_model or args.model
+    critic_args.base_url = args.critic_base_url or args.base_url
     critic_args.temperature = 0.7
     critic = build_model(critic_args)
     summary = optimize_meta(harness_from_arg(args.start), actor, critic,

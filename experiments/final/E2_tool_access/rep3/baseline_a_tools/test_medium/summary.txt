@@ -1,0 +1,28 @@
+harness: baseline_a_tools    model: qwen3-4b    split: test_medium
+problems: 150    errors: 3    duration: 81.8s    tokens: 987242
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188  100.0%    100.0%    100.0%
+test_medium  cycle_detection           30     203  100.0%     83.3%     70.0%
+test_medium  diameter                  30     182   90.0%     66.7%     66.7%
+test_medium  max_clique                30     194  100.0%     96.7%     83.3%
+test_medium  shortest_path             30     189  100.0%    100.0%    100.0%
+test_medium  ALL                      150     191   98.0%     89.3%     84.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191    98.0%     89.3%     84.0%
+
+First failures:
+- cycle_detection/test_medium/00005 (cycle_detection, n=137): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00011 (cycle_detection, n=146): said no cycle, but the graph has one
+- cycle_detection/test_medium/00012 (cycle_detection, n=203): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00014 (cycle_detection, n=270): said no cycle, but the graph has one
+- cycle_detection/test_medium/00016 (cycle_detection, n=285): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00019 (cycle_detection, n=135): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_medium/00024 (cycle_detection, n=182): said no cycle, but the graph has one
+- cycle_detection/test_medium/00027 (cycle_detection, n=273): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_medium/00028 (cycle_detection, n=182): said no cycle, but the graph has one
+- diameter/test_medium/00000 (diameter, n=204): unknown node(s): ['1', '2', '3']

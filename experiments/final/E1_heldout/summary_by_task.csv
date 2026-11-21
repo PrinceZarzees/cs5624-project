@@ -1,0 +1,16 @@
+harness,task,repeats,accuracy_mean,accuracy_std
+baseline_a,connected_components,3,1.0,0.0
+baseline_a,cycle_detection,3,0.5777777777777777,0.03142696805273544
+baseline_a,diameter,3,0.9555555555555556,0.01571348402636772
+baseline_a,max_clique,3,0.9222222222222223,0.01571348402636772
+baseline_a,shortest_path,3,0.9666666666666667,0.0
+baseline_b,connected_components,3,1.0,0.0
+baseline_b,cycle_detection,3,0.8222222222222223,0.01571348402636772
+baseline_b,diameter,3,1.0,0.0
+baseline_b,max_clique,3,0.888888888888889,0.01571348402636772
+baseline_b,shortest_path,3,0.9777777777777777,0.01571348402636772
+baseline_b_v2,connected_components,3,1.0,0.0
+baseline_b_v2,cycle_detection,3,0.9555555555555556,0.01571348402636772
+baseline_b_v2,diameter,3,1.0,0.0
+baseline_b_v2,max_clique,3,0.8333333333333334,0.04714045207910316
+baseline_b_v2,shortest_path,3,1.0,0.0

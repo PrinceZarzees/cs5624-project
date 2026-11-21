@@ -1,0 +1,7 @@
+{
+  "seed": 56240,
+  "tasks": ["shortest_path", "connected_components", "cycle_detection", "diameter", "max_clique"],
+  "splits": {
+    "test_small_fresh": {"n_range": [4, 50], "per_task": 30}
+  }
+}

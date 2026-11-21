@@ -1,0 +1,29 @@
+{
+  "seed": 56240,
+  "tasks": [
+    "shortest_path",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "max_clique"
+  ],
+  "files": {
+    "test_small_fresh.jsonl": {
+      "n_range": [
+        4,
+        50
+      ],
+      "count": 150,
+      "per_task": {
+        "shortest_path": 30,
+        "connected_components": 30,
+        "cycle_detection": 30,
+        "diameter": 30,
+        "max_clique": 30
+      },
+      "min_nodes": 4,
+      "max_nodes": 50,
+      "sha256": "8dcdcdd279182cc0f21700e4eaeb57f0917110e7c8418f6f29f70e4d26523871"
+    }
+  }
+}

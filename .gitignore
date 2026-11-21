@@ -73,3 +73,12 @@ experiments/**/cache.sqlite
 experiments/**/sandbox/
 experiments/**/*.sqlite
 experiments/**/*.zip
+
+# Final experiment generated data
+data_final/
+data/grapharena_eval100/
+data/graphqa_eval50/
+
+# final split manifest is small and should be tracked
+!data/manifest_final.json
+experiments/final/logs/

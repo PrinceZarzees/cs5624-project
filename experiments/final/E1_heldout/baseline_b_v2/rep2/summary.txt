@@ -1,0 +1,23 @@
+harness: baseline_b_v2    model: qwen3-4b    split: test_small_fresh
+problems: 150    errors: 0    duration: 81.6s    tokens: 868443
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small_fresh connected_components      30      27  100.0%    100.0%    100.0%
+test_small_fresh cycle_detection           30      28  100.0%     96.7%     96.7%
+test_small_fresh diameter                  30      30  100.0%    100.0%    100.0%
+test_small_fresh max_clique                30      27  100.0%     86.7%     86.7%
+test_small_fresh shortest_path             30      24  100.0%    100.0%    100.0%
+test_small_fresh ALL                      150      27  100.0%     96.7%     96.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       27   100.0%     96.7%     96.7%
+
+First failures:
+- cycle_detection/test_small_fresh/00003 (cycle_detection, n=7): unknown node(s): ['1', '2']
+- max_clique/test_small_fresh/00001 (max_clique, n=16): empty answer
+- max_clique/test_small_fresh/00007 (max_clique, n=49): unknown node(s): ['2']
+- max_clique/test_small_fresh/00008 (max_clique, n=42): unknown node(s): ['128', '129']
+- max_clique/test_small_fresh/00015 (max_clique, n=28): 100 and 109 are not connected, not a clique

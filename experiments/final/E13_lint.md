@@ -1,0 +1,31 @@
+# E13 LaTeX lint
+
+- main.tex lines: 305
+- citations missing `~`: 0
+- included files: 18
+  - OK figures/scaling_4b_accuracy_vs_size.png
+  - OK figures/fig_tool_access.pdf
+  - OK tables/tab_tool_access.tex
+  - OK tables/tab_heldout_small.tex
+  - OK figures/fig_scaling.pdf
+  - OK tables/tab_main_scaling.tex
+  - OK tables/tab_rule_ablation.tex
+  - OK tables/tab_real_bench_overall.tex
+  - OK figures/fig_characteristics.pdf
+  - OK figures/fig_density.pdf
+  - OK tables/tab_characteristics.tex
+  - OK figures/fig_proxy.pdf
+  - OK tables/tab_proxy.tex
+  - OK figures/fig_optimizer_curves.pdf
+  - OK tables/tab_costs.tex
+  - OK tables/tab_cost_counterfactual.tex
+  - OK figures/fig_router.pdf
+  - OK tables/tab_router.tex
+- AI-DRAFT blocks: 1
+  - lines 102-303
+- compile: returncode 0, pdf written
+- compile errors: 0
+- PDF pages: 9
+- page where Section 6 (Scaling Results) starts: 2
+- page where the AI-DRAFT final section starts: 3
+- main-content pages before Section 6: 2 (3-page minimum applies to Sections 1-5)

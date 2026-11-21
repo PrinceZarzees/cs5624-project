@@ -1,0 +1,368 @@
+{
+  "harness": "baseline_b_v2_text",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b_v2_text",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+      "For connected components, print `list(nx.connected_components(G))` and return one node from each component.",
+      "For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",
+      "Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",
+      "For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",
+      "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+      "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+      "Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results."
+    ],
+    "graph_view": "adjacency_list",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": false,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "No tools; adjacency list only."
+  },
+  "model": "qwen3-4b",
+  "split": "test_small",
+  "started_at": "2026-11-21T16:14:12.847645+00:00",
+  "finished_at": "2026-11-21T16:14:55.363677+00:00",
+  "duration_s": 42.5160338159767,
+  "n": 150,
+  "overall": {
+    "split": "test_small",
+    "task": "ALL",
+    "n": 150,
+    "parsed": 1.0,
+    "feasible": 0.4866666666666667,
+    "accuracy": 0.36666666666666664,
+    "mean_nodes": 26.293333333333333
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 30,
+      "mean_nodes": 30.033333333333335,
+      "parsed": 1.0,
+      "feasible": 0.43333333333333335,
+      "accuracy": 0.23333333333333334
+    },
+    {
+      "task": "cycle_detection",
+      "n": 30,
+      "mean_nodes": 26.0,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.6
+    },
+    {
+      "task": "diameter",
+      "n": 30,
+      "mean_nodes": 27.333333333333332,
+      "parsed": 1.0,
+      "feasible": 0.2,
+      "accuracy": 0.1
+    },
+    {
+      "task": "max_clique",
+      "n": 30,
+      "mean_nodes": 26.9,
+      "parsed": 1.0,
+      "feasible": 0.4666666666666667,
+      "accuracy": 0.2
+    },
+    {
+      "task": "shortest_path",
+      "n": 30,
+      "mean_nodes": 21.2,
+      "parsed": 1.0,
+      "feasible": 0.7333333333333333,
+      "accuracy": 0.7
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 150,
+      "mean_nodes": 26.293333333333333,
+      "parsed": 1.0,
+      "feasible": 0.4866666666666667,
+      "accuracy": 0.36666666666666664
+    }
+  ],
+  "tokens": {
+    "prompt": 330810,
+    "completion": 113794,
+    "total": 444604,
+    "mean_total_per_problem": 2964.0266666666666
+  },
+  "tool_calls": 0,
+  "mean_agent_duration_s": 2.2198767567858644,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "shortest_path/test_small/00002",
+      "task": "shortest_path",
+      "n_nodes": 38,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 100 and 183"
+    },
+    {
+      "id": "shortest_path/test_small/00006",
+      "task": "shortest_path",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 126 and 134"
+    },
+    {
+      "id": "shortest_path/test_small/00008",
+      "task": "shortest_path",
+      "n_nodes": 23,
+      "parsed": true,
+      "feasible": true,
+      "note": "path has 3 edges, shortest is 2"
+    },
+    {
+      "id": "shortest_path/test_small/00009",
+      "task": "shortest_path",
+      "n_nodes": 41,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 17 and 333"
+    },
+    {
+      "id": "shortest_path/test_small/00013",
+      "task": "shortest_path",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 141 and 143"
+    },
+    {
+      "id": "shortest_path/test_small/00015",
+      "task": "shortest_path",
+      "n_nodes": 42,
+      "parsed": true,
+      "feasible": false,
+      "note": "path does not start/end at the given nodes"
+    },
+    {
+      "id": "shortest_path/test_small/00017",
+      "task": "shortest_path",
+      "n_nodes": 27,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 115 and 26"
+    },
+    {
+      "id": "shortest_path/test_small/00020",
+      "task": "shortest_path",
+      "n_nodes": 43,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 112 and 128"
+    },
+    {
+      "id": "shortest_path/test_small/00023",
+      "task": "shortest_path",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 44 and 102"
+    },
+    {
+      "id": "connected_components/test_small/00001",
+      "task": "connected_components",
+      "n_nodes": 41,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 300)"
+    },
+    {
+      "id": "connected_components/test_small/00002",
+      "task": "connected_components",
+      "n_nodes": 21,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 4 components, graph has 7"
+    },
+    {
+      "id": "connected_components/test_small/00003",
+      "task": "connected_components",
+      "n_nodes": 27,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 140)"
+    },
+    {
+      "id": "connected_components/test_small/00004",
+      "task": "connected_components",
+      "n_nodes": 26,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 114)"
+    },
+    {
+      "id": "connected_components/test_small/00005",
+      "task": "connected_components",
+      "n_nodes": 33,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 128)"
+    },
+    {
+      "id": "connected_components/test_small/00007",
+      "task": "connected_components",
+      "n_nodes": 41,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 2 components, graph has 4"
+    },
+    {
+      "id": "connected_components/test_small/00008",
+      "task": "connected_components",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 2 components, graph has 5"
+    },
+    {
+      "id": "connected_components/test_small/00009",
+      "task": "connected_components",
+      "n_nodes": 44,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 113)"
+    },
+    {
+      "id": "connected_components/test_small/00010",
+      "task": "connected_components",
+      "n_nodes": 30,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 108)"
+    },
+    {
+      "id": "connected_components/test_small/00011",
+      "task": "connected_components",
+      "n_nodes": 44,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 165)"
+    },
+    {
+      "id": "connected_components/test_small/00012",
+      "task": "connected_components",
+      "n_nodes": 40,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 222)"
+    },
+    {
+      "id": "connected_components/test_small/00013",
+      "task": "connected_components",
+      "n_nodes": 28,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 106)"
+    },
+    {
+      "id": "connected_components/test_small/00015",
+      "task": "connected_components",
+      "n_nodes": 44,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 127)"
+    },
+    {
+      "id": "connected_components/test_small/00016",
+      "task": "connected_components",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 0 components, graph has 3"
+    },
+    {
+      "id": "connected_components/test_small/00019",
+      "task": "connected_components",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 3 components, graph has 4"
+    },
+    {
+      "id": "connected_components/test_small/00021",
+      "task": "connected_components",
+      "n_nodes": 34,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 108)"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_small",
+      "task": "connected_components",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.43333333333333335,
+      "accuracy": 0.23333333333333334,
+      "mean_nodes": 30.033333333333335
+    },
+    {
+      "split": "test_small",
+      "task": "cycle_detection",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.6,
+      "mean_nodes": 26.0
+    },
+    {
+      "split": "test_small",
+      "task": "diameter",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.2,
+      "accuracy": 0.1,
+      "mean_nodes": 27.333333333333332
+    },
+    {
+      "split": "test_small",
+      "task": "max_clique",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.4666666666666667,
+      "accuracy": 0.2,
+      "mean_nodes": 26.9
+    },
+    {
+      "split": "test_small",
+      "task": "shortest_path",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.7333333333333333,
+      "accuracy": 0.7,
+      "mean_nodes": 21.2
+    },
+    {
+      "split": "test_small",
+      "task": "ALL",
+      "n": 150,
+      "parsed": 1.0,
+      "feasible": 0.4866666666666667,
+      "accuracy": 0.36666666666666664,
+      "mean_nodes": 26.293333333333333
+    }
+  ]
+}

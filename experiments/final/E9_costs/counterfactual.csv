@@ -1,0 +1,4 @@
+scenario,split,tokens_per_problem,seconds_per_problem,train_per_round,val_per_round,rounds,est_tokens,est_wall_s,est_gpu_hours,est_usd_tokens,ratio_vs_actual_small_run
+optimize on small,test_small,4730.6,2.79,20,50,10,3311414,1953,2.65,2.32,1.82
+optimize on medium,test_medium,4617.0,3.41,20,50,10,3231919,2386,2.59,2.26,1.78
+optimize on large,test_large,5028.6,3.83,20,50,10,3519995,2678,2.82,2.46,1.94

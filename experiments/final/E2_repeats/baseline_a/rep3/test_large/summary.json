@@ -1,0 +1,265 @@
+{
+  "harness": "baseline_a",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_a",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+  },
+  "model": "qwen3-4b",
+  "split": "test_large",
+  "started_at": "2026-11-21T15:32:08.558915+00:00",
+  "finished_at": "2026-11-21T15:33:17.499842+00:00",
+  "duration_s": 68.94092988898046,
+  "n": 100,
+  "overall": {
+    "split": "test_large",
+    "task": "ALL",
+    "n": 100,
+    "parsed": 1.0,
+    "feasible": 0.88,
+    "accuracy": 0.86,
+    "mean_nodes": 741.24
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 20,
+      "mean_nodes": 662.9,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "cycle_detection",
+      "n": 20,
+      "mean_nodes": 722.05,
+      "parsed": 1.0,
+      "feasible": 0.7,
+      "accuracy": 0.65
+    },
+    {
+      "task": "diameter",
+      "n": 20,
+      "mean_nodes": 712.15,
+      "parsed": 1.0,
+      "feasible": 0.85,
+      "accuracy": 0.8
+    },
+    {
+      "task": "max_clique",
+      "n": 20,
+      "mean_nodes": 829.5,
+      "parsed": 1.0,
+      "feasible": 0.85,
+      "accuracy": 0.85
+    },
+    {
+      "task": "shortest_path",
+      "n": 20,
+      "mean_nodes": 779.6,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "500-1000",
+      "n": 100,
+      "mean_nodes": 741.24,
+      "parsed": 1.0,
+      "feasible": 0.88,
+      "accuracy": 0.86
+    }
+  ],
+  "tokens": {
+    "prompt": 469517,
+    "completion": 85711,
+    "total": 555228,
+    "mean_total_per_problem": 5552.28
+  },
+  "tool_calls": 233,
+  "mean_agent_duration_s": 4.319224800569937,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "cycle_detection/test_large/00000",
+      "task": "cycle_detection",
+      "n_nodes": 827,
+      "parsed": true,
+      "feasible": true,
+      "note": "said no cycle, but the graph has one"
+    },
+    {
+      "id": "cycle_detection/test_large/00001",
+      "task": "cycle_detection",
+      "n_nodes": 501,
+      "parsed": true,
+      "feasible": false,
+      "note": "a cycle needs at least 3 nodes"
+    },
+    {
+      "id": "cycle_detection/test_large/00002",
+      "task": "cycle_detection",
+      "n_nodes": 893,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "cycle_detection/test_large/00011",
+      "task": "cycle_detection",
+      "n_nodes": 507,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "cycle_detection/test_large/00012",
+      "task": "cycle_detection",
+      "n_nodes": 668,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '1']"
+    },
+    {
+      "id": "cycle_detection/test_large/00016",
+      "task": "cycle_detection",
+      "n_nodes": 692,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "cycle_detection/test_large/00017",
+      "task": "cycle_detection",
+      "n_nodes": 886,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['0']"
+    },
+    {
+      "id": "diameter/test_large/00003",
+      "task": "diameter",
+      "n_nodes": 671,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['0', '1', '2']"
+    },
+    {
+      "id": "diameter/test_large/00004",
+      "task": "diameter",
+      "n_nodes": 944,
+      "parsed": true,
+      "feasible": true,
+      "note": "distance 5, diameter is 6"
+    },
+    {
+      "id": "diameter/test_large/00006",
+      "task": "diameter",
+      "n_nodes": 773,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "diameter/test_large/00011",
+      "task": "diameter",
+      "n_nodes": 575,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['2', '3']"
+    },
+    {
+      "id": "max_clique/test_large/00001",
+      "task": "max_clique",
+      "n_nodes": 965,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['a', 'b', 'c']"
+    },
+    {
+      "id": "max_clique/test_large/00015",
+      "task": "max_clique",
+      "n_nodes": 849,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2']"
+    },
+    {
+      "id": "max_clique/test_large/00017",
+      "task": "max_clique",
+      "n_nodes": 971,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['a', 'b']"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_large",
+      "task": "connected_components",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 662.9
+    },
+    {
+      "split": "test_large",
+      "task": "cycle_detection",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.7,
+      "accuracy": 0.65,
+      "mean_nodes": 722.05
+    },
+    {
+      "split": "test_large",
+      "task": "diameter",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.85,
+      "accuracy": 0.8,
+      "mean_nodes": 712.15
+    },
+    {
+      "split": "test_large",
+      "task": "max_clique",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.85,
+      "accuracy": 0.85,
+      "mean_nodes": 829.5
+    },
+    {
+      "split": "test_large",
+      "task": "shortest_path",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 779.6
+    },
+    {
+      "split": "test_large",
+      "task": "ALL",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.88,
+      "accuracy": 0.86,
+      "mean_nodes": 741.24
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+harness: baseline_a    model: qwen3-4b    split: test_small_fresh
+problems: 150    errors: 0    duration: 70.4s    tokens: 839677
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small_fresh connected_components      30      27  100.0%    100.0%    100.0%
+test_small_fresh cycle_detection           30      28  100.0%     63.3%     60.0%
+test_small_fresh diameter                  30      30  100.0%     96.7%     96.7%
+test_small_fresh max_clique                30      27  100.0%     96.7%     93.3%
+test_small_fresh shortest_path             30      24  100.0%     96.7%     96.7%
+test_small_fresh ALL                      150      27  100.0%     90.7%     89.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       27   100.0%     90.7%     89.3%
+
+First failures:
+- shortest_path/test_small_fresh/00028 (shortest_path, n=33): empty answer
+- cycle_detection/test_small_fresh/00002 (cycle_detection, n=8): unknown node(s): ['1', '2']
+- cycle_detection/test_small_fresh/00006 (cycle_detection, n=4): unknown node(s): ['a', 'b', 'c', 'a']
+- cycle_detection/test_small_fresh/00010 (cycle_detection, n=7): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_small_fresh/00013 (cycle_detection, n=10): a cycle needs at least 3 nodes
+- cycle_detection/test_small_fresh/00015 (cycle_detection, n=41): unknown node(s): ['1', '2']
+- cycle_detection/test_small_fresh/00018 (cycle_detection, n=37): unknown node(s): ['1', '3']
+- cycle_detection/test_small_fresh/00020 (cycle_detection, n=15): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_small_fresh/00023 (cycle_detection, n=29): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_small_fresh/00024 (cycle_detection, n=14): said no cycle, but the graph has one

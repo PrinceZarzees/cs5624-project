@@ -1,0 +1,438 @@
+{
+  "harness": "baseline_a",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_a",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+  },
+  "model": "qwen3-4b",
+  "split": "ga_easy",
+  "started_at": "2026-11-21T15:54:31.351052+00:00",
+  "finished_at": "2026-11-21T16:02:24.048787+00:00",
+  "duration_s": 472.69773838995025,
+  "n": 1000,
+  "overall": {
+    "split": "ga_easy",
+    "task": "ALL",
+    "n": 1000,
+    "parsed": 0.97,
+    "feasible": 0.791,
+    "accuracy": 0.729,
+    "mean_nodes": 7.138
+  },
+  "by_task": [
+    {
+      "task": "common_neighbors",
+      "n": 100,
+      "mean_nodes": 9.12,
+      "parsed": 1.0,
+      "feasible": 0.99,
+      "accuracy": 0.99
+    },
+    {
+      "task": "connected_components",
+      "n": 100,
+      "mean_nodes": 6.93,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "diameter",
+      "n": 100,
+      "mean_nodes": 6.91,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.95
+    },
+    {
+      "task": "graph_edit_distance",
+      "n": 100,
+      "mean_nodes": 5.63,
+      "parsed": 1.0,
+      "feasible": 0.29,
+      "accuracy": 0.19
+    },
+    {
+      "task": "max_clique",
+      "n": 100,
+      "mean_nodes": 7.2,
+      "parsed": 1.0,
+      "feasible": 0.93,
+      "accuracy": 0.91
+    },
+    {
+      "task": "max_common_subgraph",
+      "n": 100,
+      "mean_nodes": 5.41,
+      "parsed": 0.7,
+      "feasible": 0.59,
+      "accuracy": 0.54
+    },
+    {
+      "task": "max_independent_set",
+      "n": 100,
+      "mean_nodes": 6.45,
+      "parsed": 1.0,
+      "feasible": 0.91,
+      "accuracy": 0.88
+    },
+    {
+      "task": "min_vertex_cover",
+      "n": 100,
+      "mean_nodes": 8.56,
+      "parsed": 1.0,
+      "feasible": 0.84,
+      "accuracy": 0.81
+    },
+    {
+      "task": "shortest_path",
+      "n": 100,
+      "mean_nodes": 9.86,
+      "parsed": 1.0,
+      "feasible": 0.87,
+      "accuracy": 0.87
+    },
+    {
+      "task": "traveling_salesman",
+      "n": 100,
+      "mean_nodes": 5.31,
+      "parsed": 1.0,
+      "feasible": 0.54,
+      "accuracy": 0.15
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 1000,
+      "mean_nodes": 7.138,
+      "parsed": 0.97,
+      "feasible": 0.791,
+      "accuracy": 0.729
+    }
+  ],
+  "tokens": {
+    "prompt": 3199066,
+    "completion": 699838,
+    "total": 3898904,
+    "mean_total_per_problem": 3898.904
+  },
+  "tool_calls": 1957,
+  "mean_agent_duration_s": 3.7553799393754455,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "shortest_path/ga_easy/00000",
+      "task": "shortest_path",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00018",
+      "task": "shortest_path",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00019",
+      "task": "shortest_path",
+      "n_nodes": 7,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00022",
+      "task": "shortest_path",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00027",
+      "task": "shortest_path",
+      "n_nodes": 11,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00028",
+      "task": "shortest_path",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00038",
+      "task": "shortest_path",
+      "n_nodes": 13,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00049",
+      "task": "shortest_path",
+      "n_nodes": 11,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Chah Mir Hormozgan']"
+    },
+    {
+      "id": "shortest_path/ga_easy/00060",
+      "task": "shortest_path",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00087",
+      "task": "shortest_path",
+      "n_nodes": 12,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00090",
+      "task": "shortest_path",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00092",
+      "task": "shortest_path",
+      "n_nodes": 8,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_easy/00099",
+      "task": "shortest_path",
+      "n_nodes": 7,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "diameter/ga_easy/00016",
+      "task": "diameter",
+      "n_nodes": 12,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "diameter/ga_easy/00017",
+      "task": "diameter",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Bevern Schleswig-Holstein']"
+    },
+    {
+      "id": "diameter/ga_easy/00059",
+      "task": "diameter",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "diameter/ga_easy/00077",
+      "task": "diameter",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "diameter/ga_easy/00078",
+      "task": "diameter",
+      "n_nodes": 5,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Holyoke Massachusetts']"
+    },
+    {
+      "id": "max_clique/ga_easy/00020",
+      "task": "max_clique",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['a', 'b', 'c', 'd']"
+    },
+    {
+      "id": "max_clique/ga_easy/00030",
+      "task": "max_clique",
+      "n_nodes": 12,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "max_clique/ga_easy/00048",
+      "task": "max_clique",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3', '4', '5']"
+    },
+    {
+      "id": "max_clique/ga_easy/00064",
+      "task": "max_clique",
+      "n_nodes": 10,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 5, maximum is 6"
+    },
+    {
+      "id": "max_clique/ga_easy/00086",
+      "task": "max_clique",
+      "n_nodes": 5,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3', '4', '5']"
+    },
+    {
+      "id": "max_clique/ga_easy/00087",
+      "task": "max_clique",
+      "n_nodes": 9,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 5, maximum is 6"
+    },
+    {
+      "id": "max_clique/ga_easy/00089",
+      "task": "max_clique",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['a', 'b', 'c', 'd']"
+    }
+  ],
+  "rows": [
+    {
+      "split": "ga_easy",
+      "task": "common_neighbors",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.99,
+      "accuracy": 0.99,
+      "mean_nodes": 9.12
+    },
+    {
+      "split": "ga_easy",
+      "task": "connected_components",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 6.93
+    },
+    {
+      "split": "ga_easy",
+      "task": "diameter",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.95,
+      "mean_nodes": 6.91
+    },
+    {
+      "split": "ga_easy",
+      "task": "graph_edit_distance",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.29,
+      "accuracy": 0.19,
+      "mean_nodes": 5.63
+    },
+    {
+      "split": "ga_easy",
+      "task": "max_clique",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.93,
+      "accuracy": 0.91,
+      "mean_nodes": 7.2
+    },
+    {
+      "split": "ga_easy",
+      "task": "max_common_subgraph",
+      "n": 100,
+      "parsed": 0.7,
+      "feasible": 0.59,
+      "accuracy": 0.54,
+      "mean_nodes": 5.41
+    },
+    {
+      "split": "ga_easy",
+      "task": "max_independent_set",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.91,
+      "accuracy": 0.88,
+      "mean_nodes": 6.45
+    },
+    {
+      "split": "ga_easy",
+      "task": "min_vertex_cover",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.84,
+      "accuracy": 0.81,
+      "mean_nodes": 8.56
+    },
+    {
+      "split": "ga_easy",
+      "task": "shortest_path",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.87,
+      "accuracy": 0.87,
+      "mean_nodes": 9.86
+    },
+    {
+      "split": "ga_easy",
+      "task": "traveling_salesman",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.54,
+      "accuracy": 0.15,
+      "mean_nodes": 5.31
+    },
+    {
+      "split": "ga_easy",
+      "task": "ALL",
+      "n": 1000,
+      "parsed": 0.97,
+      "feasible": 0.791,
+      "accuracy": 0.729,
+      "mean_nodes": 7.138
+    }
+  ]
+}
