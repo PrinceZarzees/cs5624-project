@@ -1,7 +1,7 @@
-optimizer,start,initial val,best val,tokens (M),USD tokens
-SkillOpt,baseline_a,0.875,0.875,4.01,USD 2.80
-SkillOpt,baseline_b_v2,0.975,0.975,3.53,USD 2.47
-GEPA,baseline_a,0.95,0.95,1.19,USD 0.83
-RRSI-lite,baseline_a,0.9,0.9,0.51,USD 0.36
-RRSI-lite,baseline_b_v2,1.0,1.0,0.81,USD 0.57
-Meta-Harness-lite,baseline_a,0.9,0.9,0.87,USD 0.61
+optimizer,start,accepted/rounds,init $\rightarrow$ best val,tokens (M),USD,parsed
+GEPA-style,b,0/6,100.0% $\rightarrow$ 100.0%,0.64,0.45,0
+Meta-Harness-lite,b,0/6,98.0% $\rightarrow$ 98.0%,1.27,0.89,5
+RRSI-lite,b,1/5,96.0% $\rightarrow$ 98.0%,1.09,0.76,5
+RRSI-lite,b,1/6,97.0% $\rightarrow$ 99.0%,1.76,1.23,6
+SkillOpt-style,b,1/6,98.0% $\rightarrow$ 100.0%,2.41,1.69,6
+EvoSkill-style,b,0/3,100.0% $\rightarrow$ 100.0%,3.42,2.39,3

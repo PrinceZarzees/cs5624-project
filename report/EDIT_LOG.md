@@ -49,3 +49,19 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 | Sec. 4 table | A 87.3 → 89.3±1.6, B 90.0 → 94.4±0.6, v2(14) 94.0 → 95.8±1.4 on test_small; caption states k=3 | `experiments/final/E2_repeats/summary.csv` |
 | Sec. 6 table | A 87.3/80.7/81.0/62.0 → 89.3±1.6/86.2±3.9/84.3±2.4/66.0±2.8; B 94.0/90.7/86.0/60.0 → 94.4±0.6/92.0±1.1/90.7±3.7/72.7±9.0; v2 94.0/90.0/85.0/74.0 → 95.8±1.4/90.7±0.9/85.3±0.5/73.3±0.9 | `experiments/final/E2_repeats/summary.csv` |
 | Sec. 3 | added AI-DRAFT "Setup facts" block (model, splits, seeds, harnesses, sandbox, protocol, repeats) | `experiments/final/INTERFACES.md`, `data/manifest_final.json` |
+| Sec. 6 table / final section | Baseline B stress 72.7±9.0 → 74.5±8.4 after adding replacement repeat 4 (4 repeats) | `experiments/final/E2_repeats/summary.csv` |
+
+## 2026-11-21 E6/E11 integration
+
+| Location | Change | Source |
+|---|---|---|
+| Sec. 8 | v2-only 20/task numbers (74.5/61.0/88.3) → A/B/v2 at 100/task and 50/task; added the 20/task subset check | `experiments/final/E6_real_bench/summary.csv` |
+| final section "Real benchmarks" | added A/B/v2 text, `fig_real_bench`, `tab_real_bench_overall`, `tab_real_bench_per_task` | same |
+| final section "No-tools at 32k" | new paragraph + `tab_notools_longctx`, `fig_notools_longctx` | `experiments/final/E11_notools_longctx/summary.csv` |
+
+## 2026-11-21 E3/E4 integration
+
+| Location | Change | Source |
+|---|---|---|
+| final section "Optimization and proxies" | replaced "all optimizers accepted zero edits" with 7B-critic outcomes (SkillOpt 1, RRSI 1, GEPA 0, Meta 0) and changed-harness test numbers; added `tab_optimizer_outputs` and `tab_optimizers` | `experiments/final/E3_optimizers/{summary.csv,eval_*}` |
+| final section | counterfactual ratio 1.90 -> 1.94 (fixed denominator = six 4B-critic pilot runs) | `experiments/final/E9_costs/counterfactual.csv` |

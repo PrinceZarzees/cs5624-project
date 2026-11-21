@@ -1,38 +1,38 @@
 \begin{tabular}{llrrrr}
 \toprule
-split & task & n & accuracy & parsed & feasible \\
+benchmark & task & n & A & B & B v2 \\
 \midrule
-ga\_easy & common\_neighbors & 20 & 0.95 & 1.0 & 1.0 \\
-ga\_easy & connected\_components & 20 & 1.0 & 1.0 & 1.0 \\
-ga\_easy & diameter & 20 & 0.9 & 1.0 & 0.95 \\
-ga\_easy & graph\_edit\_distance & 20 & 0.1 & 0.9 & 0.1 \\
-ga\_easy & max\_clique & 20 & 0.95 & 1.0 & 0.95 \\
-ga\_easy & max\_common\_subgraph & 20 & 0.55 & 0.6 & 0.55 \\
-ga\_easy & max\_independent\_set & 20 & 0.95 & 1.0 & 0.95 \\
-ga\_easy & min\_vertex\_cover & 20 & 0.85 & 1.0 & 0.95 \\
-ga\_easy & shortest\_path & 20 & 1.0 & 1.0 & 1.0 \\
-ga\_easy & traveling\_salesman & 20 & 0.2 & 1.0 & 0.95 \\
-ga\_hard & common\_neighbors & 20 & 1.0 & 1.0 & 1.0 \\
-ga\_hard & connected\_components & 20 & 1.0 & 1.0 & 1.0 \\
-ga\_hard & diameter & 20 & 0.9 & 1.0 & 0.9 \\
-ga\_hard & graph\_edit\_distance & 20 & 0.0 & 1.0 & 0.1 \\
-ga\_hard & max\_clique & 20 & 0.8 & 1.0 & 0.95 \\
-ga\_hard & max\_common\_subgraph & 20 & 0.5 & 0.75 & 0.7 \\
-ga\_hard & max\_independent\_set & 20 & 0.2 & 1.0 & 0.95 \\
-ga\_hard & min\_vertex\_cover & 20 & 0.7 & 1.0 & 0.9 \\
-ga\_hard & shortest\_path & 20 & 1.0 & 1.0 & 1.0 \\
-ga\_hard & traveling\_salesman & 20 & 0.0 & 1.0 & 0.85 \\
-graphqa\_test & connected\_nodes & 20 & 1.0 & 1.0 & 1.0 \\
-graphqa\_test & cycle\_detection & 20 & 0.9 & 1.0 & 1.0 \\
-graphqa\_test & disconnected\_nodes & 20 & 1.0 & 1.0 & 1.0 \\
-graphqa\_test & edge\_count & 20 & 1.0 & 1.0 & 1.0 \\
-graphqa\_test & edge\_existence & 20 & 1.0 & 1.0 & 1.0 \\
-graphqa\_test & maximum\_flow & 20 & 0.15 & 1.0 & 1.0 \\
-graphqa\_test & node\_classification & 20 & 0.75 & 1.0 & 1.0 \\
-graphqa\_test & node\_count & 20 & 1.0 & 1.0 & 1.0 \\
-graphqa\_test & node\_degree & 20 & 1.0 & 1.0 & 1.0 \\
-graphqa\_test & reachability & 20 & 0.95 & 1.0 & 0.95 \\
-graphqa\_test & shortest\_path & 20 & 0.95 & 1.0 & 0.95 \\
-graphqa\_test & triangle\_counting & 20 & 0.9 & 1.0 & 1.0 \\
+GA easy & common\_neighbors & 100 & 99.0\% & 98.0\% & 98.0\% \\
+GA easy & connected\_components & 100 & 100.0\% & 100.0\% & 100.0\% \\
+GA easy & diameter & 100 & 95.0\% & 98.0\% & 92.0\% \\
+GA easy & graph\_edit\_distance & 100 & 19.0\% & 22.0\% & 26.0\% \\
+GA easy & max\_clique & 100 & 91.0\% & 99.0\% & 92.0\% \\
+GA easy & max\_common\_subgraph & 100 & 54.0\% & 67.0\% & 54.0\% \\
+GA easy & max\_independent\_set & 100 & 88.0\% & 86.0\% & 83.0\% \\
+GA easy & min\_vertex\_cover & 100 & 81.0\% & 79.0\% & 80.0\% \\
+GA easy & shortest\_path & 100 & 87.0\% & 95.0\% & 99.0\% \\
+GA easy & traveling\_salesman & 100 & 15.0\% & 12.0\% & 13.0\% \\
+GA hard & common\_neighbors & 100 & 98.0\% & 98.0\% & 97.0\% \\
+GA hard & connected\_components & 100 & 100.0\% & 100.0\% & 100.0\% \\
+GA hard & diameter & 100 & 86.0\% & 96.0\% & 93.0\% \\
+GA hard & graph\_edit\_distance & 100 & 1.0\% & 2.0\% & 0.0\% \\
+GA hard & max\_clique & 100 & 95.0\% & 82.0\% & 86.0\% \\
+GA hard & max\_common\_subgraph & 100 & 42.0\% & 52.0\% & 41.0\% \\
+GA hard & max\_independent\_set & 100 & 62.0\% & 45.0\% & 33.0\% \\
+GA hard & min\_vertex\_cover & 100 & 61.0\% & 55.0\% & 60.0\% \\
+GA hard & shortest\_path & 100 & 46.0\% & 96.0\% & 99.0\% \\
+GA hard & traveling\_salesman & 100 & 0.0\% & 0.0\% & 0.0\% \\
+GraphQA & connected\_nodes & 50 & 100.0\% & 100.0\% & 100.0\% \\
+GraphQA & cycle\_detection & 50 & 52.0\% & 88.0\% & 90.0\% \\
+GraphQA & disconnected\_nodes & 50 & 98.0\% & 100.0\% & 100.0\% \\
+GraphQA & edge\_count & 50 & 100.0\% & 100.0\% & 100.0\% \\
+GraphQA & edge\_existence & 50 & 100.0\% & 100.0\% & 100.0\% \\
+GraphQA & maximum\_flow & 50 & 14.0\% & 14.0\% & 14.0\% \\
+GraphQA & node\_classification & 50 & 90.0\% & 84.0\% & 78.0\% \\
+GraphQA & node\_count & 50 & 100.0\% & 100.0\% & 100.0\% \\
+GraphQA & node\_degree & 50 & 100.0\% & 98.0\% & 100.0\% \\
+GraphQA & reachability & 50 & 78.0\% & 96.0\% & 98.0\% \\
+GraphQA & shortest\_path & 50 & 100.0\% & 100.0\% & 98.0\% \\
+GraphQA & triangle\_counting & 50 & 80.0\% & 88.0\% & 92.0\% \\
 \bottomrule
 \end{tabular}

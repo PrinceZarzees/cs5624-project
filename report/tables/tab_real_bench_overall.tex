@@ -1,9 +1,15 @@
-\begin{tabular}{lrrrr}
+\begin{tabular}{llrrcr}
 \toprule
-benchmark & n & accuracy & parsed & feasible \\
+benchmark & harness & n & accuracy & 95\% CI & parsed \\
 \midrule
-GraphArena easy & 200 & 74.5\% & 95.0\% & 84.0\% \\
-GraphArena hard & 200 & 61.0\% & 97.5\% & 83.5\% \\
-GraphQA test & 240 & 88.3\% & 100.0\% & 99.2\% \\
+GraphArena easy & a & 1000 & 72.9\% & [70.1\%, 75.6\%] & 97.0\% \\
+GraphArena easy & b & 1000 & 75.6\% & [72.8\%, 78.2\%] & 97.4\% \\
+GraphArena easy & b\_v2 & 1000 & 73.7\% & [70.9\%, 76.3\%] & 95.9\% \\
+GraphArena hard & a & 1000 & 59.1\% & [56.0\%, 62.1\%] & 97.2\% \\
+GraphArena hard & b & 1000 & 62.6\% & [59.6\%, 65.5\%] & 97.5\% \\
+GraphArena hard & b\_v2 & 1000 & 60.9\% & [57.8\%, 63.9\%] & 97.3\% \\
+GraphQA test & a & 600 & 84.3\% & [81.2\%, 87.0\%] & 100.0\% \\
+GraphQA test & b & 600 & 89.0\% & [86.2\%, 91.3\%] & 99.8\% \\
+GraphQA test & b\_v2 & 600 & 89.2\% & [86.4\%, 91.4\%] & 99.8\% \\
 \bottomrule
 \end{tabular}

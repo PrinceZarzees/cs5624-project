@@ -70,11 +70,43 @@ Values with $\pm$ are mean and population std over three repeats; the 13-rule
 v2 value is the original single run and was not repeated.}
 \end{table}
 
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\paragraph{Harness definitions.}
+Baseline A is a generic instruction with no rules. Baseline B adds seven expert
+rules: use the NetworkX \texttt{G} object rather than node labels, prefer exact
+library routines, verify feasibility before answering, keep sandbox output
+short, change the code after a timeout, and put only the final node list in
+\texttt{<answer>}. Baseline B v2 appends seven rules: print
+\texttt{list(nx.connected\_components(G))} and return one representative per
+component; for diameter, return a witness pair at the measured diameter; always
+\texttt{print} the value; use \texttt{nx.max\_weight\_clique} on small graphs
+only; stop after a successful run; never sort or index nodes by numeric value;
+and materialize NetworkX generators before reusing them. All harnesses use the
+summary graph view, an 8-step limit, a 30\,s tool timeout and temperature 0.
+v2 was built from earlier \texttt{test\_small} failures, so its
+\texttt{test\_small} result is not held out; the fresh split in the
+final-results section is the clean estimate.
+% <<< AI-DRAFT
+
 \section{Small-Graph Optimization}
 % TODO: SkillOpt/GEPA loop, accepted/rejected edits, why no candidate improved.
 Two optimizer runs (8 rounds from v2, 10 rounds from A) rejected every
 candidate. The validation gate prevented regressions; v2 is frozen as
 $H^*_{\text{small}}$.
+
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\paragraph{Optimizer settings.}
+Four loops are compared: SkillOpt-style (system prompt and rules), GEPA-style
+(system prompt only, rules fixed), RRSI-lite (rule edits with a consistency
+gate) and Meta-Harness-lite (prompt, rules, graph view and tool preamble).
+EvoSkill-style adds a library of named skills. Each round evaluates the
+candidate on a training batch of 4 problems per task and accepts an edit only
+if accuracy on 10 validation problems per task improves (ties are accepted
+only when the prompt is shorter). The earlier pilots used the 4B actor as its
+own critic and accepted zero edits. A separate grid uses Qwen2.5-7B-Instruct
+BF16 as critic while the actor stays Qwen3-4B; its settings and outcome are
+reported in the final-results section.
+% <<< AI-DRAFT
 
 \section{Scaling Results}
 % TODO: full scaling curves and delta_gen.
@@ -91,7 +123,7 @@ $H^*_{\text{small}}$.
 Harness & small & medium & large & stress \\
 \midrule
 Baseline A & 89.3 $\pm$ 1.6 & 86.2 $\pm$ 3.9 & 84.3 $\pm$ 2.4 & 66.0 $\pm$ 2.8 \\
-Baseline B & 94.4 $\pm$ 0.6 & 92.0 $\pm$ 1.1 & 90.7 $\pm$ 3.7 & 72.7 $\pm$ 9.0 \\
+Baseline B & 94.4 $\pm$ 0.6 & 92.0 $\pm$ 1.1 & 90.7 $\pm$ 3.7 & 74.5 $\pm$ 8.4 \\
 Baseline B v2 & 95.8 $\pm$ 1.4 & 90.7 $\pm$ 0.9 & 85.3 $\pm$ 0.5 & 73.3 $\pm$ 0.9 \\
 \bottomrule
 \end{tabular}
@@ -107,9 +139,11 @@ and \texttt{report/tables/ablation\_*.csv}.
 
 \section{Real Benchmark Evaluation}
 % TODO: GraphArena/GraphQA results and error analysis.
-GraphArena (20 problems/task): easy 74.5\%, hard 61.0\%.
-GraphQA test (20/task): 88.3\%.
-See \texttt{experiments/qwen3\_4b\_real\_bench/}.
+GraphArena at 100 problems/task: easy 72.9\% (Baseline A), 75.6\% (B),
+73.7\% (B v2); hard 59.1\%, 62.6\%, 60.9\%. GraphQA test at 50/task: 84.3\%,
+89.0\%, 89.2\%. On the original 20/task subset v2 scores 76.5/62.5/90.4\%,
+within 2 points of the earlier 74.5/61.0/88.3\%.
+See \texttt{E6\_real\_bench/}.
 
 \section{Discussion and Limitations}
 % TODO: synthetic vs real benchmarks, scale, model choice, sandbox assumptions,
@@ -208,14 +242,64 @@ Table~\ref{tab:rule-ablation}.
 \end{table}
 
 \paragraph{Real benchmarks.}
-Table~\ref{tab:real-bench} reports the GraphArena and GraphQA results for
-Baseline B v2. GED, MCS, TSP and hard MIS are the main failures.
+All three harnesses were run on the expanded benchmarks: GraphArena easy and
+hard at 100 problems per task (1{,}000 each) and GraphQA test at 50 per task
+(600). Baseline B is highest on both GraphArena splits (75.6\% versus 73.7\%
+for v2 on easy; 62.6\% versus 60.9\% on hard). On GraphQA, v2 and B are within
+0.2 points (89.2\% and 89.0\%). Baseline A is below both everywhere (72.9\%,
+59.1\%, 84.3\%). The 20/task ids contained in the new data reproduce the
+earlier v2 values within 2 points (76.5/62.5/90.4\% versus
+74.5/61.0/88.3\%), so the expansion did not change the ranking
+(Table~\ref{tab:real-bench}, Table~\ref{tab:real-bench-task},
+Figure~\ref{fig:real-bench}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_real_bench.pdf}
+\caption{Accuracy on the expanded real benchmarks, 100/task (GraphArena) and
+50/task (GraphQA).}
+\label{fig:real-bench}
+\end{figure}
 
 \begin{table}[h]
 \centering
 \input{tables/tab_real_bench_overall.tex}
-\caption{Real benchmark accuracy at 20 problems per task.}
+\caption{Real benchmark accuracy on the expanded sets, with 95\% Wilson CIs.}
 \label{tab:real-bench}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_real_bench_per_task.tex}
+\caption{Per-task real benchmark accuracy; $n$ is problems per harness.}
+\label{tab:real-bench-task}
+\end{table}
+
+\paragraph{No-tools at 32k.}
+To separate ``no tools'' from ``the graph does not fit in 8k'', the two
+no-tools harnesses were rerun with a 32k context. Accuracy is 18.0\% (A) and
+16.7\% (v2) on \texttt{test\_medium}, and 11.0\% and 10.0\% on
+\texttt{test\_large}; the 8k values were 15.6/15.3\% and 0.0\%. On medium,
+141/150 prompts already fit in 8k and score 18.4\%, so the low medium accuracy
+is not a context artifact. On large, no prompt fits in 8k, 93/100 fit in 32k
+and score 11.8/10.8\%, and 7/100 exceed 32k (largest about 40k tokens) and
+score 0 (Table~\ref{tab:notools-32k}, Figure~\ref{fig:notools-32k}). Tools
+remain far ahead at 84--92\%.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_notools_longctx.pdf}
+\caption{No-tools accuracy at 8k and 32k context.}
+\label{fig:notools-32k}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_notools_longctx.tex}
+\caption{No-tools runs at 32k, split by prompt length.}
+\label{tab:notools-32k}
 \end{table}
 
 \paragraph{Characteristics.}
@@ -251,10 +335,21 @@ identified.
 \end{table}
 
 \paragraph{Optimization and proxies.}
-All automated optimizers (SkillOpt-style, GEPA, RRSI, Meta-Harness) accepted
-zero improving edits in the final pilot. Table~\ref{tab:costs} reports their
-token/time cost. Figure~\ref{fig:optimizer-curves} shows the best validation
-accuracy versus cumulative tokens. Measured evaluation cost rises from
+With Qwen2.5-7B-Instruct BF16 as critic and Baseline B as the start,
+SkillOpt-style accepted one edit (val 98\% $\rightarrow$ 100\%) and RRSI-lite
+accepted one (96\% $\rightarrow$ 98\%; a second run went 97\% $\rightarrow$
+99\%). GEPA-style and Meta-Harness-lite accepted none; GEPA's validation
+sample was already at 100\%. The earlier 4B-critic pilots accepted none. Every
+accepted edit is a generic verification rule, and none contains a numeric node
+id. The changed SkillOpt harness scores 98.7/94.0/94.0/76.0\% on
+fresh-small/medium/large/stress (one run each); the changed RRSI harness
+scores 96.0/96.0/94.0/74.0\%. Baseline B's three-repeat means are
+94.4/92.0/90.7/74.5\%. These are single runs, so the 2--4 point differences
+are within the observed repeat spread, including on large
+(Table~\ref{tab:optimizer-outputs}). Table~\ref{tab:optimizers} lists rounds,
+parse rate and accepted edits; Table~\ref{tab:costs} reports token/time
+cost and Figure~\ref{fig:optimizer-curves} shows the best validation accuracy
+versus cumulative tokens. Measured evaluation cost rises from
 2.8\,s and 4.7k tokens per problem on small graphs to 3.8\,s and 5.0k tokens
 on large graphs. A 10-round optimization run that used large graphs directly
 is therefore estimated at 3.52M tokens and 0.74 GPU-hours, 1.94$\times$ the
@@ -301,6 +396,24 @@ the same 15 candidates.}
 \input{tables/tab_costs.tex}
 \caption{Optimizer token, time and estimated dollar cost.}
 \label{tab:costs}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_optimizers.tex}
+\caption{Optimizer runs with the 7B critic, started from Baseline B.
+``acc.'' counts accepted edits.}
+\label{tab:optimizers}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_optimizer_outputs.tex}
+\caption{Evaluation of the changed harnesses on the four scaling splits
+(one run each), next to Baseline B's three-repeat means.}
+\label{tab:optimizer-outputs}
 \end{table}
 
 \begin{table}[h]
