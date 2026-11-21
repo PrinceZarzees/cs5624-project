@@ -1,0 +1,20 @@
+{
+  "task": "connected_components",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 0.0,
+  "final_statement": "Given an undirected graph, print the number of connected components (an isolated node is its own component). The input consists of a graph with n nodes and m edges, where the graph is undirected (directed = 0) and unweighted (weighted = 0). We must compute the number of connected components using standard graph traversal techniques. The challenge lies in handling large graphs efficiently\u2014up to 100,000 nodes\u2014and ensuring correctness without hardcoding examples or node-specific logic.",
+  "val_curve": [
+    0.0
+  ],
+  "statements": [
+    "Given an undirected graph, print the number of connected components (an isolated node is its own component). The input consists of a graph with n nodes and m edges, where the graph is undirected (directed = 0) and unweighted (weighted = 0). We must compute the number of connected components using standard graph traversal techniques. The challenge lies in handling large graphs efficiently\u2014up to 100,000 nodes\u2014and ensuring correctness without hardcoding examples or node-specific logic."
+  ],
+  "tokens": {
+    "prompt": 23138,
+    "completion": 2826
+  },
+  "test": {}
+}

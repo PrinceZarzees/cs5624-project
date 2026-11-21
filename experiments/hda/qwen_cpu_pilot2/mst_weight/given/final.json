@@ -1,0 +1,110 @@
+{
+  "task": "mst_weight",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 1.0,
+  "final_statement": "Given a connected undirected graph with positive integer edge weights, print the total weight of a minimum spanning tree.",
+  "val_curve": [
+    1.0
+  ],
+  "statements": [
+    "Given a connected undirected graph with positive integer edge weights, print the total weight of a minimum spanning tree."
+  ],
+  "tokens": {
+    "prompt": 14438,
+    "completion": 2069
+  },
+  "test": {
+    "test_small": {
+      "n": 40,
+      "accuracy": 1.0,
+      "verdicts": {
+        "AC": 40
+      },
+      "by_bucket": {
+        "small": {
+          "n": 30,
+          "acc": 1.0
+        },
+        "tiny": {
+          "n": 10,
+          "acc": 1.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "components": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "dense": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "er": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "grid": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "path_like": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "powerlaw": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "regular": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "tree": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "ws": {
+          "n": 4,
+          "acc": 1.0
+        }
+      },
+      "by_density": {
+        "dense": {
+          "n": 10,
+          "acc": 1.0
+        },
+        "medium": {
+          "n": 10,
+          "acc": 1.0
+        },
+        "sparse": {
+          "n": 20,
+          "acc": 1.0
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 24,
+          "acc": 1.0
+        },
+        "true": {
+          "n": 16,
+          "acc": 1.0
+        }
+      },
+      "max_cpu_s": 0.0076,
+      "median_cpu_s": 0.005050000000000001,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    }
+  }
+}

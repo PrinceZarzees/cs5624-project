@@ -1,0 +1,111 @@
+{
+  "task": "bipartite_check",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 0.44,
+  "final_statement": "Given an undirected graph, print YES if its nodes can be split into two sets such that every edge joins the two sets (i.e., the graph is bipartite), otherwise NO. The graph is represented with node indices from 0 to n-1 and edges without weights. We need to determine whether a valid 2-coloring exists where no adjacent nodes share the same color.",
+  "val_curve": [
+    0.44
+  ],
+  "statements": [
+    "Given an undirected graph, print YES if its nodes can be split into two sets such that every edge joins the two sets (i.e., the graph is bipartite), otherwise NO. The graph is represented with node indices from 0 to n-1 and edges without weights. We need to determine whether a valid 2-coloring exists where no adjacent nodes share the same color."
+  ],
+  "tokens": {
+    "prompt": 12701,
+    "completion": 1634
+  },
+  "test": {
+    "test_small": {
+      "n": 40,
+      "accuracy": 0.525,
+      "verdicts": {
+        "WA": 19,
+        "AC": 21
+      },
+      "by_bucket": {
+        "small": {
+          "n": 33,
+          "acc": 0.5455
+        },
+        "tiny": {
+          "n": 7,
+          "acc": 0.4286
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "components": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "dense": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "er": {
+          "n": 4,
+          "acc": 0.25
+        },
+        "grid": {
+          "n": 4,
+          "acc": 0.25
+        },
+        "path_like": {
+          "n": 4,
+          "acc": 0.5
+        },
+        "powerlaw": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "regular": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "tree": {
+          "n": 4,
+          "acc": 0.25
+        },
+        "ws": {
+          "n": 4,
+          "acc": 0.25
+        }
+      },
+      "by_density": {
+        "dense": {
+          "n": 10,
+          "acc": 0.6
+        },
+        "medium": {
+          "n": 10,
+          "acc": 0.4
+        },
+        "sparse": {
+          "n": 20,
+          "acc": 0.55
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 24,
+          "acc": 0.5417
+        },
+        "true": {
+          "n": 16,
+          "acc": 0.5
+        }
+      },
+      "max_cpu_s": 0.0073,
+      "median_cpu_s": 0.005,
+      "invariance": {
+        "tried": 5,
+        "failed": 4
+      }
+    }
+  }
+}

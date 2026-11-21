@@ -1,0 +1,20 @@
+{
+  "task": "diameter",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 0.0,
+  "final_statement": "Given a connected undirected unweighted graph, print its diameter: the largest shortest-path distance (in edges) between any two nodes.",
+  "val_curve": [
+    0.0
+  ],
+  "statements": [
+    "Given a connected undirected unweighted graph, print its diameter: the largest shortest-path distance (in edges) between any two nodes."
+  ],
+  "tokens": {
+    "prompt": 2268,
+    "completion": 1121
+  },
+  "test": {}
+}

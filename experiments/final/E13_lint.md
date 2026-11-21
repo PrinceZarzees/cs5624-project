@@ -1,8 +1,12 @@
 # E13 LaTeX lint
 
-- main.tex lines: 518
+- main.tex lines: 713
 - citations missing `~`: 0
-- included files: 29
+- included files: 33
+  - OK tables/hda/tab_hda_tasks.tex
+  - OK tables/hda/tab_hda_splits.tex
+  - OK tables/hda/tab_hda_identifiability.tex
+  - OK tables/hda/tab_hda_pilot.tex
   - OK figures/scaling_4b_accuracy_vs_size.png
   - OK figures/fig_tool_access.pdf
   - OK tables/tab_tool_access.tex
@@ -32,14 +36,15 @@
   - OK figures/fig_router120.pdf
   - OK tables/tab_router120.tex
   - OK tables/tab_router_decomp.tex
-- AI-DRAFT blocks: 4
+- AI-DRAFT blocks: 5
   - lines 34-52
   - lines 73-89
-  - lines 97-109
-  - lines 160-516
+  - lines 92-284
+  - lines 292-304
+  - lines 355-711
 - compile: returncode 0, pdf written
 - compile errors: 0
-- PDF pages: 14
-- page where Section 6 (Scaling Results) starts: 2
-- page where the AI-DRAFT final section starts: 3
-- main-content pages before Section 6: 2 (3-page minimum applies to Sections 1-5)
+- PDF pages: 19
+- page where Section 6 (Scaling Results) starts: 5
+- page where the AI-DRAFT final section starts: 6
+- main-content pages before Section 6: 5 (3-page minimum applies to Sections 1-5)

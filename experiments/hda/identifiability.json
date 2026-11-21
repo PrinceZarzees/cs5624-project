@@ -1,0 +1,285 @@
+{
+  "shortest_path": {
+    "n_candidates": 4,
+    "equivalent_on_domain": [],
+    "k=1": 0.805,
+    "confusers_k=1": {
+      "edge_weight": 78,
+      "max_edge_on_path": 69,
+      "hop_distance": 8
+    },
+    "k=2": 0.943,
+    "confusers_k=2": {
+      "edge_weight": 23,
+      "max_edge_on_path": 17
+    },
+    "k=3": 0.985,
+    "confusers_k=3": {
+      "edge_weight": 6,
+      "max_edge_on_path": 4
+    },
+    "k=5": 0.998,
+    "confusers_k=5": {
+      "edge_weight": 1,
+      "max_edge_on_path": 1
+    },
+    "k=10": 1.0,
+    "confusers_k=10": {}
+  },
+  "reachability": {
+    "n_candidates": 5,
+    "equivalent_on_domain": [],
+    "k=1": 0.0,
+    "confusers_k=1": {
+      "strongly_connected": 321,
+      "undirected_connected": 273,
+      "edge_exists": 271
+    },
+    "k=2": 0.052,
+    "confusers_k=2": {
+      "strongly_connected": 264,
+      "reach_t_to_s": 188,
+      "edge_exists": 186
+    },
+    "k=3": 0.177,
+    "confusers_k=3": {
+      "strongly_connected": 209,
+      "edge_exists": 122,
+      "undirected_connected": 118
+    },
+    "k=5": 0.45,
+    "confusers_k=5": {
+      "strongly_connected": 142,
+      "edge_exists": 61,
+      "undirected_connected": 56
+    },
+    "k=10": 0.863,
+    "confusers_k=10": {
+      "strongly_connected": 37,
+      "edge_exists": 11,
+      "undirected_connected": 8
+    }
+  },
+  "connected_components": {
+    "n_candidates": 18,
+    "equivalent_on_domain": [],
+    "k=1": 0.755,
+    "confusers_k=1": {
+      "radius_lcc": 48,
+      "max_degree": 30,
+      "leaf_count": 26
+    },
+    "k=2": 0.98,
+    "confusers_k=2": {
+      "radius_lcc": 6,
+      "leaf_count": 1,
+      "max_degree": 1
+    },
+    "k=3": 0.998,
+    "confusers_k=3": {
+      "radius_lcc": 1
+    },
+    "k=5": 1.0,
+    "confusers_k=5": {},
+    "k=10": 1.0,
+    "confusers_k=10": {}
+  },
+  "cycle_detection": {
+    "n_candidates": 18,
+    "equivalent_on_domain": [],
+    "k=1": 0.015,
+    "confusers_k=1": {
+      "has_triangle": 309,
+      "is_connected": 250,
+      "is_tree": 103
+    },
+    "k=2": 0.182,
+    "confusers_k=2": {
+      "has_triangle": 241,
+      "is_connected": 146,
+      "is_tree": 37
+    },
+    "k=3": 0.412,
+    "confusers_k=3": {
+      "has_triangle": 163,
+      "is_connected": 96,
+      "is_tree": 7
+    },
+    "k=5": 0.672,
+    "confusers_k=5": {
+      "has_triangle": 100,
+      "is_connected": 32,
+      "is_tree": 1
+    },
+    "k=10": 0.932,
+    "confusers_k=10": {
+      "has_triangle": 25,
+      "is_connected": 2
+    }
+  },
+  "diameter": {
+    "n_candidates": 18,
+    "equivalent_on_domain": [
+      "diameter_lcc"
+    ],
+    "k=1": 0.777,
+    "confusers_k=1": {
+      "radius_lcc": 35,
+      "connected_components": 16,
+      "leaf_count": 16
+    },
+    "k=2": 0.995,
+    "confusers_k=2": {
+      "radius_lcc": 2
+    },
+    "k=3": 1.0,
+    "confusers_k=3": {},
+    "k=5": 1.0,
+    "confusers_k=5": {},
+    "k=10": 1.0,
+    "confusers_k=10": {}
+  },
+  "common_neighbors": {
+    "n_candidates": 7,
+    "equivalent_on_domain": [],
+    "k=1": 0.605,
+    "confusers_k=1": {
+      "min_degree_uv": 121,
+      "degree_v": 68,
+      "degree_u": 63
+    },
+    "k=2": 0.895,
+    "confusers_k=2": {
+      "min_degree_uv": 38,
+      "degree_u": 14,
+      "degree_v": 10
+    },
+    "k=3": 0.975,
+    "confusers_k=3": {
+      "min_degree_uv": 10,
+      "degree_v": 3,
+      "degree_u": 1
+    },
+    "k=5": 1.0,
+    "confusers_k=5": {},
+    "k=10": 1.0,
+    "confusers_k=10": {}
+  },
+  "triangle_count": {
+    "n_candidates": 18,
+    "equivalent_on_domain": [],
+    "k=1": 0.432,
+    "confusers_k=1": {
+      "cycle_rank": 212,
+      "isolated_nodes": 157,
+      "max_degree": 8
+    },
+    "k=2": 0.767,
+    "confusers_k=2": {
+      "cycle_rank": 92,
+      "isolated_nodes": 56
+    },
+    "k=3": 0.895,
+    "confusers_k=3": {
+      "cycle_rank": 38,
+      "isolated_nodes": 22
+    },
+    "k=5": 0.97,
+    "confusers_k=5": {
+      "cycle_rank": 11,
+      "isolated_nodes": 4
+    },
+    "k=10": 1.0,
+    "confusers_k=10": {}
+  },
+  "bipartite_check": {
+    "n_candidates": 18,
+    "equivalent_on_domain": [],
+    "k=1": 0.228,
+    "confusers_k=1": {
+      "is_tree": 248,
+      "is_connected": 225,
+      "cycle_detection": 61
+    },
+    "k=2": 0.545,
+    "confusers_k=2": {
+      "is_connected": 126,
+      "is_tree": 108,
+      "cycle_detection": 23
+    },
+    "k=3": 0.738,
+    "confusers_k=3": {
+      "is_connected": 67,
+      "is_tree": 60,
+      "cycle_detection": 4
+    },
+    "k=5": 0.917,
+    "confusers_k=5": {
+      "is_tree": 25,
+      "is_connected": 16
+    },
+    "k=10": 0.998,
+    "confusers_k=10": {
+      "is_tree": 1
+    }
+  },
+  "mst_weight": {
+    "n_candidates": 6,
+    "equivalent_on_domain": [],
+    "k=1": 0.578,
+    "confusers_k=1": {
+      "max_spanning_tree": 169,
+      "total_weight": 169
+    },
+    "k=2": 0.797,
+    "confusers_k=2": {
+      "max_spanning_tree": 81,
+      "total_weight": 81
+    },
+    "k=3": 0.932,
+    "confusers_k=3": {
+      "max_spanning_tree": 27,
+      "total_weight": 27
+    },
+    "k=5": 0.978,
+    "confusers_k=5": {
+      "max_spanning_tree": 9,
+      "total_weight": 9
+    },
+    "k=10": 1.0,
+    "confusers_k=10": {}
+  },
+  "max_flow": {
+    "n_candidates": 7,
+    "equivalent_on_domain": [],
+    "k=1": 0.163,
+    "confusers_k=1": {
+      "widest_path": 262,
+      "min_out_in": 250,
+      "out_capacity_s": 173
+    },
+    "k=2": 0.355,
+    "confusers_k=2": {
+      "min_out_in": 185,
+      "widest_path": 149,
+      "out_capacity_s": 75
+    },
+    "k=3": 0.54,
+    "confusers_k=3": {
+      "min_out_in": 109,
+      "widest_path": 105,
+      "out_capacity_s": 31
+    },
+    "k=5": 0.77,
+    "confusers_k=5": {
+      "widest_path": 50,
+      "min_out_in": 50,
+      "in_capacity_t": 3
+    },
+    "k=10": 0.985,
+    "confusers_k=10": {
+      "min_out_in": 4,
+      "widest_path": 2
+    }
+  }
+}

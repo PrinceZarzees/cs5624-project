@@ -1,0 +1,20 @@
+{
+  "task": "triangle_count",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 0,
+  "best_val_acc": -1.0,
+  "final_statement": "Given an undirected simple graph, print the number of triangles (unordered triples of mutually adjacent nodes). A triangle is a set of three distinct vertices {u, v, w} such that each pair among them is connected by an edge. The goal is to count all such unordered triples efficiently.",
+  "val_curve": [
+    0.0
+  ],
+  "statements": [
+    "Given an undirected simple graph, print the number of triangles (unordered triples of mutually adjacent nodes). A triangle is a set of three distinct vertices {u, v, w} such that each pair among them is connected by an edge. The goal is to count all such unordered triples efficiently."
+  ],
+  "tokens": {
+    "prompt": 21909,
+    "completion": 2069
+  },
+  "test": {}
+}

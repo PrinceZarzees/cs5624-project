@@ -1,0 +1,21 @@
+{
+  "task": "diameter",
+  "condition": "hidden",
+  "k": 3,
+  "seed": 0,
+  "best_it": 0,
+  "best_val_acc": -1.0,
+  "final_statement": "(not yet stated)",
+  "val_curve": [
+    0.0
+  ],
+  "statements": [
+    "(not yet stated)"
+  ],
+  "tokens": {
+    "prompt": 9282,
+    "completion": 1536
+  },
+  "statement_judge": "EQUIVALENT",
+  "test": {}
+}

@@ -1,0 +1,111 @@
+{
+  "task": "common_neighbors",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 0.11,
+  "final_statement": "Given an undirected graph and a query of the form \"2 u v\", determine the number of nodes that are adjacent to both u and v. We must process only such queries and correctly build adjacency lists from edges.",
+  "val_curve": [
+    0.11
+  ],
+  "statements": [
+    "Given an undirected graph and a query of the form \"2 u v\", determine the number of nodes that are adjacent to both u and v. We must process only such queries and correctly build adjacency lists from edges."
+  ],
+  "tokens": {
+    "prompt": 21779,
+    "completion": 3662
+  },
+  "test": {
+    "test_small": {
+      "n": 40,
+      "accuracy": 0.2,
+      "verdicts": {
+        "AC": 8,
+        "WA": 32
+      },
+      "by_bucket": {
+        "small": {
+          "n": 29,
+          "acc": 0.2414
+        },
+        "tiny": {
+          "n": 11,
+          "acc": 0.0909
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 4,
+          "acc": 0.0
+        },
+        "components": {
+          "n": 4,
+          "acc": 0.25
+        },
+        "dense": {
+          "n": 4,
+          "acc": 0.0
+        },
+        "er": {
+          "n": 4,
+          "acc": 0.25
+        },
+        "grid": {
+          "n": 4,
+          "acc": 0.25
+        },
+        "path_like": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "powerlaw": {
+          "n": 4,
+          "acc": 0.0
+        },
+        "regular": {
+          "n": 4,
+          "acc": 0.5
+        },
+        "tree": {
+          "n": 4,
+          "acc": 0.0
+        },
+        "ws": {
+          "n": 4,
+          "acc": 0.0
+        }
+      },
+      "by_density": {
+        "dense": {
+          "n": 10,
+          "acc": 0.0
+        },
+        "medium": {
+          "n": 10,
+          "acc": 0.2
+        },
+        "sparse": {
+          "n": 20,
+          "acc": 0.3
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 24,
+          "acc": 0.25
+        },
+        "true": {
+          "n": 16,
+          "acc": 0.125
+        }
+      },
+      "max_cpu_s": 0.0059,
+      "median_cpu_s": 0.0049,
+      "invariance": {
+        "tried": 5,
+        "failed": 4
+      }
+    }
+  }
+}

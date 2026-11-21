@@ -1,0 +1,20 @@
+{
+  "task": "max_flow",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 0.0,
+  "final_statement": "Given a directed graph whose edge weights are capacities and two nodes s and t (query 2 s t), print the value of a maximum flow from s to t. The task is to compute the maximum flow in a weighted directed network using standard algorithms such as the Ford-Fulkerson method with DFS or Edmonds-Karp (BFS-based). Since the graphs can be up to 100,000 nodes and edges, we must use an efficient implementation that avoids recursion depth issues. We will implement a BFS-based max flow algorithm (Edmonds-Karp) which has O(VE\u00b2) complexity but is more manageable in practice due to its polynomial behavior on sparse graphs.\n\nWe\u2019ll:\n- Parse input correctly\n- Build adjacency list representation for the graph\n- Use BFS to find augmenting paths from source s to sink t\n- Maintain residual capacities\n- Repeat until no more augmenting paths exist\n\nKey design points:\n- Avoid deep recursion; use iterative DFS/BFS (we use BFS here)\n- Use a vector to track residual capacities between nodes\n- Ensure proper handling of node indices and graph directionality\n\nWe will implement the Edmonds-Karp algorithm as it is efficient for sparse graphs, and since we are only solving one flow query per input, it's suitable.\n\nNow I refine the solution with an actual max flow implementation.",
+  "val_curve": [
+    0.0
+  ],
+  "statements": [
+    "Given a directed graph whose edge weights are capacities and two nodes s and t (query 2 s t), print the value of a maximum flow from s to t. The task is to compute the maximum flow in a weighted directed network using standard algorithms such as the Ford-Fulkerson method with DFS or Edmonds-Karp (BFS-based). Since the graphs can be up to 100,000 nodes and edges, we must use an efficient implementation that avoids recursion depth issues. We will implement a BFS-based max flow algorithm (Edmonds-Karp) which has O(VE\u00b2) complexity but is more manageable in practice due to its polynomial behavior on sparse graphs.\n\nWe\u2019ll:\n- Parse input correctly\n- Build adjacency list representation for the graph\n- Use BFS to find augmenting paths from source s to sink t\n- Maintain residual capacities\n- Repeat until no more augmenting paths exist\n\nKey design points:\n- Avoid deep recursion; use iterative DFS/BFS (we use BFS here)\n- Use a vector to track residual capacities between nodes\n- Ensure proper handling of node indices and graph directionality\n\nWe will implement the Edmonds-Karp algorithm as it is efficient for sparse graphs, and since we are only solving one flow query per input, it's suitable.\n\nNow I refine the solution with an actual max flow implementation."
+  ],
+  "tokens": {
+    "prompt": 4814,
+    "completion": 1370
+  },
+  "test": {}
+}

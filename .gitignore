@@ -86,3 +86,10 @@ experiments/**/*.sqlite-*
 experiments/final/**/sandbox*/
 data_proxy_large/
 data_proxy_medium/
+hda_pipeline/data/
+experiments/hda/**/log.jsonl
+experiments/hda/**/it*/
+experiments/hda/**/sandbox*/
+hda_pipeline.tgz
+experiments/hda/**/final/solution
+experiments/hda/**/build/
