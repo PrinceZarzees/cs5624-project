@@ -1,0 +1,11 @@
+task,directed,weighted,query args,statement
+shortest_path,no,yes,"2 (s,t)","Given an undirected graph with positive integer edge weights and two nodes s and t (the query 2 s t), print the total weight of a minimum-weight path from s to t, or -1 if t is unreachable from s."
+reachability,yes,no,"2 (s,t)","Given a directed graph and two nodes s and t (query 2 s t), print YES if there is a directed path from s to t, otherwise NO."
+connected_components,no,no,none,"Given an undirected graph, print the number of connected components (an isolated node is its own component)."
+cycle_detection,no,no,none,"Given an undirected simple graph, print YES if it contains at least one cycle, otherwise NO."
+diameter,no,no,none,"Given a connected undirected unweighted graph, print its diameter: the largest shortest-path distance (in edges) between any two nodes."
+common_neighbors,no,no,"2 (s,t)","Given an undirected graph and two nodes u and v (query 2 u v), print the number of nodes adjacent to both u and v."
+triangle_count,no,no,none,"Given an undirected simple graph, print the number of triangles (unordered triples of mutually adjacent nodes)."
+bipartite_check,no,no,none,"Given an undirected graph, print YES if its nodes can be split into two sets so that every edge joins the two sets (the graph is bipartite), otherwise NO."
+mst_weight,no,yes,none,"Given a connected undirected graph with positive integer edge weights, print the total weight of a minimum spanning tree."
+max_flow,yes,yes,"2 (s,t)","Given a directed graph whose edge weights are capacities and two nodes s and t (query 2 s t), print the value of a maximum flow from s to t."

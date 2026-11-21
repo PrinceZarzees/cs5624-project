@@ -88,6 +88,201 @@ v2 was built from earlier \texttt{test\_small} failures, so its
 final-results section is the clean estimate.
 % <<< AI-DRAFT
 
+
+% >>> AI-DRAFT (HDA-methodology, 2026-11-21): rewrite before submission
+\section{Harness Developing Agent}
+
+\subsection{Motivation}
+The Python/NetworkX harness leaves the algorithmic work to the library: when
+NetworkX is available the agent scores 96.4\% on small graphs and 92.0\% on the
+25-problem large subset, and without it the same harness drops to 35.8\% and
+0\% (Section~10). The Harness Developing Agent (HDA) removes the library. It
+receives small input/output examples for one graph task and must write one
+self-contained C++17 program that solves \emph{any} instance of that task. The
+program is developed on 4--50-node graphs and then run on held-out graphs up to
+100{,}000 nodes, so a correct but slow algorithm passes validation and fails at
+scale.
+
+\subsection{Agent input and output}
+The HDA sees the following parts on every iteration. Table~\ref{tab:hda-protocol}
+summarizes the protocol.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{2.8cm}p{9.6cm}}
+\toprule
+Part & Content \\
+\midrule
+System prompt & Role; C++17 and the standard library only (no Boost, no graph
+libraries, file I/O, threads or system calls); hidden graphs are up to 1000$\times$
+larger with permuted node IDs; an explicit ban on memorizing or hardcoding
+answers, node IDs, sizes or lookup tables; limits 1--5\,s CPU, 1\,GiB memory,
+8\,MiB stack; the input format; a graph-loading template; and the tool protocol. \\
+Problem statement & \emph{Given}: one paragraph from \texttt{hda/tasks.py}.
+\emph{Hidden}: no statement; the model must list at least three candidate
+problems, argue for and against each against every example, keep the simplest
+consistent one in \texttt{<statement>}, and may revise it later. \\
+Examples & $k=10$ new examples per iteration, drawn without replacement from the
+\texttt{examples} split (4--50 nodes, seen families). The prompt shows the
+current 10; the \texttt{test} tool runs every example seen so far. \\
+Iteration context & Iteration number, aggregate validation feedback for the last
+submission, the best program so far and its validation accuracy, and the
+current statement. \\
+Tools & One action per reply: \texttt{test} (compile the latest code and run all
+seen examples), \texttt{run} (custom input), \texttt{stress} (C++ generator for
+large inputs, up to 64\,MiB), \texttt{submit}. \\
+Output & One C++17 source file per iteration, plus the current
+\texttt{<statement>}. $H^*$ is the submission with the best validation accuracy. \\
+\bottomrule
+\end{tabular}
+\caption{HDA input, tools and output.}
+\label{tab:hda-protocol}
+\end{table}
+
+Every graph, example or test, uses the same input format:
+\begin{verbatim}
+n m directed weighted        # directed, weighted in {0,1}
+u v [w]                      # m lines, nodes 0..n-1, no self-loops
+k q1 ... qk                  # query arguments (k = 0 or 2)
+\end{verbatim}
+The header reveals whether the graph is directed or weighted and how many query
+nodes follow. This narrows the task family but does not identify the task
+(Section~\ref{sec:hda-ident}).
+
+\subsection{Tasks}
+Phase~1 uses ten polynomial-time tasks with exact, single-token answers
+(Table~\ref{tab:hda-tasks}). NP-hard tasks are deferred to phase~2.
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_tasks.tex}
+\caption{Phase-1 tasks. ``Query args'' is the number of nodes after the graph;
+\texttt{2} means $s$ and $t$.}
+\label{tab:hda-tasks}
+\end{table}
+
+\subsection{Data generator}
+Graphs come from a generator with four \emph{seen} families (Erd\H{o}s--R\'enyi,
+Barab\'asi--Albert, random trees, disjoint unions) and six \emph{unseen} families
+used only in test (Watts--Strogatz, grids with 10\% edges removed,
+caterpillar/path-like, dense ER, random regular, powerlaw-cluster). Average
+degree cycles through 1.2--3, 3--8 and 8--20. Tasks are shaped so answers are not
+degenerate: diameter and MST graphs are connected; cycle detection is balanced
+between forests and forests with 1--3 chords; bipartite is balanced between
+bipartite and one-odd-edge graphs; reachability queries are 50/50 reachable;
+shortest-path and max-flow queries are 85\% reachable; common-neighbor queries
+use a 2-hop pair 70\% of the time. Node IDs are randomly permuted and edge and
+endpoint order are shuffled. Ground truth is human-written C++ in
+\texttt{reference/*.cpp}, cross-checked against NetworkX on 600 random graphs.
+
+Table~\ref{tab:hda-splits} lists the split sizes, node ranges, families and CPU
+limits. Base seed 5625; each split uses its own seed offset, so no graph is
+shared. Validation (40 graphs) and all test graphs are hidden from the HDA.
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_splits.tex}
+\caption{HDA splits. \texttt{examples} is the pool from which $k=10$ examples
+per iteration are drawn.}
+\label{tab:hda-splits}
+\end{table}
+
+\subsection{Training loop}
+For one run (task $\times$ condition $\times$ seed):
+\begin{enumerate}
+\item For iteration $t=1,\dots,5$: give 10 new examples, the last validation
+feedback, the best program so far and the current statement.
+\item The HDA works for at most 8 tool steps, may revise \texttt{<statement>},
+then submits its latest program.
+\item A static policy check rejects violations with score 0; compilation errors
+are returned as feedback.
+\item Score the program on 40 hidden validation graphs (4--50 nodes, seen
+families). Re-run 5 of them with fresh node IDs; each relabeling failure reduces
+the iteration score proportionally.
+\item Feed back aggregate accuracy, verdict counts (AC/WA/TLE/RE/MLE), accuracy
+by size bucket and family, and the maximum CPU time.
+\end{enumerate}
+$H^*$ is the best-validation submission and is evaluated once on
+\texttt{test\_small}, \texttt{test\_medium}, \texttt{test\_large},
+\texttt{test\_xl} and \texttt{test\_stress}. The problem statement is logged at
+every step but is not scored during training.
+
+\subsection{Problem-statement conditions and identifiability}
+\label{sec:hda-ident}
+In the \emph{given} condition the statement is shown. In the \emph{hidden}
+condition the model must infer it and write it in \texttt{<statement>}; it may
+revise it in later steps and iterations. We measure identification in two ways:
+an LLM judge labels the final statement EQUIVALENT/PARTIAL/WRONG, and functional
+identification is test-small accuracy $\ge 95\%$.
+
+Table~\ref{tab:hda-ident} measures how often the true task is the only candidate
+consistent with $k$ random examples, among the 10 tasks and 37 distractors.
+With $k=10$ every task is identifiable in at least 86\% of draws, which supports
+$k=10$.
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_identifiability.tex}
+\caption{Probability that the true task is the unique survivor among 10 tasks
+and 37 distractors, and the main confusers at $k=3$ (400 trials).}
+\label{tab:hda-ident}
+\end{table}
+
+\subsection{Anti-memorization}
+Four layers apply. (i) The system prompt forbids memorizing or hardcoding
+answers, node IDs, edge lists, sizes, lookup tables or special cases. (ii) A
+static policy allows only standard headers, bans system calls, file I/O, threads,
+inline assembly and local includes, rejects literal arrays of 20+ numbers, more
+than 24 non-trivial numeric literals, and code containing two or more example
+answers verbatim. (iii) Validation and test graphs are fresh and hidden, node
+IDs are permuted, and 5 graphs per evaluation are re-run with new IDs and must
+give the same answer. (iv) The sandbox uses an empty working directory, stdin
+only, and CPU/memory/stack/output limits, so a program cannot read test files.
+
+\subsection{Evaluation and logging}
+Metrics are accuracy, verdict mix, the small--large gap
+(\texttt{test\_small} minus \texttt{test\_xl}), accuracy by family, density and
+size, identification, and cost (tokens, wall time, tool calls). Baselines are a
+one-shot HDA (1 iteration), the majority answer, the human C++ reference and the
+library-assisted Python/NetworkX v2. Every run writes \texttt{log.jsonl} with
+the config, examples, full prompts, raw replies and reasoning traces, current
+statements, code, tool outputs, submissions with per-graph answers and
+verdicts, iteration summaries, the judge label and test rows;
+\texttt{final.json} holds the validation curve, statements, judge label, tokens
+and test summaries. 
+\subsection{Results so far}
+The pipeline was installed and verified on ARC. All 18 unit tests pass, the
+data build takes 60\,s, and the human C++ reference scores 100\% on every task
+and split with a maximum CPU time of 0.45\,s, well below the 1--5\,s limits.
+The identifiability measurement reproduces Table~\ref{tab:hda-ident}.
+
+Because gpt-oss-120b is not on disk and the B200 queue was reserved, the only
+model run so far is a reduced Qwen3-4B pilot: Q4 CPU, $k=3$, one iteration,
+four tool steps, 2048 maximum tokens (Table~\ref{tab:hda-pilot}). It is a
+diagnostic, not the intended $k=10$ BF16 grid. MST reaches 100\% validation and
+test accuracy; bipartite reaches 44\% validation and 52.5\% test; common
+neighbors reaches 11\% and 20\%; the other six tasks score 0. Most of the zero
+submissions fail to compile because the model omits the provided C++ loader,
+and cycle detection exceeded the 8k CPU context. In a hidden-condition smoke
+run, the model spent every step debating candidate statements and submitted no
+code. These results indicate that the 4B model is too weak for the HDA role;
+the BF16 $k=10$ grid and smoke run are queued but had not started when this
+draft was written.
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_pilot.tex}
+\caption{Reduced Qwen3-4B pilot (Q4 CPU, $k=3$, one iteration). ``--'' means
+the submission did not compile, so no test was run.}
+\label{tab:hda-pilot}
+\end{table}
+% <<< AI-DRAFT
+
 \section{Small-Graph Optimization}
 % TODO: SkillOpt/GEPA loop, accepted/rejected edits, why no candidate improved.
 Two optimizer runs (8 rounds from v2, 10 rounds from A) rejected every

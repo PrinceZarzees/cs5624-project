@@ -8,5 +8,6 @@ explicitly approved by the authors before submission.
 | `report/SLIDES.md` | 25-38 (14 lines) | `<!-- >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission -->` |
 | `report/main.tex` | 34-52 (19 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
 | `report/main.tex` | 73-89 (17 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
-| `report/main.tex` | 97-109 (13 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
-| `report/main.tex` | 160-516 (357 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
+| `report/main.tex` | 92-284 (193 lines) | `% >>> AI-DRAFT (HDA-methodology, 2026-11-21): rewrite before submission` |
+| `report/main.tex` | 292-304 (13 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
+| `report/main.tex` | 355-711 (357 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |

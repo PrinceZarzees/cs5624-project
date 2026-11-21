@@ -1,0 +1,11 @@
+task,candidates,k=1,k=3,k=5,k=10,top confusers at k=3
+shortest_path,4,0.81,0.98,1.00,1.00,"edge_weight, max_edge_on_path"
+reachability,5,0.00,0.18,0.45,0.86,"strongly_connected, edge_exists, undirected_connected"
+connected_components,18,0.76,1.00,1.00,1.00,radius_lcc
+cycle_detection,18,0.01,0.41,0.67,0.93,"has_triangle, is_connected, is_tree"
+diameter,18,0.78,1.00,1.00,1.00,--
+common_neighbors,7,0.60,0.97,1.00,1.00,"min_degree_uv, degree_v, degree_u"
+triangle_count,18,0.43,0.90,0.97,1.00,"cycle_rank, isolated_nodes"
+bipartite_check,18,0.23,0.74,0.92,1.00,"is_connected, is_tree, cycle_detection"
+mst_weight,6,0.58,0.93,0.98,1.00,"max_spanning_tree, total_weight"
+max_flow,7,0.16,0.54,0.77,0.98,"min_out_in, widest_path, out_capacity_s"

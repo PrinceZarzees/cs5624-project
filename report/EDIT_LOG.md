@@ -73,3 +73,12 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 | final section | added "Overfitting probe" paragraph + `tab_overfit`, `fig_overfit_probe` | `experiments/final/E3_probe/summary.csv` |
 | final section | added "Router at scale" paragraph + `tab_router120`, `fig_router120` | `experiments/final/E7_router/summary.csv` |
 | final section | added "Not completed" paragraph (E10/E5/E14, learned-router bug, decomposition timeout) | `experiments/final/{RESULTS_INDEX,JOBS}.md` |
+
+## 2026-11-21 HDA section
+
+| Location | Change | Source |
+|---|---|---|
+| main.tex new Section 5 | HDA methodology: motivation, input/output, tasks, generator, loop, conditions, anti-memorization, evaluation, logging; AI-DRAFT markers | `HDA_RUNBOOK.md`, `hda_pipeline/` |
+| main.tex HDA results | human-reference/identifiability summary and reduced Qwen3-4B pilot table | `experiments/hda/{human_reference,identifiability.json,qwen_cpu_pilot2}` |
+| tables/hda/* | generated task, split, identifiability, human-reference and pilot tables | `hda_pipeline/scripts/make_hda_{tables,results}.py` |
+| main.tex protocol table | HDA input/tools/output summary | runbook 1.1--1.3 |

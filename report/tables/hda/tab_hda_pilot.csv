@@ -1,0 +1,10 @@
+task,condition,k,iters,best val,test_small,judge
+bipartite_check,given,3,1,44.0%,52.5%,
+common_neighbors,given,3,1,11.0%,20.0%,
+connected_components,given,3,1,0.0%,--,
+diameter,given,3,1,0.0%,--,
+max_flow,given,3,1,0.0%,--,
+mst_weight,given,3,1,100.0%,100.0%,
+reachability,given,3,1,0.0%,--,
+shortest_path,given,3,1,0.0%,--,
+triangle_count,given,3,1,0.0%,--,
