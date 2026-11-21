@@ -1,0 +1,7 @@
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+disconnected120 connected_components       3    1133  100.0%    100.0%    100.0%
+disconnected120 max_clique                 3    1133  100.0%    100.0%    100.0%
+disconnected120 max_independent_set        3    1133  100.0%    100.0%    100.0%
+disconnected120 min_vertex_cover           3    1133  100.0%    100.0%    100.0%
+disconnected120 ALL                       12    1133  100.0%    100.0%    100.0%

@@ -11,13 +11,13 @@ Updated 2026-11-21. Status: **DONE**, **PARTIAL**, **PENDING**, **NOT RUN**.
 | F5 SkillOpt / EvoSkill | E3/E4 | **DONE**: SkillOpt 1 accepted; EvoSkill 0 accepted (val already 100%) | `E3_optimizers/skillopt_baseline_b/`, `E4_evoskill/baseline_b/` | `tab_optimizers`, `tab_optimizer_outputs`, final section |
 | F6 optimization cost | E9 | **DONE** (CPU) | `E9_costs/{per_run,curves,counterfactual}.csv` | `tab_costs`, `tab_cost_counterfactual`, `fig_optimizer_curves` |
 | F7 large-graph proxies | E5 | **PARTIAL** (reduced: 17/15 candidates, no evolved rubric) | `E5_proxy/{summary.csv,labels_same_candidates.csv}` | `tab_proxy`, `fig_proxy`, "Proxies" paragraph |
-| F8 router/decomposition | E7 | **PARTIAL**: 120-problem global/rule results; learned router trained (CV 96.7%) but GPU run failed on an interface bug; decomposition timed out | `E7_router/{summary.csv,router.json}` | `tab_router120`, `fig_router120`, "Router at scale" |
+| F8 router/decomposition | E7 | **PARTIAL**: 120-problem global/rule; decomposition+repair 12/12 = 100%; learned router trained (CV 96.7%) but not rerun | `E7_router/{summary.csv,router.json}` | `tab_router120`, `tab_router_decomp`, `fig_router120`, "Router at scale" |
 | F9 RRSI overfitting | E3 | **DONE**: probe shows val 92.7→98.7 while large 95.0→90.0 | `E3_probe/summary.csv` | `tab_overfit`, `fig_overfit_probe` |
 | F10 citation spacing | E13 | **DONE** (0 violations) | `E13_lint.md` | – |
 | held-out v2 | E1 | **DONE** | `E1_heldout/{summary,summary_by_task,mcnemar}.csv` | `tab_heldout_small`, "Held-out" paragraph |
 | repeats/error bars | E2 | **DONE** | `E2_repeats/{summary,gen_gap,mcnemar}.csv` | `tab_main_scaling`, `fig_scaling`, `fig_gen_gap` |
 | larger real bench | E6 | **DONE** | `E6_real_bench/{summary,per_task}.csv` | `tab_real_bench_overall`, `tab_real_bench_per_task`, `fig_real_bench` |
-| C + library 2×2 | E10 | **CODE DONE, RUN QUEUED** (job 1549258, 20:16) | `E10_lang_lib/harnesses/`, `summary.csv` when run | `tab_lang_lib` still has the old pilot |
+| C + library 2×2 | E10 | **CODE DONE, RUN STOPPED** (CPU pilot completed 1 of 4 cells) | `E10_lang_lib/harnesses/`, `cpu10/` | `tab_lang_lib` still has the old pilot |
 | 32k no-tools | E11 | **DONE** | `E11_notools_longctx/{summary.csv,fit_rows.csv}` | `tab_notools_longctx`, `fig_notools_longctx`, "No-tools at 32k" |
 | cross-model | E14 | **NOT RUN** (optional; cancelled for GPU contention) | – | – |
 
@@ -45,9 +45,10 @@ Updated 2026-11-21. Status: **DONE**, **PARTIAL**, **PENDING**, **NOT RUN**.
 
 ## Not run, and why
 
-- E10 (language × library) is implemented and unit-tested; the run is queued
-  as job 1549258 (projected after the session).
-- E7 learned-router run failed on an interface bug (now fixed); decomposition
-  on 120 problems exceeded the job window.
+- E10 (language × library) is implemented and unit-tested; the run was stopped
+  after one CPU-Q4 cell, so no 2x2 result is reported.
+- E7 learned-router run failed on an interface bug (now fixed) and was not
+  rerun; decomposition on 120 problems exceeded the job window, but a
+  12-problem subset scored 100% with exact component repair.
 - E14 optional cross-model check; no larger actor on disk.
 - Full E5 (60 candidates, evolved rubric, `proxy_large` split): no GPU window.

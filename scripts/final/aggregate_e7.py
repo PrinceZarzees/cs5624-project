@@ -35,6 +35,19 @@ def main():
             rows.append({"set": "disconnected120", "mode": mode, "task": t.get("task", "ALL"),
                          "n": t.get("n"), "accuracy": t.get("accuracy"),
                          "parsed": t.get("parsed"), "feasible": t.get("feasible")})
+    for mode, path in [("decomp_rule_12", OUT/"disc/decomp_rule12"),
+                       ("decomp_learned_12", OUT/"disc/decomp_learned12")]:
+        d = summ(path)
+        if not d: continue
+        if "overall" in d:
+            o = d["overall"]
+            rows.append({"set": "disconnected12", "mode": mode, "task": "ALL",
+                         "n": d.get("n"), "accuracy": o["accuracy"],
+                         "parsed": o.get("parsed"), "feasible": o.get("feasible")})
+        for t in d.get("by_task", []):
+            rows.append({"set": "disconnected12", "mode": mode, "task": t.get("task", "ALL"),
+                         "n": t.get("n"), "accuracy": t.get("accuracy"),
+                         "parsed": t.get("parsed"), "feasible": t.get("feasible")})
     for mode in ("rule", "learned"):
         d = summ(OUT/f"test_medium/{mode}")
         if not d: continue

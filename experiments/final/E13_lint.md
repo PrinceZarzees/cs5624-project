@@ -1,8 +1,8 @@
 # E13 LaTeX lint
 
-- main.tex lines: 508
+- main.tex lines: 518
 - citations missing `~`: 0
-- included files: 28
+- included files: 29
   - OK figures/scaling_4b_accuracy_vs_size.png
   - OK figures/fig_tool_access.pdf
   - OK tables/tab_tool_access.tex
@@ -31,11 +31,12 @@
   - OK tables/tab_router.tex
   - OK figures/fig_router120.pdf
   - OK tables/tab_router120.tex
+  - OK tables/tab_router_decomp.tex
 - AI-DRAFT blocks: 4
   - lines 34-52
   - lines 73-89
   - lines 97-109
-  - lines 160-506
+  - lines 160-516
 - compile: returncode 0, pdf written
 - compile errors: 0
 - PDF pages: 14

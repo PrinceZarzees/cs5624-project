@@ -200,6 +200,22 @@ if e7.exists():
     header=['mode','ALL','components','max clique','MIS','MVC']
     csvw('tab_router120',header,rows); tex('tab_router120',header,rows,align='lrrrrr')
 
+# E7 decomposition+repair on 12 problems
+e7d=ROOT/'experiments/final/E7_router/summary.csv'
+if e7d.exists():
+    rs=[r for r in csv.DictReader(open(e7d)) if r['set']=='disconnected12']
+    if rs:
+        tasks=['ALL','connected_components','max_clique','max_independent_set','min_vertex_cover']
+        rows=[]
+        for m in sorted({r['mode'] for r in rs}):
+            cells=[]
+            for t in tasks:
+                x=[r for r in rs if r['mode']==m and r['task']==t]
+                cells.append(f"{float(x[0]['accuracy']):.1%}" if x else '--')
+            rows.append([m.replace('_',' ')]+cells)
+        header=['mode','ALL','components','max clique','MIS','MVC']
+        csvw('tab_router_decomp',header,rows); tex('tab_router_decomp',header,rows,align='lrrrrr')
+
 # router (8-problem pilot)
 rows=[]
 for m,p in [('global','experiments/review_router/global/summary.txt'),('routed','experiments/review_router/routed/summary.txt'),('decomposed','experiments/review_router/decomposed/summary.txt')]:

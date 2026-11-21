@@ -48,3 +48,9 @@ All jobs use `--account=psgroup --partition=b200_normal_q --qos=owl_b200_normal_
 | 1549257 | run_e5_a30.sbatch | E5 labels/judges for 20 candidates | 19:46 (projected) | 20:16 | PENDING | E5_proxy/ |
 | 1549258 | run_e10.sbatch | E10 2x2 on test_small | 20:16 (projected) | 20:41 | PENDING | E10_lang_lib/ |
 | 1549291 | run_e7_learned.sbatch | learned router rerun after interface fix | 20:42 (projected) | 21:12 | PENDING | E7_router/disc/learned |
+- All remaining queued jobs were **stopped at the user's request on 2026-11-21
+  16:55**: 1548907 (decomposition; decomp_rule12 completed, learned half done),
+  1549257 (E5 labels), 1549291 (learned-router rerun).
+- The CPU-Q4 E10 pilot was also stopped after the first cell
+  (`E10_lang_lib/cpu10/py_lib`, n=50); the other three cells are partial.
+- No experiment job was left running; only the interactive allocation 1546176.
