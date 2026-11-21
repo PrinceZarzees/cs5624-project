@@ -1,0 +1,261 @@
+{
+  "harness": "baseline_b-candidate",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b-candidate",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+      "Verify the correctness of cycles and paths by checking the edges they traverse.",
+      "For large graphs, avoid using node labels in your output; use indices or generic labels.",
+      "When reporting cycles, ensure they start and end at the same node.",
+      "For connected components, report a representative node from each component without relying on specific node IDs."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Added rules for verifying cycle correctness and avoiding specific node IDs, which will help scale to larger graphs."
+  },
+  "model": "qwen3-4b",
+  "split": "test_stress",
+  "started_at": "2026-11-21T18:35:22.239857+00:00",
+  "finished_at": "2026-11-21T18:36:41.920666+00:00",
+  "duration_s": 79.68081467298907,
+  "n": 50,
+  "overall": {
+    "split": "test_stress",
+    "task": "ALL",
+    "n": 50,
+    "parsed": 0.82,
+    "feasible": 0.8,
+    "accuracy": 0.76,
+    "mean_nodes": 2000.0
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 10,
+      "mean_nodes": 2000.0,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "cycle_detection",
+      "n": 10,
+      "mean_nodes": 2000.0,
+      "parsed": 0.9,
+      "feasible": 0.8,
+      "accuracy": 0.8
+    },
+    {
+      "task": "diameter",
+      "n": 10,
+      "mean_nodes": 2000.0,
+      "parsed": 0.4,
+      "feasible": 0.4,
+      "accuracy": 0.4
+    },
+    {
+      "task": "max_clique",
+      "n": 10,
+      "mean_nodes": 2000.0,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.8
+    },
+    {
+      "task": "shortest_path",
+      "n": 10,
+      "mean_nodes": 2000.0,
+      "parsed": 0.8,
+      "feasible": 0.8,
+      "accuracy": 0.8
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "1000+",
+      "n": 50,
+      "mean_nodes": 2000.0,
+      "parsed": 0.82,
+      "feasible": 0.8,
+      "accuracy": 0.76
+    }
+  ],
+  "tokens": {
+    "prompt": 356583,
+    "completion": 43417,
+    "total": 400000,
+    "mean_total_per_problem": 8510.63829787234
+  },
+  "tool_calls": 100,
+  "mean_agent_duration_s": 6.285238047977513,
+  "errors": 3,
+  "failures": [
+    {
+      "id": "shortest_path/test_stress/00000",
+      "task": "shortest_path",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_stress/00009",
+      "task": "shortest_path",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "cycle_detection/test_stress/00001",
+      "task": "cycle_detection",
+      "n_nodes": 2000,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['0']"
+    },
+    {
+      "id": "cycle_detection/test_stress/00007",
+      "task": "cycle_detection",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "diameter/test_stress/00000",
+      "task": "diameter",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "diameter/test_stress/00003",
+      "task": "diameter",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "diameter/test_stress/00005",
+      "task": "diameter",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "diameter/test_stress/00006",
+      "task": "diameter",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "diameter/test_stress/00007",
+      "task": "diameter",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "diameter/test_stress/00008",
+      "task": "diameter",
+      "n_nodes": 2000,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "max_clique/test_stress/00000",
+      "task": "max_clique",
+      "n_nodes": 2000,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 9"
+    },
+    {
+      "id": "max_clique/test_stress/00003",
+      "task": "max_clique",
+      "n_nodes": 2000,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 2, maximum is 3"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_stress",
+      "task": "connected_components",
+      "n": 10,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 2000.0
+    },
+    {
+      "split": "test_stress",
+      "task": "cycle_detection",
+      "n": 10,
+      "parsed": 0.9,
+      "feasible": 0.8,
+      "accuracy": 0.8,
+      "mean_nodes": 2000.0
+    },
+    {
+      "split": "test_stress",
+      "task": "diameter",
+      "n": 10,
+      "parsed": 0.4,
+      "feasible": 0.4,
+      "accuracy": 0.4,
+      "mean_nodes": 2000.0
+    },
+    {
+      "split": "test_stress",
+      "task": "max_clique",
+      "n": 10,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.8,
+      "mean_nodes": 2000.0
+    },
+    {
+      "split": "test_stress",
+      "task": "shortest_path",
+      "n": 10,
+      "parsed": 0.8,
+      "feasible": 0.8,
+      "accuracy": 0.8,
+      "mean_nodes": 2000.0
+    },
+    {
+      "split": "test_stress",
+      "task": "ALL",
+      "n": 50,
+      "parsed": 0.82,
+      "feasible": 0.8,
+      "accuracy": 0.76,
+      "mean_nodes": 2000.0
+    }
+  ]
+}

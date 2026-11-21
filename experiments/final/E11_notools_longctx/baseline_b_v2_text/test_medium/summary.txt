@@ -1,0 +1,28 @@
+harness: baseline_b_v2_text    model: qwen3-4b    split: test_medium
+problems: 150    errors: 0    duration: 105.6s    tokens: 1522526
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188  100.0%     53.3%      6.7%
+test_medium  cycle_detection           30     203  100.0%     53.3%     53.3%
+test_medium  diameter                  30     182  100.0%     10.0%      0.0%
+test_medium  max_clique                30     194   93.3%     16.7%      0.0%
+test_medium  shortest_path             30     189  100.0%     23.3%     23.3%
+test_medium  ALL                      150     191   98.7%     31.3%     16.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191    98.7%     31.3%     16.7%
+
+First failures:
+- shortest_path/test_medium/00000 (shortest_path, n=130): no edge between 99 and 300
+- shortest_path/test_medium/00002 (shortest_path, n=163): no edge between 1410 and 1418
+- shortest_path/test_medium/00003 (shortest_path, n=135): no edge between 203 and 358
+- shortest_path/test_medium/00004 (shortest_path, n=141): no edge between 136 and 65
+- shortest_path/test_medium/00005 (shortest_path, n=224): no edge between 1496 and 1696
+- shortest_path/test_medium/00006 (shortest_path, n=107): no edge between 307 and 496
+- shortest_path/test_medium/00007 (shortest_path, n=128): no edge between 264 and 541
+- shortest_path/test_medium/00008 (shortest_path, n=127): no edge between 507 and 1068
+- shortest_path/test_medium/00009 (shortest_path, n=141): no edge between 643 and 848
+- shortest_path/test_medium/00010 (shortest_path, n=122): no edge between 415 and 654

@@ -82,3 +82,4 @@ data/graphqa_eval50/
 # final split manifest is small and should be tracked
 !data/manifest_final.json
 experiments/final/logs/
+experiments/**/*.sqlite-*

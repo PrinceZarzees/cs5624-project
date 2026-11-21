@@ -1,0 +1,480 @@
+{
+  "harness": "baseline_b",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "model": "qwen3-4b",
+  "split": "graphqa_test",
+  "started_at": "2026-11-21T16:56:33.074607+00:00",
+  "finished_at": "2026-11-21T16:57:51.463522+00:00",
+  "duration_s": 78.38891922403127,
+  "n": 600,
+  "overall": {
+    "split": "graphqa_test",
+    "task": "ALL",
+    "n": 600,
+    "parsed": 0.9983333333333333,
+    "feasible": 0.985,
+    "accuracy": 0.89,
+    "mean_nodes": 12.405
+  },
+  "by_task": [
+    {
+      "task": "connected_nodes",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "cycle_detection",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 0.88,
+      "accuracy": 0.88
+    },
+    {
+      "task": "disconnected_nodes",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "edge_count",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "edge_existence",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "maximum_flow",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 0.98,
+      "feasible": 0.98,
+      "accuracy": 0.14
+    },
+    {
+      "task": "node_classification",
+      "n": 50,
+      "mean_nodes": 10.92,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.84
+    },
+    {
+      "task": "node_count",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "node_degree",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.98
+    },
+    {
+      "task": "reachability",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.96
+    },
+    {
+      "task": "shortest_path",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "triangle_counting",
+      "n": 50,
+      "mean_nodes": 12.54,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.88
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 600,
+      "mean_nodes": 12.405,
+      "parsed": 0.9983333333333333,
+      "feasible": 0.985,
+      "accuracy": 0.89
+    }
+  ],
+  "tokens": {
+    "prompt": 1207099,
+    "completion": 87703,
+    "total": 1294802,
+    "mean_total_per_problem": 2158.0033333333336
+  },
+  "tool_calls": 847,
+  "mean_agent_duration_s": 1.0161826456539953,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "cycle_detection/graphqa_test/00005",
+      "task": "cycle_detection",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 2 and 3"
+    },
+    {
+      "id": "cycle_detection/graphqa_test/00015",
+      "task": "cycle_detection",
+      "n_nodes": 13,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1 and 2"
+    },
+    {
+      "id": "cycle_detection/graphqa_test/00017",
+      "task": "cycle_detection",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge from the last node back to the first"
+    },
+    {
+      "id": "cycle_detection/graphqa_test/00018",
+      "task": "cycle_detection",
+      "n_nodes": 14,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 2 and 3"
+    },
+    {
+      "id": "cycle_detection/graphqa_test/00019",
+      "task": "cycle_detection",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1 and 2"
+    },
+    {
+      "id": "cycle_detection/graphqa_test/00033",
+      "task": "cycle_detection",
+      "n_nodes": 13,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1 and 2"
+    },
+    {
+      "id": "reachability/graphqa_test/00001",
+      "task": "reachability",
+      "n_nodes": 10,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "reachability/graphqa_test/00030",
+      "task": "reachability",
+      "n_nodes": 10,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "node_degree/graphqa_test/00026",
+      "task": "node_degree",
+      "n_nodes": 13,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 12, degree is 10"
+    },
+    {
+      "id": "triangle_counting/graphqa_test/00008",
+      "task": "triangle_counting",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 18, graph has 8 triangles"
+    },
+    {
+      "id": "triangle_counting/graphqa_test/00019",
+      "task": "triangle_counting",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 19, graph has 7 triangles"
+    },
+    {
+      "id": "triangle_counting/graphqa_test/00022",
+      "task": "triangle_counting",
+      "n_nodes": 14,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 0, graph has 1 triangles"
+    },
+    {
+      "id": "triangle_counting/graphqa_test/00033",
+      "task": "triangle_counting",
+      "n_nodes": 13,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 13, graph has 5 triangles"
+    },
+    {
+      "id": "triangle_counting/graphqa_test/00038",
+      "task": "triangle_counting",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 5, graph has 327 triangles"
+    },
+    {
+      "id": "triangle_counting/graphqa_test/00047",
+      "task": "triangle_counting",
+      "n_nodes": 8,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 8, graph has 13 triangles"
+    },
+    {
+      "id": "node_classification/graphqa_test/00015",
+      "task": "node_classification",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered '[4]', expected 'soccer'"
+    },
+    {
+      "id": "node_classification/graphqa_test/00018",
+      "task": "node_classification",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered '[0]', expected 'soccer'"
+    },
+    {
+      "id": "node_classification/graphqa_test/00019",
+      "task": "node_classification",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 'golf', expected 'soccer'"
+    },
+    {
+      "id": "node_classification/graphqa_test/00027",
+      "task": "node_classification",
+      "n_nodes": 8,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered '[5,6]', expected 'soccer'"
+    },
+    {
+      "id": "node_classification/graphqa_test/00033",
+      "task": "node_classification",
+      "n_nodes": 8,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered '[0]', expected 'golf'"
+    },
+    {
+      "id": "node_classification/graphqa_test/00041",
+      "task": "node_classification",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered '[]', expected 'soccer'"
+    },
+    {
+      "id": "node_classification/graphqa_test/00044",
+      "task": "node_classification",
+      "n_nodes": 14,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 'soccer', expected 'golf'"
+    },
+    {
+      "id": "node_classification/graphqa_test/00048",
+      "task": "node_classification",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 'soccer', expected 'golf'"
+    },
+    {
+      "id": "maximum_flow/graphqa_test/00000",
+      "task": "maximum_flow",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 0, expected 50"
+    },
+    {
+      "id": "maximum_flow/graphqa_test/00001",
+      "task": "maximum_flow",
+      "n_nodes": 10,
+      "parsed": true,
+      "feasible": true,
+      "note": "answered 1, expected 8"
+    }
+  ],
+  "rows": [
+    {
+      "split": "graphqa_test",
+      "task": "connected_nodes",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "cycle_detection",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 0.88,
+      "accuracy": 0.88,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "disconnected_nodes",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "edge_count",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "edge_existence",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "maximum_flow",
+      "n": 50,
+      "parsed": 0.98,
+      "feasible": 0.98,
+      "accuracy": 0.14,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "node_classification",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.84,
+      "mean_nodes": 10.92
+    },
+    {
+      "split": "graphqa_test",
+      "task": "node_count",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "node_degree",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.98,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "reachability",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.96,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "shortest_path",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "triangle_counting",
+      "n": 50,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.88,
+      "mean_nodes": 12.54
+    },
+    {
+      "split": "graphqa_test",
+      "task": "ALL",
+      "n": 600,
+      "parsed": 0.9983333333333333,
+      "feasible": 0.985,
+      "accuracy": 0.89,
+      "mean_nodes": 12.405
+    }
+  ]
+}

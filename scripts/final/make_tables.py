@@ -121,18 +121,54 @@ for r in csv.DictReader(open(ROOT/'experiments/final/E5_proxy/summary.csv')):
 header=['proxy','target','n','Spearman','95% CI','pairwise','top-3','pool']
 csvw('tab_proxy',header,rows); tex('tab_proxy',header,rows,align='llrlrrlp{2.2cm}')
 
-# real benchmarks overall
-rows=[]
-for name,path in [('GraphArena easy','experiments/qwen3_4b_real_bench/bench/ga_easy/summary.json'),
-                  ('GraphArena hard','experiments/qwen3_4b_real_bench/bench/ga_hard/summary.json'),
-                  ('GraphQA test','experiments/qwen3_4b_real_bench/bench/graphqa_test/summary.json')]:
-    d=json.load(open(ROOT/path)); o=d['overall']; rows.append([name,d['n'],f"{o['accuracy']:.1%}",f"{o['parsed']:.1%}",f"{o['feasible']:.1%}"])
-header=['benchmark','n','accuracy','parsed','feasible']
-csvw('tab_real_bench_overall',header,rows); tex('tab_real_bench_overall',header,rows)
+# real benchmarks: expanded E6 if present, else the frozen 20/task run
+e6=ROOT/'experiments/final/E6_real_bench/summary.csv'
+if e6.exists():
+    rs=list(csv.DictReader(open(e6)))
+    rows=[]
+    for r in rs:
+        rows.append([r['benchmark'],r['harness'].replace('baseline_',''),r['n'],
+                     f"{float(r['accuracy']):.1%}",
+                     f"[{float(r['wilson_lo']):.1%}, {float(r['wilson_hi']):.1%}]",
+                     f"{float(r['parsed']):.1%}"])
+    header=['benchmark','harness','n','accuracy','95% CI','parsed']
+    csvw('tab_real_bench_overall',header,rows); tex('tab_real_bench_overall',header,rows,align='llrrcr')
 
-# real per task
-rows=list(csv.reader(open(ROOT/'report/tables/real_benchmarks.csv')))
-csvw('tab_real_bench_per_task',rows[0],rows[1:]); tex('tab_real_bench_per_task',rows[0],rows[1:],align='llrrrr')
+    pt=list(csv.DictReader(open(ROOT/'experiments/final/E6_real_bench/per_task.csv')))
+    keys=sorted({(r['benchmark'],r['task']) for r in pt})
+    rows=[]
+    for bench,task in keys:
+        cells=[]
+        for h in ['baseline_a','baseline_b','baseline_b_v2']:
+            x=[r for r in pt if r['benchmark']==bench and r['task']==task and r['harness']==h]
+            cells.append(f"{float(x[0]['accuracy']):.1%}" if x else '--')
+        n=[r for r in pt if r['benchmark']==bench and r['task']==task][0]['n']
+        rows.append([bench.replace('GraphArena ','GA ').replace(' test',''),task,n]+cells)
+    header=['benchmark','task','n','A','B','B v2']
+    csvw('tab_real_bench_per_task',header,rows); tex('tab_real_bench_per_task',header,rows,align='llrrrr')
+
+    # E11 no-tools long context
+    e11=ROOT/'experiments/final/E11_notools_longctx/summary.csv'
+    if e11.exists():
+        rows=[]
+        for r in csv.DictReader(open(e11)):
+            fmt=lambda k: f"{float(r[k]):.1%}" if r.get(k) not in ('',None) else '--'
+            rows.append([r['harness'].replace('_text','').replace('baseline_',''),r['split'],r['n'],
+                         fmt('accuracy'),fmt('parsed'),fmt('feasible'),
+                         f"{r['n_le8k']}"+(f" ({fmt('acc_le8k')})" if r.get('acc_le8k') else ''),
+                         f"{r['n_8k_to_32k']}",r['n_gt32k'],r['max_prompt_tokens']])
+        header=['harness','split','n','acc 32k','parsed','feasible','<=8k','8k-32k','>32k','max tok']
+        csvw('tab_notools_longctx',header,rows); tex('tab_notools_longctx',header,rows,align='llrrrrrrrrr')
+else:
+    rows=[]
+    for name,path in [('GraphArena easy','experiments/qwen3_4b_real_bench/bench/ga_easy/summary.json'),
+                      ('GraphArena hard','experiments/qwen3_4b_real_bench/bench/ga_hard/summary.json'),
+                      ('GraphQA test','experiments/qwen3_4b_real_bench/bench/graphqa_test/summary.json')]:
+        d=json.load(open(ROOT/path)); o=d['overall']; rows.append([name,d['n'],f"{o['accuracy']:.1%}",f"{o['parsed']:.1%}",f"{o['feasible']:.1%}"])
+    header=['benchmark','n','accuracy','parsed','feasible']
+    csvw('tab_real_bench_overall',header,rows); tex('tab_real_bench_overall',header,rows)
+    rows=list(csv.reader(open(ROOT/'report/tables/real_benchmarks.csv')))
+    csvw('tab_real_bench_per_task',rows[0],rows[1:]); tex('tab_real_bench_per_task',rows[0],rows[1:],align='llrrrr')
 
 # characteristics: family rows for all harnesses
 rows=[]
@@ -187,11 +223,48 @@ if (ROOT/'experiments/final/E1_heldout/summary.csv').exists():
             '- ' + '\n- '.join(logs) + '\n')
 else:
     print('E1 heldout not available yet; not writing tab_heldout_small')
-# optimizer table from per_run
+# optimizer table: E3/E4 summary when available, otherwise cost-only
+e3s=ROOT/'experiments/final/E3_optimizers/summary.csv'
 rows=[]
-for r in csv.DictReader(open(ROOT/'experiments/final/E9_costs/per_run.csv')):
-    rows.append([r['optimizer'],r['start'],r['initial_val'],r['best_val'],
-                 f"{float(r['tokens'])/1e6:.2f}",f"USD {float(r['usd_tokens']):.2f}"])
-header=['optimizer','start','initial val','best val','tokens (M)','USD tokens']
-csvw('tab_optimizers',header,rows); tex('tab_optimizers',header,rows,align='llrrrr')
+if e3s.exists():
+    for r in csv.DictReader(open(e3s)):
+        init=f"{float(r['init_val']):.1%}" if r['init_val'] else '--'
+        best=f"{float(r['best_val']):.1%}" if r['best_val'] else '--'
+        acc=f"{r['accepted']}/{r['rounds']}"
+        rows.append([r['optimizer'],r['start'].replace('baseline_',''),
+                     acc,f"{init} $\\rightarrow$ {best}",
+                     f"{float(r['total_tokens'])/1e6:.2f}",f"{float(r['est_usd']):.2f}",
+                     r['parsed_proposals']])
+    header=['optimizer','start','accepted/rounds','init $\\rightarrow$ best val','tokens (M)','USD','parsed']
+    csvw('tab_optimizers',header,rows); tex('tab_optimizers',header,rows,align='llrcrrr')
+
+    # changed-harness evaluation on the four scaling splits
+    out_rows=[]; b=[r for r in csv.DictReader(open(ROOT/'experiments/final/E2_repeats/summary.csv'))
+                    if r['harness']=='baseline_b']
+    getb={r['split']:r for r in b}
+    if getb:
+        out_rows.append(['Baseline B (3 repeats)',
+                         f"{float(getb['test_small']['mean']):.1%}",
+                         f"{float(getb['test_medium']['mean']):.1%}",
+                         f"{float(getb['test_large']['mean']):.1%}",
+                         f"{float(getb['test_stress']['mean']):.1%}",
+                         f"{(float(getb['test_small']['mean'])-float(getb['test_large']['mean']))*100:+.1f}"])
+    for r in csv.DictReader(open(e3s)):
+        if not r['small_fresh']:
+            continue
+        name=f"{r['optimizer']} output"
+        out_rows.append([name,
+                         f"{float(r['small_fresh']):.1%}", f"{float(r['medium']):.1%}",
+                         f"{float(r['large']):.1%}", f"{float(r['stress']):.1%}",
+                         f"{float(r['gen_gap'])*100:+.1f}"])
+    if out_rows:
+        header=['harness','fresh small','medium','large','stress','small-large (pp)']
+        csvw('tab_optimizer_outputs',header,out_rows)
+        tex('tab_optimizer_outputs',header,out_rows,align='lrrrrr')
+else:
+    for r in csv.DictReader(open(ROOT/'experiments/final/E9_costs/per_run.csv')):
+        rows.append([r['optimizer'],r['start'],r['initial_val'],r['best_val'],
+                     f"{float(r['tokens'])/1e6:.2f}",f"USD {float(r['usd_tokens']):.2f}"])
+    header=['optimizer','start','initial val','best val','tokens (M)','USD tokens']
+    csvw('tab_optimizers',header,rows); tex('tab_optimizers',header,rows,align='llrrrr')
 print('tables written')

@@ -1,0 +1,33 @@
+harness: baseline_b_v2    model: qwen3-4b    split: ga_hard
+problems: 1000    errors: 1    duration: 596.7s    tokens: 6724300
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+ga_hard      common_neighbors         100      31  100.0%    100.0%     97.0%
+ga_hard      connected_components     100      19  100.0%    100.0%    100.0%
+ga_hard      diameter                 100      20   99.0%     94.0%     93.0%
+ga_hard      graph_edit_distance      100      12   99.0%     17.0%      0.0%
+ga_hard      max_clique               100      19   99.0%     95.0%     86.0%
+ga_hard      max_common_subgraph      100      13   78.0%     63.0%     41.0%
+ga_hard      max_independent_set      100      19  100.0%     94.0%     33.0%
+ga_hard      min_vertex_cover         100      19   98.0%     78.0%     60.0%
+ga_hard      shortest_path            100      32  100.0%     99.0%     99.0%
+ga_hard      traveling_salesman       100      13  100.0%     88.0%      0.0%
+ga_hard      ALL                     1000      20   97.3%     82.8%     60.9%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50        1000       20    97.3%     82.8%     60.9%
+
+First failures:
+- shortest_path/ga_hard/00033 (shortest_path, n=24): unknown node(s): ['Lugo Emilia-Romagna']
+- diameter/ga_hard/00001 (diameter, n=28): unknown node(s): ['Linares Chile']
+- diameter/ga_hard/00005 (diameter, n=15): unknown node(s): ['Gol Kan South Khorasan']
+- diameter/ga_hard/00023 (diameter, n=26): distance 0, diameter is 13
+- diameter/ga_hard/00035 (diameter, n=15): unknown node(s): ['Davenport Iowa']
+- diameter/ga_hard/00039 (diameter, n=20): unknown node(s): ['Canton Mississippi']
+- diameter/ga_hard/00072 (diameter, n=15): unknown node(s): ['0', '1', '2', '3', '4']
+- diameter/ga_hard/00087 (diameter, n=19): no prediction
+- max_clique/ga_hard/00007 (max_clique, n=20): no prediction
+- max_clique/ga_hard/00016 (max_clique, n=15): unknown node(s): ['1', '2', '3', '4', '5']

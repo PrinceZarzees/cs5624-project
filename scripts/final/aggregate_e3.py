@@ -52,6 +52,8 @@ def main():
         if not base.exists():
             continue
         for d in sorted(p for p in base.iterdir() if p.is_dir()):
+            if d.name.endswith("_mixed"):
+                continue
             data = find_summary(d)
             if not data:
                 continue
@@ -60,24 +62,40 @@ def main():
                 opt = "EvoSkill-style"
                 start = d.name
             hist = history(d)
+            if len(data.get("history") or []) > len(hist):
+                hist = data["history"]
             tokens = int(data.get("total_tokens") or sum(int(h.get("tokens") or 0) for h in hist))
             wall = float(data.get("duration_s") or 0)
             usd = (0.8 * tokens / 1e6) * IN_PER_M + (0.2 * tokens / 1e6) * OUT_PER_M
-            proposals = len([h for h in hist if h.get("round")])
-            parsed = sum(1 for h in hist if h.get("proposal") is not None)
-            accepted = sum(1 for h in hist if h.get("accepted"))
+            rnds = [h for h in hist if (h.get("round") or 0) >= 1]
+            proposals = len(rnds)
+            parsed = sum(1 for h in rnds if h.get("proposal") is not None or
+                         (h.get("reason") and "no valid candidate" not in h["reason"].lower()
+                          and "parse" not in h["reason"].lower()))
+            accepted = sum(1 for h in rnds if h.get("accepted"))
+            evals = {}
+            evdir = E3 / f"eval_{d.name}"
+            for split in ("test_small_fresh", "test_medium", "test_large", "test_stress"):
+                sp = evdir / split / "summary.json"
+                if sp.exists():
+                    evals[split] = json.loads(sp.read_text())["overall"]["accuracy"]
+            gap = (evals.get("test_small_fresh") - evals.get("test_large")
+                   if "test_small_fresh" in evals and "test_large" in evals else "")
             rows.append({
                 "optimizer": opt, "start": start,
                 "critic": "Qwen2.5-7B-Instruct BF16",
-                "rounds": len(hist), "proposals": proposals,
+                "rounds": len(rnds), "proposals": proposals,
                 "parsed_proposals": parsed, "accepted": accepted,
                 "init_val": data.get("initial_val_accuracy"),
                 "best_val": data.get("best_val_accuracy"),
                 "actor_tokens": "", "critic_tokens": "",
                 "total_tokens": tokens, "wall_s": round(wall, 1),
                 "est_usd": round(usd, 2),
-                "small_fresh": "", "medium": "", "large": "", "stress": "",
-                "gen_gap": "", "note": "" if accepted else "no accepted edit",
+                "small_fresh": evals.get("test_small_fresh", ""),
+                "medium": evals.get("test_medium", ""),
+                "large": evals.get("test_large", ""),
+                "stress": evals.get("test_stress", ""),
+                "gen_gap": gap, "note": "" if accepted else "no accepted edit",
             })
     out = E3 / "summary.csv"
     if not rows:

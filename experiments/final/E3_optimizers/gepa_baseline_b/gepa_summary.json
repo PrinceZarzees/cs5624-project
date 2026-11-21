@@ -1,0 +1,117 @@
+{
+  "start_harness": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "best_harness": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "config": {
+    "rounds": 6,
+    "candidates_per_round": 2,
+    "train_per_task": 4,
+    "val_per_task": 10,
+    "max_steps": null,
+    "workers": 1,
+    "seed": 5624,
+    "critic_temperature": 0.8
+  },
+  "initial_val_accuracy": 1.0,
+  "best_val_accuracy": 1.0,
+  "total_tokens": 640209,
+  "duration_s": 262.2689358609787,
+  "started_at": "2026-11-21T16:50:37.176771+00:00",
+  "history": [
+    {
+      "round": 0,
+      "role": "initial",
+      "val_accuracy": 1.0,
+      "best_val_accuracy": 1.0,
+      "tokens": 166051
+    },
+    {
+      "round": 1,
+      "accepted": false,
+      "reason": "no valid candidate",
+      "best_val_accuracy": 1.0,
+      "tokens": 235732
+    },
+    {
+      "round": 2,
+      "accepted": false,
+      "reason": "no valid candidate",
+      "best_val_accuracy": 1.0,
+      "tokens": 328381
+    },
+    {
+      "round": 3,
+      "accepted": false,
+      "reason": "no valid candidate",
+      "best_val_accuracy": 1.0,
+      "tokens": 411550
+    },
+    {
+      "round": 4,
+      "accepted": false,
+      "reason": "no valid candidate",
+      "best_val_accuracy": 1.0,
+      "tokens": 482095
+    },
+    {
+      "round": 5,
+      "accepted": false,
+      "reason": "no valid candidate",
+      "best_val_accuracy": 1.0,
+      "tokens": 570854
+    },
+    {
+      "round": 6,
+      "accepted": false,
+      "reason": "no valid candidate",
+      "best_val_accuracy": 1.0,
+      "tokens": 640209
+    }
+  ],
+  "optimizer": "gepa"
+}

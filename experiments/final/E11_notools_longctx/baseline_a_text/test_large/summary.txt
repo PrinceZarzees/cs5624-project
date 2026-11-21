@@ -1,0 +1,28 @@
+harness: baseline_a_text    model: qwen3-4b    split: test_large
+problems: 100    errors: 8    duration: 104.6s    tokens: 3039046
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_large   connected_components      20     663   95.0%     60.0%     15.0%
+test_large   cycle_detection           20     722  100.0%     40.0%     40.0%
+test_large   diameter                  20     712   65.0%     15.0%      0.0%
+test_large   max_clique                20     830   75.0%     20.0%      0.0%
+test_large   shortest_path             20     780   80.0%      0.0%      0.0%
+test_large   ALL                      100     741   83.0%     27.0%     11.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+500-1000     100      741    83.0%     27.0%     11.0%
+
+First failures:
+- shortest_path/test_large/00000 (shortest_path, n=702): no edge between 1013 and 1394
+- shortest_path/test_large/00001 (shortest_path, n=739): no [ ... ] answer found
+- shortest_path/test_large/00002 (shortest_path, n=698): no edge between 3229 and 4589
+- shortest_path/test_large/00003 (shortest_path, n=824): path does not start/end at the given nodes
+- shortest_path/test_large/00004 (shortest_path, n=986): no prediction
+- shortest_path/test_large/00005 (shortest_path, n=699): no edge between 6643 and 6443
+- shortest_path/test_large/00006 (shortest_path, n=967): no edge between 2855 and 485
+- shortest_path/test_large/00007 (shortest_path, n=984): no prediction
+- shortest_path/test_large/00008 (shortest_path, n=673): no edge between 1357 and 2430
+- shortest_path/test_large/00009 (shortest_path, n=890): no edge between 5507 and 5528

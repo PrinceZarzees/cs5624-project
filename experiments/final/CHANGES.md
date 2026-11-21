@@ -53,3 +53,16 @@
 - `report/main.tex`: final-results section inside one AI-DRAFT block.
 - `report/tables/tab_*.{csv,tex}`, `report/figures/fig_*.{pdf,png}`.
 - `report/EDIT_LOG.md`, `report/AI_DRAFTS.md`, `experiments/final/E13_lint.md`.
+
+## Added during integration
+
+- `scripts/final/run_e3_lite.sbatch`, `run_e3b.sbatch`, `run_e3_eval.sbatch`:
+  reduced strong-critic grid, second RRSI run, clean EvoSkill + E3d evaluation.
+- `scripts/final/run_e6b.sbatch` (cancelled) and `aggregate_e6.py` (full and
+  30/task balanced modes).
+- `scripts/final/aggregate_e3.py`: optimizer summary including changed-harness
+  split results and gen gap.
+- `scripts/final/run_e11.sbatch`, `e11_prompt_sizes.py`, `aggregate_e11.py`:
+  32k no-tools runs and prompt-length split.
+- `scripts/final/list_ai_drafts.py`: checklist writer for `report/AI_DRAFTS.md`.
+- `report/main.pdf`: compiled draft (Tectonic 0.17.0).

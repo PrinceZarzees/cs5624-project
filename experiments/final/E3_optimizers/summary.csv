@@ -1,0 +1,7 @@
+optimizer,start,critic,rounds,proposals,parsed_proposals,accepted,init_val,best_val,actor_tokens,critic_tokens,total_tokens,wall_s,est_usd,small_fresh,medium,large,stress,gen_gap,note
+GEPA-style,baseline_b,Qwen2.5-7B-Instruct BF16,6,6,0,0,1.0,1.0,,,640209,262.3,0.45,,,,,,no accepted edit
+Meta-Harness-lite,baseline_b,Qwen2.5-7B-Instruct BF16,6,6,5,0,0.98,0.98,,,1267540,648.6,0.89,,,,,,no accepted edit
+RRSI-lite,baseline_b,Qwen2.5-7B-Instruct BF16,5,5,5,1,0.96,0.98,,,1087868,915.7,0.76,0.96,0.96,0.94,0.74,0.020000000000000018,
+RRSI-lite,baseline_b,Qwen2.5-7B-Instruct BF16,6,6,6,1,0.97,0.99,,,1755089,1305.1,1.23,,,,,,
+SkillOpt-style,baseline_b,Qwen2.5-7B-Instruct BF16,6,6,6,1,0.98,1.0,,,2410597,1413.5,1.69,0.9866666666666667,0.94,0.94,0.76,0.046666666666666745,
+EvoSkill-style,baseline_b,Qwen2.5-7B-Instruct BF16,3,3,3,0,1.0,1.0,,,3417084,1327.7,2.39,,,,,,no accepted edit

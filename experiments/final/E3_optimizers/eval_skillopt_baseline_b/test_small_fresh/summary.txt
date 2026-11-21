@@ -1,0 +1,20 @@
+harness: baseline_b-candidate    model: qwen3-4b    split: test_small_fresh
+problems: 150    errors: 0    duration: 76.4s    tokens: 535100
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small_fresh connected_components      30      27  100.0%    100.0%    100.0%
+test_small_fresh cycle_detection           30      28  100.0%    100.0%     96.7%
+test_small_fresh diameter                  30      30  100.0%    100.0%    100.0%
+test_small_fresh max_clique                30      27  100.0%     96.7%     96.7%
+test_small_fresh shortest_path             30      24  100.0%    100.0%    100.0%
+test_small_fresh ALL                      150      27  100.0%     99.3%     98.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       27   100.0%     99.3%     98.7%
+
+First failures:
+- cycle_detection/test_small_fresh/00026 (cycle_detection, n=39): said no cycle, but the graph has one
+- max_clique/test_small_fresh/00025 (max_clique, n=14): unknown node(s): ['3']

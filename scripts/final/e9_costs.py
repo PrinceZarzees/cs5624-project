@@ -69,6 +69,17 @@ def discover_final_runs():
 
 
 def main():
+    pilot_tokens = []
+    for opt, start, rel in list(RUNS):
+        d = ROOT / rel
+        try:
+            summ = load_summary(d)
+        except Exception:
+            continue
+        tok = int(summ.get("total_tokens") or 0)
+        if tok > 0:
+            pilot_tokens.append(tok)
+    pilot_mean = sum(pilot_tokens) / len(pilot_tokens) if pilot_tokens else 0
     discover_final_runs()
     curves = []
     per_run = []
@@ -84,6 +95,8 @@ def main():
                            "cumulative_tokens": cum, "best_val": best,
                            "accepted": row.get("accepted")})
         total = int(summ.get("total_tokens") or cum)
+        if total <= 0:
+            continue
         dur = float(summ.get("duration_s") or 0)
         usd_tok = (0.8 * total / 1e6) * IN_PER_M + (0.2 * total / 1e6) * OUT_PER_M
         per_run.append({"optimizer": opt, "start": start, "tokens": total, "wall_s": dur,
@@ -123,9 +136,9 @@ def main():
                      "est_wall_s": round(est_s),
                      "est_gpu_hours": round(est / 1e6 * 0.8, 2),
                      "est_usd_tokens": round((0.8 * est / 1e6) * IN_PER_M + (0.2 * est / 1e6) * OUT_PER_M, 2)})
-    actual = sum(r["tokens"] for r in per_run) / len(per_run)
+    # fixed denominator: mean tokens of the six original 4B-critic pilot runs
     for r in rows:
-        r["ratio_vs_actual_small_run"] = round(r["est_tokens"] / actual, 2) if actual else None
+        r["ratio_vs_actual_small_run"] = round(r["est_tokens"] / pilot_mean, 2) if pilot_mean else None
     with open(OUT / "counterfactual.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
 
@@ -136,7 +149,8 @@ def main():
         f"- GPU-hour price: ${GPU_HOUR_USD:.2f}/B200-hour (cloud reference; ARC is a class allocation).\n"
         "- Counterfactual protocol: 20 train + 50 val problems per round, 10 rounds.\n"
         "- `est_gpu_hours` uses 0.8M tokens per B200-hour, measured from the optimizer pilots.\n"
-        "- Counterfactual is arithmetic from measured per-problem tokens, not a new run.\n")
+        "- Counterfactual is arithmetic from measured per-problem tokens, not a new run.\n"
+        f"- Ratio denominator: mean of the six original 4B-critic pilot runs ({pilot_mean/1e6:.2f}M tokens).\n")
     print(f"wrote curves.csv ({len(curves)} rows), per_run.csv, counterfactual.csv")
     for r in rows:
         print(r)

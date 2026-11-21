@@ -7,7 +7,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 ROOT=Path(__file__).resolve().parents[2]; F=ROOT/'report/figures'; F.mkdir(exist_ok=True)
 colors={'baseline_a':'#4C78A8','baseline_b':'#F58518','baseline_b_v2':'#54A24B'}
-labels={'baseline_a':'Baseline A','baseline_b':'Baseline B','baseline_b_v2':'Baseline B v2'}
+hlabels={'baseline_a':'Baseline A','baseline_b':'Baseline B','baseline_b_v2':'Baseline B v2'}
 
 def save(fig,name):
     for ext in ['pdf','png']: fig.savefig(F/f'{name}.{ext}',bbox_inches='tight',dpi=200)
@@ -24,11 +24,11 @@ if e2.exists():
     for h in ['baseline_a','baseline_b','baseline_b_v2']:
         rows=sorted([r for r in agg if r['harness']==h], key=lambda r: mean_nodes[r['split']])
         ax.errorbar([mean_nodes[r['split']] for r in rows],[float(r['mean']) for r in rows],
-                    yerr=[float(r['std']) for r in rows],marker='o',capsize=3,label=labels[h],color=colors[h])
+                    yerr=[float(r['std']) for r in rows],marker='o',capsize=3,label=hlabels[h],color=colors[h])
 else:
     for h in ['baseline_a','baseline_b','baseline_b_v2']:
         rows=[r for r in s['runs'] if r['harness']==h]
-        ax.plot([r['mean_nodes'] for r in rows],[r['accuracy'] for r in rows],marker='o',label=labels[h],color=colors[h])
+        ax.plot([r['mean_nodes'] for r in rows],[r['accuracy'] for r in rows],marker='o',label=hlabels[h],color=colors[h])
 ax.set_xscale('log'); ax.set_xlabel('mean nodes'); ax.set_ylabel('accuracy'); ax.set_ylim(0.55,1.0); ax.grid(alpha=.3); ax.legend(); save(fig,'fig_scaling')
 
 # gen gap (mean over repeats when available)
@@ -42,7 +42,7 @@ if gg.exists():
 else:
     g=s['generalization_gaps']; g=[dict(x,std=0) for x in g]
 fig,ax=plt.subplots(figsize=(5,3.2))
-ax.bar([labels[x['harness']] for x in g],[x['delta_gen'] for x in g],yerr=[x.get('std',0) for x in g],
+ax.bar([hlabels[x['harness']] for x in g],[x['delta_gen'] for x in g],yerr=[x.get('std',0) for x in g],
        capsize=3,color=[colors[x['harness']] for x in g])
 ax.axhline(0,color='k',lw=.8); ax.set_ylabel('small - large accuracy'); save(fig,'fig_gen_gap')
 
@@ -87,12 +87,47 @@ rows=d['rows'][1:]; fig,ax=plt.subplots(figsize=(7,3.2))
 ax.bar([r['rule_index'] for r in rows],[-r.get('delta',0) for r in rows])
 ax.set_xlabel('removed rule index'); ax.set_ylabel('accuracy drop'); ax.grid(axis='y',alpha=.3); save(fig,'fig_rule_ablation')
 
-# real benchmark per-task overall bars
-fig,ax=plt.subplots(figsize=(5.5,3.2))
-vals=[]; names=[]
-for n,p in [('GA easy','experiments/qwen3_4b_real_bench/bench/ga_easy/summary.json'),('GA hard','experiments/qwen3_4b_real_bench/bench/ga_hard/summary.json'),('GraphQA','experiments/qwen3_4b_real_bench/bench/graphqa_test/summary.json')]:
-    d=json.load(open(ROOT/p)); names.append(n); vals.append(d['overall']['accuracy'])
-ax.bar(names,vals); ax.set_ylim(0,1); ax.set_ylabel('accuracy'); save(fig,'fig_real_bench')
+# real benchmark: three groups (benchmark) x three harnesses
+e6=ROOT/'experiments/final/E6_real_bench/summary.csv'
+fig,ax=plt.subplots(figsize=(6.4,3.2))
+if e6.exists():
+    rs=list(csv.DictReader(open(e6)))
+    benches=['GraphArena easy','GraphArena hard','GraphQA test']
+    w=.26
+    for j,h in enumerate(['baseline_a','baseline_b','baseline_b_v2']):
+        vals=[]
+        for b in benches:
+            x=[r for r in rs if r['benchmark']==b and r['harness']==h]
+            vals.append(float(x[0]['accuracy']) if x else 0)
+        ax.bar([i+j*w for i in range(len(benches))],vals,width=w,label=hlabels[h],color=colors[h])
+    ax.set_xticks([i+w for i in range(len(benches))]); ax.set_xticklabels(['GA easy','GA hard','GraphQA'])
+else:
+    vals=[]; names=[]
+    for n,p in [('GA easy','experiments/qwen3_4b_real_bench/bench/ga_easy/summary.json'),('GA hard','experiments/qwen3_4b_real_bench/bench/ga_hard/summary.json'),('GraphQA','experiments/qwen3_4b_real_bench/bench/graphqa_test/summary.json')]:
+        d=json.load(open(ROOT/p)); names.append(n); vals.append(d['overall']['accuracy'])
+    ax.bar(names,vals)
+ax.set_ylim(0,1); ax.set_ylabel('accuracy'); ax.legend(); save(fig,'fig_real_bench')
+
+# E11: no-tools at 8k vs 32k (medium and large)
+e11=ROOT/'experiments/final/E11_notools_longctx/summary.csv'
+if e11.exists():
+    rs=list(csv.DictReader(open(e11)))
+    fig,axes=plt.subplots(1,2,figsize=(6.6,2.9),sharey=True)
+    for ax,split in [(axes[0],'test_medium'),(axes[1],'test_large')]:
+        hs=['baseline_a_text','baseline_b_v2_text']
+        v8=[]; v32=[]
+        for h in hs:
+            x=[r for r in rs if r['harness']==h and r['split']==split]
+            v32.append(float(x[0]['accuracy']) if x else 0)
+            ta=ROOT/'experiments/final/E2_tool_access/summary.csv'
+            t=[r for r in list(csv.DictReader(open(ta))) if r['condition']==h and r['split']==split] if ta.exists() else []
+            v8.append(sum(float(r['accuracy']) for r in t)/len(t) if t else 0)
+        ax.bar([0,1],v8,width=.36,label='8k',color='#B0B0B0')
+        ax.bar([.38,1.38],v32,width=.36,label='32k',color='#4C78A8')
+        ax.set_xticks([.19,1.19]); ax.set_xticklabels(['A no-tools','B v2 no-tools'])
+        ax.set_xlabel(split.replace('test_',''))
+    axes[0].set_ylabel('accuracy'); axes[0].set_ylim(0,1); axes[0].legend()
+    save(fig,'fig_notools_longctx')
 
 # proxy: same 15 candidates, val vs test_large
 rows=list(csv.DictReader(open(ROOT/'experiments/final/E5_proxy/labels_same_candidates.csv')))
