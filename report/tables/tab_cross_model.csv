@@ -1,0 +1,9 @@
+model,precision,hardware,harness,split,n,accuracy
+Qwen3-4B-Instruct-2507,bfloat16,1x B200,baseline_a,test_small,150,87.3%
+Qwen3-4B-Instruct-2507,bfloat16,1x B200,baseline_b,test_small,150,90.0%
+Qwen3-4B-Instruct-2507,bfloat16,1x B200,baseline_b_v2 (13 rules),test_small,150,93.3%
+Qwen3-4B-Instruct-2507,bfloat16,1x B200,baseline_b_v2 (14 rules),test_small,150,94.0%
+Qwen3-4B-Instruct-2507,Q4_K_M,96 CPU,baseline_a,test_small,150,84.7%
+Qwen3-4B-Instruct-2507,Q4_K_M,96 CPU,baseline_b_v2 (13 rules),test_small,150,93.3%
+Qwen2.5-7B-Instruct,Q4_K_M,48 CPU,baseline_b_v2 (13 rules),test_small,150,77.3%
+Qwen2.5-7B-Instruct,Q4_K_M,96 CPU,baseline_b_v2 (14 rules),test_small,150,76.0%

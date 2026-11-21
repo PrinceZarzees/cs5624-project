@@ -1,0 +1,7 @@
+optimizer,start,initial val,best val,tokens (M),USD tokens
+SkillOpt,baseline_a,0.875,0.875,4.01,USD 2.80
+SkillOpt,baseline_b_v2,0.975,0.975,3.53,USD 2.47
+GEPA,baseline_a,0.95,0.95,1.19,USD 0.83
+RRSI-lite,baseline_a,0.9,0.9,0.51,USD 0.36
+RRSI-lite,baseline_b_v2,1.0,1.0,0.81,USD 0.57
+Meta-Harness-lite,baseline_a,0.9,0.9,0.87,USD 0.61

@@ -98,4 +98,214 @@ See \texttt{experiments/qwen3\_4b\_real\_bench/}.
 \bibliographystyle{plain}
 % \bibliography{references}
 
+
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\section{Final experimental results}
+This section is a factual integration of the final experiments. The full
+methods and tables are in \texttt{report/EXPERIMENTAL\_REPORT.md}; the authors
+should rewrite this prose.
+
+\paragraph{Tool access.}
+Python/NetworkX tool access changes the task substantially. Over three
+repeats at the original 8k context, Baseline B v2 scores
+96.4 $\pm$ 0.3\% with tools and 35.8 $\pm$ 0.6\% without them on
+\texttt{test\_small}; on \texttt{test\_medium} the two conditions are
+91.1 $\pm$ 1.9\% and 15.3 $\pm$ 0.5\%. On the 25-problem
+\texttt{test\_large} subset used by the original tool study, v2 scores
+92.0 $\pm$ 3.3\% with tools and 0.0\% without tools in all three repeats;
+the no-tools prompts exceed the 8k limit. Baseline A shows the same pattern
+(90.4 $\pm$ 0.8\% versus 39.6 $\pm$ 2.8\% on small).
+Table~\ref{tab:tool-access}
+and Figure~\ref{fig:tool-access} summarize this. The C/gcc backend without a
+graph library scores 12.0\% on 25 small problems (one pilot run).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_tool_access.pdf}
+\caption{Tool access versus no-tools accuracy.}
+\label{fig:tool-access}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_tool_access.tex}
+\caption{Accuracy by tool condition and graph split.}
+\label{tab:tool-access}
+\end{table}
+
+\paragraph{Held-out small-graph estimate.}
+A fresh small split (\texttt{test\_small\_fresh}, seed 56240, 30 problems per
+task, 150 total, zero graph overlap with the six frozen splits) was run three
+times per harness. Accuracy is Baseline A 88.4 $\pm$ 1.3\%, Baseline B
+93.8 $\pm$ 0.8\%, and Baseline B v2 95.8 $\pm$ 0.8\% (Table~\ref{tab:heldout}).
+The contaminated \texttt{test\_small} value for v2 was 94.0\%, so the held-out
+estimate is not lower. Per task, v2 improves cycle detection over B
+(95.6\% versus 82.2\%) and is lower on max clique (83.3\% versus 88.9\%).
+McNemar B versus v2 gives $p=1.00$, $0.34$, $0.30$ in the three repeats.
+
+\begin{table}[h]
+\centering
+\input{tables/tab_heldout_small.tex}
+\caption{Accuracy on the fresh held-out small split, 3 repeats.}
+\label{tab:heldout}
+\end{table}
+
+\paragraph{Scaling and ablation.}
+Table~\ref{tab:main-scaling} and Figure~\ref{fig:scaling} show the synthetic
+scaling results as mean $\pm$ std over three repeats. v2 is higher than B on
+small (95.8 $\pm$ 1.4 versus 94.4 $\pm$ 0.6), the two are within 1.5 points on
+medium and on the 2,000-node stress split, and B is higher on large
+(90.7 $\pm$ 3.7 versus 85.3 $\pm$ 0.5). The large difference is significant in
+repeat 2 (McNemar $p=0.006$) and not in repeats 1 and 3 ($p=1.00$, $0.18$).
+The small-minus-large gap is 10.4 $\pm$ 0.8 points for v2, 3.8 $\pm$ 2.2 for B,
+and 5.0 $\pm$ 1.7 for A. Rule ablations are in
+Table~\ref{tab:rule-ablation}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_scaling.pdf}
+\caption{Accuracy versus graph size.}
+\label{fig:scaling}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_main_scaling.tex}
+\caption{Full synthetic scaling accuracy.}
+\label{tab:main-scaling}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_rule_ablation.tex}
+\caption{Rule ablation on full \texttt{test\_large}.}
+\label{tab:rule-ablation}
+\end{table}
+
+\paragraph{Real benchmarks.}
+Table~\ref{tab:real-bench} reports the GraphArena and GraphQA results for
+Baseline B v2. GED, MCS, TSP and hard MIS are the main failures.
+
+\begin{table}[h]
+\centering
+\input{tables/tab_real_bench_overall.tex}
+\caption{Real benchmark accuracy at 20 problems per task.}
+\label{tab:real-bench}
+\end{table}
+
+\paragraph{Characteristics.}
+Table~\ref{tab:characteristics} and Figures~\ref{fig:characteristics} and
+\ref{fig:density} break accuracy down by graph family, density and size for A,
+B and v2 on the 450 frozen scaling problems. A logistic regression
+(\texttt{correct} $\sim \log n$ + density + task + harness) gives an odds ratio
+of 0.63 per unit $\log n$ (95\% CI 0.55--0.72), 0.76 per 0.1 density
+(0.64--0.90), and 1.91 for v2 versus A (1.29--2.81). Family and task are
+perfectly nested in this generator (tree only occurs with cycle detection,
+mixed only with connected components), so their effects are not separately
+identified.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_characteristics.pdf}
+\caption{Accuracy by graph family for each harness.}
+\label{fig:characteristics}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_density.pdf}
+\caption{Accuracy by density bin for each harness.}
+\label{fig:density}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_characteristics.tex}
+\caption{Accuracy by graph family, all frozen scaling splits.}
+\label{tab:characteristics}
+\end{table}
+
+\paragraph{Optimization and proxies.}
+All automated optimizers (SkillOpt-style, GEPA, RRSI, Meta-Harness) accepted
+zero improving edits in the final pilot. Table~\ref{tab:costs} reports their
+token/time cost. Figure~\ref{fig:optimizer-curves} shows the best validation
+accuracy versus cumulative tokens. Measured evaluation cost rises from
+2.8\,s and 4.7k tokens per problem on small graphs to 3.8\,s and 5.0k tokens
+on large graphs. A 10-round optimization run that used large graphs directly
+is therefore estimated at 3.52M tokens and 0.74 GPU-hours, 1.94$\times$ the
+average completed small-graph run (Table~\ref{tab:cost-counterfactual}); cost
+alone does not explain optimizing on small graphs.
+
+\paragraph{Proxies for large-graph accuracy.}
+On the same 15 rule-ablation candidates, the learned static proxy (static
+harness-text features, leave-one-out) reaches Spearman $-0.25$ (95\% CI
+$-0.73$ to $0.41$) against val accuracy and $0.29$ ($-0.36$ to $0.85$) against
+\texttt{test\_large}; with $n=15$ neither is distinguishable from zero, and
+top-3 recall is zero for both (Table~\ref{tab:proxy},
+Figure~\ref{fig:proxy}). On the earlier pool of 18 optimizer candidates the
+same proxy reached $0.553$ against val; that pool varies the prompt and rule
+list much more than one-rule ablations do. A cheap rollout with one problem
+per task reached $-0.17$ against val on the 18-candidate pool.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_proxy.pdf}
+\caption{Learned static proxy versus val and \texttt{test\_large} accuracy on
+the same 15 candidates.}
+\label{fig:proxy}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_proxy.tex}
+\caption{Proxy ranking quality by proxy, target and candidate pool.}
+\label{tab:proxy}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{figures/fig_optimizer_curves.pdf}
+\caption{Best validation accuracy versus cumulative optimizer tokens.}
+\label{fig:optimizer-curves}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_costs.tex}
+\caption{Optimizer token, time and estimated dollar cost.}
+\label{tab:costs}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_cost_counterfactual.tex}
+\caption{Estimated cost of 10 rounds of optimization on each graph size.}
+\label{tab:cost-counterfactual}
+\end{table}
+
+\paragraph{Router and decomposition.}
+On a controlled disconnected additive set, global v2 scores 25.0\%, the feature
+router 37.5\%, and per-component decomposition 50.0\%; max clique rises from 0\%
+to 100\% under decomposition. Figure~\ref{fig:router} and
+Table~\ref{tab:router} show the pilot.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.65\linewidth]{figures/fig_router.pdf}
+\caption{Router/decomposition accuracy on the disconnected additive set.}
+\label{fig:router}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_router.tex}
+\caption{Router modes on the disconnected additive set.}
+\label{tab:router}
+\end{table}
+% <<< AI-DRAFT
+
 \end{document}

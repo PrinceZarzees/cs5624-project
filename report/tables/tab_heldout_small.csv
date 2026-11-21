@@ -1,0 +1,4 @@
+harness,repeats,accuracy,std (pp),95% Wilson CI
+baseline_a,3,88.4%,1.3,"[85.2%, 91.1%]"
+baseline_b,3,93.8%,0.8,"[91.2%, 95.7%]"
+baseline_b_v2,3,95.8%,0.8,"[93.5%, 97.3%]"
