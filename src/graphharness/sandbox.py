@@ -155,14 +155,70 @@ os.execv(sys.executable, [sys.executable, "-I", "-u", "step.py"])
 """
 
 
+_PREAMBLE_NOLIB = """\
+# --- injected by graphharness.sandbox (no NetworkX) ---
+import ast as _gh_ast
+import json as _gh_json
+import sys as _gh_sys
+
+class _GhBlockNX:
+    def find_spec(self, name, path=None, target=None):
+        if name == "networkx" or name.startswith("networkx."):
+            raise ImportError("NetworkX is not available in this sandbox")
+        return None
+
+if not any(getattr(f, "__name__", "") == "_GhBlockNX" for f in _gh_sys.meta_path):
+    _gh_sys.meta_path.insert(0, _GhBlockNX())
+
+with open("graph.json", "r", encoding="utf-8") as _gh_f:
+    _gh_data = _gh_json.load(_gh_f)
+
+def _gh_adj(_g):
+    a = {v: [] for v in _g["nodes"]}
+    for e in _g["edges"]:
+        u, v = e[0], e[1]
+        a.setdefault(u, []).append(v)
+        a.setdefault(v, []).append(u)
+    return a
+
+if _gh_data.get("graphs"):
+    adj1 = _gh_adj(_gh_data["graphs"][0]); adj2 = _gh_adj(_gh_data["graphs"][1])
+    edge_list1 = [tuple(e[:2]) for e in _gh_data["graphs"][0]["edges"]]
+    edge_list2 = [tuple(e[:2]) for e in _gh_data["graphs"][1]["edges"]]
+    adj, edge_list = adj1, edge_list1
+else:
+    adj = _gh_adj(_gh_data["graph"])
+    edge_list = [tuple(e[:2]) for e in _gh_data["graph"]["edges"]]
+params = _gh_data["params"]
+nodes = list(adj)
+del _gh_data, _gh_f
+
+with open("user_code.py", "r", encoding="utf-8") as _gh_f:
+    _gh_source = _gh_f.read()
+_gh_tree = _gh_ast.parse(_gh_source, filename="user_code.py")
+_gh_last = None
+if _gh_tree.body and isinstance(_gh_tree.body[-1], _gh_ast.Expr):
+    _gh_last = _gh_ast.Expression(_gh_tree.body[-1].value)
+    _gh_tree.body = _gh_tree.body[:-1]
+exec(compile(_gh_tree, "user_code.py", "exec"), globals())
+if _gh_last is not None:
+    _gh_value = eval(compile(_gh_last, "user_code.py", "eval"), globals())
+    if _gh_value is not None:
+        print(repr(_gh_value))
+# --- model code has finished ---
+"""
+
+
 class PythonSandbox:
     """A temporary working directory plus a method to execute code in it."""
 
     def __init__(self, record: dict, limits: SandboxLimits | None = None,
-                 workdir: str | Path | None = None, preamble: str = ""):
+                 workdir: str | Path | None = None, preamble: str = "",
+                 block_networkx: bool = False):
         self.record = record
         self.limits = limits or SandboxLimits()
         self.preamble = preamble or ""
+        self.block_networkx = block_networkx
         self._owns_dir = workdir is None
         if workdir:
             self.workdir = Path(workdir)
@@ -198,7 +254,8 @@ class PythonSandbox:
         step = self.workdir / "step.py"
         user_code = (self.preamble + "\n" + code) if self.preamble else code
         (self.workdir / "user_code.py").write_text(user_code + "\n", encoding="utf-8")
-        step.write_text(_PREAMBLE, encoding="utf-8")
+        step.write_text(_PREAMBLE_NOLIB if self.block_networkx else _PREAMBLE,
+                        encoding="utf-8")
 
         out_path = self.workdir / "_stdout.txt"
         err_path = self.workdir / "_stderr.txt"

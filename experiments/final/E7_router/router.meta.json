@@ -1,0 +1,33 @@
+{
+  "n": 150,
+  "classes": [
+    "baseline_b_v2",
+    "tree",
+    "sparse",
+    "dense",
+    "large"
+  ],
+  "class_counts": {
+    "baseline_b_v2": 147,
+    "tree": 2,
+    "sparse": 1,
+    "dense": 0,
+    "large": 0
+  },
+  "cv_router_accuracy": 0.9666666666666667,
+  "cv_oracle_any_accuracy": 1.0,
+  "features": [
+    "log_n",
+    "density",
+    "avg_degree",
+    "max_degree",
+    "clustering",
+    "n_components",
+    "is_forest",
+    "task[shortest_path]",
+    "task[connected_components]",
+    "task[cycle_detection]",
+    "task[diameter]",
+    "task[max_clique]"
+  ]
+}

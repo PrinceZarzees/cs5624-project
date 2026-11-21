@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "name": "baseline_b_v2-candidate",
+  "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label. Always verify results against graph structure before finalizing.",
+  "rules": [
+    "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+    "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected, and nx.diameter.",
+    "For cycle detection, use nx.find_cycle(G) and only return a cycle if it returns a non-empty list; otherwise return []. Never rely on edge checks or manual traversal.",
+    "For diameter, compute all-pairs shortest paths using nx.all_pairs_shortest_path_length, then find a pair with maximum distance and return their shortest path using nx.shortest_path. Always verify that the returned path exists in the graph.",
+    "For maximum clique, on small graphs use nx.find_cliques() and return the largest clique; on large graphs, use a verified heuristic and ensure every pair in the result is adjacent.",
+    "Always print the result you are using (e.g., the path, clique, or component list) to confirm it matches the expected format and content.",
+    "Check feasibility: ensure the returned nodes are in the graph, form valid edges (for cliques or cycles), and satisfy the problem constraints (e.g., path length, cycle closure).",
+    "If a function fails (e.g., raises an error or returns None), fall back to a simpler, verified method (e.g., use nx.is_connected for connectivity, or return [] for no cycle).",
+    "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+    "For connected components, print `list(nx.connected_components(G))` and return one node from each component, ensuring the list length matches the number of components.",
+    "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+    "If code times out or errors, change the algorithm instead of rerunning it unchanged."
+  ],
+  "graph_view": "edge_list",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "notes": "The failures occurred due to incorrect cycle detection (missing edge checks) and improper diameter/path verification. Using explicit edge_list view enables direct validation of paths and cliques. Rules now emphasize verification, fallbacks, and explicit printing to ensure correctness at scale."
+}

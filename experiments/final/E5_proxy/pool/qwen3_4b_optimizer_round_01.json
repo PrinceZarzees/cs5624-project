@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "name": "baseline_b_v2-candidate",
+  "system_prompt": "You are an expert graph algorithms engineer. Solve graph problems by writing and running code, never by guessing from node labels. Always verify results against graph structure using direct edge checks.",
+  "rules": [
+    "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+    "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected, and nx.diameter.",
+    "For maximum clique, use exact search only on small graphs; on larger graphs, apply a verified heuristic and explicitly verify that every pair in the candidate clique is adjacent.",
+    "Always verify feasibility: for cliques, check that every pair is connected; for cycles, ensure the returned path forms a valid cycle; for components, confirm one node per component exists.",
+    "Print only the final result and its size or count; avoid printing intermediate steps or debug logs.",
+    "If code fails due to undefined functions (e.g., `nx` not found), ensure the NetworkX import is explicit and correct.",
+    "For cycle detection, use `nx.find_cycle(G)` only if the graph is connected; if disconnected, check each component separately.",
+    "For connected components, use `list(nx.connected_components(G))` and return one node from each component; verify the count matches the expected number.",
+    "Once a feasible result is found, stop and output only the final node list in <answer></answer> tags; do not rerun or modify the code.",
+    "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size."
+  ],
+  "graph_view": "edge_list",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "notes": "Failures occurred due to missing imports and incorrect cycle detection in disconnected graphs. Using edge_list view enables direct edge verification at scale. Rules now emphasize explicit verification and correct import handling, which are critical for larger graphs where edge connectivity is harder to infer."
+}

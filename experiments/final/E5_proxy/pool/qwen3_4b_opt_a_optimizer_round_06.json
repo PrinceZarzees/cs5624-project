@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "name": "baseline_a-candidate",
+  "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your solution against the problem requirements. Use the tools only when necessary, and ensure your final answer uses actual node identifiers from the graph. Never invent or use node labels like '1', '2', '3'.",
+  "rules": [
+    "Always use the graph's actual node labels from the input, not arbitrary numbers like 1, 2, 3.",
+    "For cycle detection, run a cycle-finding algorithm (e.g., DFS with recursion stack) and return a valid cycle if one exists; otherwise return an empty list.",
+    "For diameter, compute all-pairs shortest paths only if the graph is small enough to fit in memory; otherwise, use two BFS steps from random nodes to estimate the diameter.",
+    "For connected components, use NetworkX's connected_components function and return one representative node per component using actual node IDs.",
+    "Before finalizing, verify that the output matches the expected format and uses only nodes present in the graph.",
+    "If a tool fails due to memory or context length, simplify the approach (e.g., avoid full all-pairs shortest paths).",
+    "Never generate node sequences that do not follow actual edges in the graph.",
+    "If no cycle exists, return an empty list; if one exists, return a valid cycle in traversal order."
+  ],
+  "graph_view": "adjacency_list",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "notes": "The failures stemmed from the model inventing arbitrary node labels and failing to use actual graph structure. By enforcing use of real node IDs and adding verification rules, the harness ensures correctness even at scale. Adjacency list provides clearer structural access for small-to-medium graphs and scales better than summary or edge list for reasoning."
+}

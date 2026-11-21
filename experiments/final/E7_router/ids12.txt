@@ -1,0 +1,1 @@
+max_clique/disc400/000 max_independent_set/disc400/000 min_vertex_cover/disc400/000 connected_components/disc400/000 max_clique/disc1000/000 max_independent_set/disc1000/000 min_vertex_cover/disc1000/000 connected_components/disc1000/000 max_clique/disc2000/000 max_independent_set/disc2000/000 min_vertex_cover/disc2000/000 connected_components/disc2000/000

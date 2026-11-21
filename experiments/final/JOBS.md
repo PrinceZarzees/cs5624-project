@@ -30,3 +30,21 @@ All jobs use `--account=psgroup --partition=b200_normal_q --qos=owl_b200_normal_
   Baseline B only, 6 rounds, val 10/task, and adds one EvoSkill run.
 - No GPU experiment was run on a test split for tuning; optimizers read `train`
   and `val` only.
+
+## Remaining-experiment jobs (2026-11-21 afternoon)
+
+| Job ID | Script | Purpose | Start | End | Status | Output |
+|---|---|---|---|---|---|---|
+| 1548282 | run_e3c.sbatch | E3c overfitting probe + checkpoint eval | 14:00 | 14:35 | COMPLETED | E3_probe/ |
+| 1548283 | run_e14.sbatch | E14 cross-model (7B actor) | – | – | CANCELLED (GPU contention) | – |
+| 1548286/87 | run_e5*.sbatch | full E5 attempts | – | – | CANCELLED (no GPU) | – |
+| 1548382 | run_e7.sbatch | learned router + decomposition | – | – | CANCELLED (resubmitted) | – |
+| 1548421 | run_e10.sbatch | E10 2x2 | – | – | CANCELLED (resubmitted) | – |
+| 1548451 | run_remaining.sbatch | combined E7/E10/E5 | – | – | CANCELLED (16-CPU request did not fit) | – |
+| 1548462 | run_probe.sbatch | short E7 val probe | 14:35 | 14:40 | FAILED (GPU OOM while E3c held the GPU) | – |
+| 1548488 | run_e7.sbatch | E7 global/rule/learned + decomposition | 14:40 | 16:10 (limit) | RUNNING | E7_router/ |
+| 1548735 | run_e10_e5.sbatch | E10 2x2 on small + E5 labels for 40 candidates + judges | 17:49 (projected) | 19:04 (limit) | PENDING | E10_lang_lib/, E5_proxy/ |
+| 1548490/1548567/68 | run_e5_*.sbatch | split E5 attempts | – | – | CANCELLED (no GPU) | – |
+| 1549257 | run_e5_a30.sbatch | E5 labels/judges for 20 candidates | 19:46 (projected) | 20:16 | PENDING | E5_proxy/ |
+| 1549258 | run_e10.sbatch | E10 2x2 on test_small | 20:16 (projected) | 20:41 | PENDING | E10_lang_lib/ |
+| 1549291 | run_e7_learned.sbatch | learned router rerun after interface fix | 20:42 (projected) | 21:12 | PENDING | E7_router/disc/learned |

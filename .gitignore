@@ -83,3 +83,6 @@ data/graphqa_eval50/
 !data/manifest_final.json
 experiments/final/logs/
 experiments/**/*.sqlite-*
+experiments/final/**/sandbox*/
+data_proxy_large/
+data_proxy_medium/

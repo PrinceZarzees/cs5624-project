@@ -100,6 +100,43 @@ Use `[]` for a negative node-list answer. Do not invent node ids.
 """
 
 
+TOOL_PROTOCOL_NOLIB = """\
+## Tools and answer format (no NetworkX)
+
+You can run Python in a sandbox, but **NetworkX is not installed**. A code run
+is a fresh process with these names already defined:
+
+- `adj`: a dict mapping each node to the list of its neighbours
+- `edge_list`: a list of `(u, v)` pairs
+- `params`: a dict with task-specific inputs such as `source` and `target`
+- `nodes`: the list of node ids
+
+Write your own BFS/DFS/union-find if needed. Print a small amount of output.
+Use a tool by replying with a fenced Python block:
+
+```python
+print(len(adj), nodes[:5])
+```
+
+When ready, give the answer in the task-requested format, for example
+<answer>[1, 2, 3]</answer>.
+"""
+
+C_LIBRARY_NOTE = """\
+## C graph library
+
+In addition to `graph_io.h`, the sandbox provides `graph_algos.h` with:
+
+- `int ga_components(const Graph *g, int *comp)` -> number of components
+- `int ga_has_cycle(const Graph *g)` -> 1 if the graph has a cycle
+- `int ga_diameter(const Graph *g)` -> unweighted diameter
+- `int ga_max_clique(const Graph *g, int *out, int cap)` -> clique size
+- `int ga_max_independent_set(const Graph *g, int *out, int cap)` -> IS size
+- `int ga_min_vertex_cover(const Graph *g, int *out, int cap)` -> cover size
+
+Include both headers and compile with `#include "graph_algos.h"`.
+"""
+
 @dataclass
 class Harness:
     """A frozen, serializable agent configuration."""
@@ -116,6 +153,8 @@ class Harness:
     allow_tools: bool = True
     tool_backend: str = "python"
     tool_preamble: str = ""
+    block_networkx: bool = False
+    c_library: bool = False
     notes: str = ""
 
     def __post_init__(self):
@@ -137,7 +176,14 @@ class Harness:
             parts.append("Helper code already loaded in the sandbox:\n```python\n"
                          + self.tool_preamble.strip() + "\n```")
         if self.allow_tools:
-            parts.append((TOOL_PROTOCOL_C if self.tool_backend == "c" else TOOL_PROTOCOL).strip())
+            if self.block_networkx:
+                parts.append(TOOL_PROTOCOL_NOLIB.strip())
+            elif self.tool_backend == "c":
+                parts.append(TOOL_PROTOCOL_C.strip())
+                if self.c_library:
+                    parts.append(C_LIBRARY_NOTE.strip())
+            else:
+                parts.append(TOOL_PROTOCOL.strip())
         else:
             parts.append(
                 "## No tools\nYou cannot run code or call tools for this task. "
@@ -186,6 +232,8 @@ class Harness:
             "allow_tools": self.allow_tools,
             "tool_backend": self.tool_backend,
             "tool_preamble": self.tool_preamble,
+            "block_networkx": self.block_networkx,
+            "c_library": self.c_library,
             "notes": self.notes,
         }
 
@@ -194,7 +242,8 @@ class Harness:
         allowed = {
             "name", "system_prompt", "rules", "graph_view", "max_steps",
             "tool_timeout_s", "memory_mb", "max_output_bytes", "temperature",
-            "allow_tools", "tool_backend", "tool_preamble", "notes",
+            "allow_tools", "tool_backend", "tool_preamble", "block_networkx",
+            "c_library", "notes",
         }
         kwargs = {k: v for k, v in data.items() if k in allowed}
         kwargs.setdefault("name", "harness")
@@ -610,10 +659,12 @@ def run_agent(
                 tool_calls += 1
                 if sandbox is None:
                     if harness.tool_backend == "c":
-                        sandbox = CSandbox(record, limits=harness.sandbox_limits())
+                        sandbox = CSandbox(record, limits=harness.sandbox_limits(),
+                                           library=harness.c_library)
                     else:
                         sandbox = PythonSandbox(record, limits=harness.sandbox_limits(),
-                                                preamble=harness.tool_preamble)
+                                                preamble=harness.tool_preamble,
+                                                block_networkx=harness.block_networkx)
                 run = sandbox.run(action.code)
                 observation = run.observation()
                 steps[-1].update({

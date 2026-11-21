@@ -1,0 +1,28 @@
+harness: baseline_b-candidate    model: qwen3-4b    split: test_large
+problems: 100    errors: 1    duration: 73.7s    tokens: 541086
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_large   connected_components      20     663  100.0%    100.0%    100.0%
+test_large   cycle_detection           20     722  100.0%     95.0%     75.0%
+test_large   diameter                  20     712  100.0%    100.0%    100.0%
+test_large   max_clique                20     830   95.0%     85.0%     75.0%
+test_large   shortest_path             20     780  100.0%    100.0%    100.0%
+test_large   ALL                      100     741   99.0%     96.0%     90.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+500-1000     100      741    99.0%     96.0%     90.0%
+
+First failures:
+- cycle_detection/test_large/00001 (cycle_detection, n=501): said no cycle, but the graph has one
+- cycle_detection/test_large/00004 (cycle_detection, n=731): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_large/00006 (cycle_detection, n=701): said no cycle, but the graph has one
+- cycle_detection/test_large/00011 (cycle_detection, n=507): said no cycle, but the graph has one
+- cycle_detection/test_large/00016 (cycle_detection, n=692): said no cycle, but the graph has one
+- max_clique/test_large/00002 (max_clique, n=922): clique of size 2, maximum is 3
+- max_clique/test_large/00005 (max_clique, n=604): clique of size 3, maximum is 4
+- max_clique/test_large/00013 (max_clique, n=874): empty answer
+- max_clique/test_large/00017 (max_clique, n=971): empty answer
+- max_clique/test_large/00018 (max_clique, n=997): no prediction

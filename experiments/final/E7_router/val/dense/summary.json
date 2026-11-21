@@ -1,0 +1,259 @@
+{
+  "harness": "dense",
+  "harness_config": {
+    "version": 1,
+    "name": "dense",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+      "For connected components, print `list(nx.connected_components(G))` and return one node from each component.",
+      "For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",
+      "Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",
+      "For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",
+      "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+      "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+      "Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results.",
+      "For dense graphs, build adjacency sets or a matrix, use exact clique/MIS/MVC where feasible, and verify all pairwise constraints."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "block_networkx": false,
+    "c_library": false,
+    "notes": "Class-specific router harness: dense."
+  },
+  "model": "qwen3-4b",
+  "split": "val",
+  "started_at": "2026-11-21T19:45:14.788782+00:00",
+  "finished_at": "2026-11-21T19:46:46.149853+00:00",
+  "duration_s": 91.36107534301118,
+  "n": 150,
+  "overall": {
+    "split": "val",
+    "task": "ALL",
+    "n": 150,
+    "parsed": 1.0,
+    "feasible": 0.9733333333333334,
+    "accuracy": 0.9266666666666666,
+    "mean_nodes": 26.506666666666668
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 30,
+      "mean_nodes": 27.033333333333335,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "cycle_detection",
+      "n": 30,
+      "mean_nodes": 27.033333333333335,
+      "parsed": 1.0,
+      "feasible": 0.9333333333333333,
+      "accuracy": 0.9333333333333333
+    },
+    {
+      "task": "diameter",
+      "n": 30,
+      "mean_nodes": 25.766666666666666,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "max_clique",
+      "n": 30,
+      "mean_nodes": 29.366666666666667,
+      "parsed": 1.0,
+      "feasible": 0.9333333333333333,
+      "accuracy": 0.7
+    },
+    {
+      "task": "shortest_path",
+      "n": 30,
+      "mean_nodes": 23.333333333333332,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 150,
+      "mean_nodes": 26.506666666666668,
+      "parsed": 1.0,
+      "feasible": 0.9733333333333334,
+      "accuracy": 0.9266666666666666
+    }
+  ],
+  "tokens": {
+    "prompt": 846088,
+    "completion": 82701,
+    "total": 928789,
+    "mean_total_per_problem": 6191.926666666666
+  },
+  "tool_calls": 422,
+  "mean_agent_duration_s": 3.6922367360817345,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "cycle_detection/val/00018",
+      "task": "cycle_detection",
+      "n_nodes": 44,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "cycle_detection/val/00021",
+      "task": "cycle_detection",
+      "n_nodes": 31,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3']"
+    },
+    {
+      "id": "max_clique/val/00000",
+      "task": "max_clique",
+      "n_nodes": 29,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 4"
+    },
+    {
+      "id": "max_clique/val/00005",
+      "task": "max_clique",
+      "n_nodes": 32,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 2, maximum is 4"
+    },
+    {
+      "id": "max_clique/val/00008",
+      "task": "max_clique",
+      "n_nodes": 23,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 5, maximum is 6"
+    },
+    {
+      "id": "max_clique/val/00010",
+      "task": "max_clique",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 4"
+    },
+    {
+      "id": "max_clique/val/00014",
+      "task": "max_clique",
+      "n_nodes": 34,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 2, maximum is 4"
+    },
+    {
+      "id": "max_clique/val/00020",
+      "task": "max_clique",
+      "n_nodes": 34,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/val/00023",
+      "task": "max_clique",
+      "n_nodes": 43,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 4"
+    },
+    {
+      "id": "max_clique/val/00025",
+      "task": "max_clique",
+      "n_nodes": 20,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/val/00027",
+      "task": "max_clique",
+      "n_nodes": 42,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 4"
+    }
+  ],
+  "rows": [
+    {
+      "split": "val",
+      "task": "connected_components",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 27.033333333333335
+    },
+    {
+      "split": "val",
+      "task": "cycle_detection",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.9333333333333333,
+      "accuracy": 0.9333333333333333,
+      "mean_nodes": 27.033333333333335
+    },
+    {
+      "split": "val",
+      "task": "diameter",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 25.766666666666666
+    },
+    {
+      "split": "val",
+      "task": "max_clique",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.9333333333333333,
+      "accuracy": 0.7,
+      "mean_nodes": 29.366666666666667
+    },
+    {
+      "split": "val",
+      "task": "shortest_path",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 23.333333333333332
+    },
+    {
+      "split": "val",
+      "task": "ALL",
+      "n": 150,
+      "parsed": 1.0,
+      "feasible": 0.9733333333333334,
+      "accuracy": 0.9266666666666666,
+      "mean_nodes": 26.506666666666668
+    }
+  ]
+}

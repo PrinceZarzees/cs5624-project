@@ -66,3 +66,19 @@
   32k no-tools runs and prompt-length split.
 - `scripts/final/list_ai_drafts.py`: checklist writer for `report/AI_DRAFTS.md`.
 - `report/main.pdf`: compiled draft (Tectonic 0.17.0).
+
+## Remaining-experiment additions
+
+- `src/graphharness/learned_router.py`: features, per-harness accuracy
+  regressions, exact additive component solver, 5-fold CV.
+- `src/graphharness/router.py`: `--learned-router`, `--repair-components`,
+  and exact per-component repair.
+- `src/graphharness/agent.py` / `sandbox.py` / `csandbox.py`: no-NetworkX
+  Python mode and C `graph_algos.h/.c` library.
+- `scripts/final/{build_disconnected120.py,e5_build_pool.py,e5_judge.py,
+  e5_analyze.py,aggregate_e3c.py,aggregate_e7.py,aggregate_e10.py,
+  make_e10_harnesses.py}` and the corresponding sbatch files.
+- New tests: `tests/test_decomposition.py`, `tests/test_router_repair.py`,
+  `tests/test_e10_sandboxes.py` (190 tests total).
+- `configs/final_proxy_{large,medium}.json`, `data_final/disconnected120.jsonl`
+  (gitignored data; manifests kept).

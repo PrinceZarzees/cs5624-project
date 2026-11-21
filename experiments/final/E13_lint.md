@@ -1,8 +1,8 @@
 # E13 LaTeX lint
 
-- main.tex lines: 434
+- main.tex lines: 508
 - citations missing `~`: 0
-- included files: 23
+- included files: 28
   - OK figures/scaling_4b_accuracy_vs_size.png
   - OK figures/fig_tool_access.pdf
   - OK tables/tab_tool_access.tex
@@ -23,17 +23,22 @@
   - OK figures/fig_optimizer_curves.pdf
   - OK tables/tab_costs.tex
   - OK tables/tab_optimizers.tex
+  - OK tables/tab_optimizer_outputs.tex
+  - OK figures/fig_overfit_probe.pdf
+  - OK tables/tab_overfit.tex
   - OK tables/tab_cost_counterfactual.tex
   - OK figures/fig_router.pdf
   - OK tables/tab_router.tex
+  - OK figures/fig_router120.pdf
+  - OK tables/tab_router120.tex
 - AI-DRAFT blocks: 4
   - lines 34-52
   - lines 73-89
   - lines 97-109
-  - lines 160-432
+  - lines 160-506
 - compile: returncode 0, pdf written
 - compile errors: 0
-- PDF pages: 12
+- PDF pages: 14
 - page where Section 6 (Scaling Results) starts: 2
 - page where the AI-DRAFT final section starts: 3
 - main-content pages before Section 6: 2 (3-page minimum applies to Sections 1-5)

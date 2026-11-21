@@ -183,7 +183,24 @@ rows=[['Python+NetworkX','yes','test_small','96.0%'],['Python, no NetworkX','no'
 header=['language','graph library','split','accuracy']
 csvw('tab_lang_lib',header,rows); tex('tab_lang_lib',header,rows)
 
-# router
+# E7 120-problem router modes
+e7=ROOT/'experiments/final/E7_router/summary.csv'
+if e7.exists():
+    rs=list(csv.DictReader(open(e7)))
+    all_modes=['global_v2','rule_router','learned_router','decomposed_rule','decomposed_learned']
+    modes=[m for m in all_modes if any(r['mode']==m for r in rs)]
+    tasks=['ALL','connected_components','max_clique','max_independent_set','min_vertex_cover']
+    rows=[]
+    for m in modes:
+        cells=[]
+        for t in tasks:
+            x=[r for r in rs if r['set']=='disconnected120' and r['mode']==m and r['task']==t]
+            cells.append(f"{float(x[0]['accuracy']):.1%}" if x else '--')
+        rows.append([m.replace('_',' ')]+cells)
+    header=['mode','ALL','components','max clique','MIS','MVC']
+    csvw('tab_router120',header,rows); tex('tab_router120',header,rows,align='lrrrrr')
+
+# router (8-problem pilot)
 rows=[]
 for m,p in [('global','experiments/review_router/global/summary.txt'),('routed','experiments/review_router/routed/summary.txt'),('decomposed','experiments/review_router/decomposed/summary.txt')]:
     text=open(ROOT/p).read(); line=[x for x in text.splitlines() if 'disconnected ALL' in x][0]
@@ -202,6 +219,17 @@ for r in rows[1:]:
         pass
     body.append(r)
 csvw('tab_cross_model',rows[0],body); tex('tab_cross_model',rows[0],body,align='lllllrr')
+
+# E3c overfitting probe
+probe=ROOT/'experiments/final/E3_probe/summary.csv'
+if probe.exists():
+    rows=[]
+    for r in csv.DictReader(open(probe)):
+        rows.append([r['run'].replace('_probe',''),r['checkpoint'],
+                     f"{float(r['val_accuracy']):.1%}",f"{float(r['large_accuracy']):.1%}",
+                     f"{float(r['delta_gen'])*100:+.1f}"])
+    header=['run','checkpoint','val','test_large','small-large (pp)']
+    csvw('tab_overfit',header,rows); tex('tab_overfit',header,rows,align='llrrr')
 
 # E1 held-out small split: mean +/- std over 3 repeats + 95% Wilson CI
 if (ROOT/'experiments/final/E1_heldout/summary.csv').exists():

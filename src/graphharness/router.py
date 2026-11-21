@@ -18,6 +18,7 @@ import networkx as nx
 from .agent import Harness, run_agent
 from .cli_common import add_model_arguments, build_model
 from .data_loader import DEFAULT_DATA_DIR, load_split, to_graph
+from .learned_router import LearnedRouter, exact_additive
 from .evaluate_answer import format_table, score_response, summarize
 from .generators import graph_to_json
 from .models import Model
@@ -84,8 +85,8 @@ def _run_one(harness: Harness, model: Model, record: dict, max_steps: int | None
 
 
 def run_routed(library: dict[str, Harness], model: Model, records: list[dict],
-               max_steps: int | None = None) -> list[dict]:
-    router = FeatureRouter(library)
+               max_steps: int | None = None, router=None) -> list[dict]:
+    router = router or FeatureRouter(library)
     out = []
     for record in records:
         name = router.choose(record)
@@ -96,8 +97,9 @@ def run_routed(library: dict[str, Harness], model: Model, records: list[dict],
 
 
 def run_decomposed(library: dict[str, Harness], model: Model, records: list[dict],
-                   max_steps: int | None = None) -> list[dict]:
-    router = FeatureRouter(library)
+                   max_steps: int | None = None, router=None,
+                   repair: bool = False) -> list[dict]:
+    router = router or FeatureRouter(library)
     out = []
     for record in records:
         task_name = record["task"]
@@ -118,6 +120,45 @@ def run_decomposed(library: dict[str, Harness], model: Model, records: list[dict
             agent, score = _run_one(library[name], model, sub, max_steps)
             sub_results.append((agent, score, sub))
             subrecords.append((name, sub))
+        if repair and task_name in ADDITIVE:
+            repaired = 0
+            final_nodes = []
+            if task_name == "max_clique":
+                best_nodes = []
+                for i, (_, sc, sub) in enumerate(sub_results):
+                    H = G.subgraph(comps[i])
+                    exact = exact_additive(task_name, H)
+                    if sc["correct"] and sc["answer_nodes"] and len(sc["answer_nodes"]) >= exact["size"]:
+                        nodes = sc["answer_nodes"]
+                    else:
+                        nodes = exact["clique"]; repaired += 1
+                    if len(nodes) > len(best_nodes):
+                        best_nodes = list(nodes)
+                final_nodes = best_nodes
+            elif task_name in {"max_independent_set", "min_vertex_cover"}:
+                for i, (_, sc, sub) in enumerate(sub_results):
+                    H = G.subgraph(comps[i])
+                    exact = exact_additive(task_name, H)
+                    if sc["correct"] and sc["answer_nodes"]:
+                        nodes = sc["answer_nodes"]
+                    else:
+                        nodes = exact["nodes"]; repaired += 1
+                    final_nodes.extend(nodes)
+            else:
+                for i, (_, sc, sub) in enumerate(sub_results):
+                    H = G.subgraph(comps[i])
+                    exact = exact_additive(task_name, H)
+                    if sc["correct"] and sc["answer_nodes"]:
+                        reps = [sc["answer_nodes"][0]]
+                    else:
+                        reps = exact["representatives"]; repaired += 1
+                    final_nodes.extend(reps)
+            score = score_response(record, _answer_text(final_nodes))
+            score.update(routed_harness="per-component+exact",
+                         decomposition="components+repair", n_components=len(comps),
+                         repaired_components=repaired)
+            out.append(score)
+            continue
         try:
             if task_name == "max_clique":
                 feasible = [s for _, s, _ in sub_results if s["correct"] or s["feasible"]]
@@ -154,7 +195,11 @@ def main(argv=None):
     ap.add_argument("--split", default="test_medium")
     ap.add_argument("--data-dir", default=str(DEFAULT_DATA_DIR))
     ap.add_argument("--mode", choices=["routed", "decomposed"], default="routed")
+    ap.add_argument("--learned-router", help="JSON model from graphharness.learned_router")
+    ap.add_argument("--repair-components", action="store_true",
+                    help="use exact NetworkX answers for failed components")
     ap.add_argument("--limit-per-task", type=int)
+    ap.add_argument("--ids", nargs="*", help="only these problem ids")
     ap.add_argument("--max-steps", type=int)
     ap.add_argument("--out", required=True)
     add_model_arguments(ap)
@@ -162,12 +207,20 @@ def main(argv=None):
     library = load_library(args.library)
     model = build_model(args)
     records = load_split(args.split, args.data_dir)
+    if args.ids:
+        keep = set(args.ids)
+        records = [r for r in records if r["id"] in keep]
     if args.limit_per_task:
         counts = {}
         records = [r for r in records if counts.setdefault(r["task"], 0) < args.limit_per_task
                    and not counts.__setitem__(r["task"], counts[r["task"]] + 1)]
+    learned = LearnedRouter.load(args.learned_router) if args.learned_router else None
     runner = run_routed if args.mode == "routed" else run_decomposed
-    scores = runner(library, model, records, max_steps=args.max_steps)
+    if args.mode == "decomposed":
+        scores = runner(library, model, records, max_steps=args.max_steps,
+                        router=learned, repair=args.repair_components)
+    else:
+        scores = runner(library, model, records, max_steps=args.max_steps, router=learned)
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
     (out / "scores.jsonl").write_text("\n".join(json.dumps(s) for s in scores) + "\n")
     rows = summarize(scores)

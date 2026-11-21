@@ -129,6 +129,22 @@ if e11.exists():
     axes[0].set_ylabel('accuracy'); axes[0].set_ylim(0,1); axes[0].legend()
     save(fig,'fig_notools_longctx')
 
+# E3c overfitting probe: val vs test_large per checkpoint
+probe=ROOT/'experiments/final/E3_probe/summary.csv'
+if probe.exists():
+    rows=list(csv.DictReader(open(probe)))
+    fig,ax=plt.subplots(figsize=(4.4,3.2))
+    for run,color in [('skillopt_probe','#4C78A8'),('rrsi_probe','#F58518')]:
+        xs=[float(r['val_accuracy']) for r in rows if r['run']==run]
+        ys=[float(r['large_accuracy']) for r in rows if r['run']==run]
+        ax.plot(xs,ys,marker='o',label=run.replace('_probe',''),color=color)
+        for x,y in zip(xs,ys):
+            ax.annotate(f"{x:.2f}",(x,y),fontsize=6,xytext=(3,3),textcoords='offset points')
+    ax.plot([0.9,1.0],[0.9,1.0],ls=':',color='k',lw=.8)
+    ax.set_xlabel('val accuracy'); ax.set_ylabel('test_large accuracy')
+    ax.set_xlim(0.90,1.005); ax.set_ylim(0.88,0.97); ax.grid(alpha=.3); ax.legend(fontsize=7)
+    save(fig,'fig_overfit_probe')
+
 # proxy: same 15 candidates, val vs test_large
 rows=list(csv.DictReader(open(ROOT/'experiments/final/E5_proxy/labels_same_candidates.csv')))
 fig,axes=plt.subplots(1,2,figsize=(7.2,3.1),sharex=True)
@@ -138,7 +154,24 @@ for ax,target,label in [(axes[0],'val_accuracy','val'),(axes[1],'large_accuracy'
     ax.grid(alpha=.3)
 save(fig,'fig_proxy')
 
-# router
+# E7 120-problem router modes
+e7=ROOT/'experiments/final/E7_router/summary.csv'
+if e7.exists():
+    rs=list(csv.DictReader(open(e7)))
+    all_modes=['global_v2','rule_router','learned_router','decomposed_rule','decomposed_learned']
+    modes=[m for m in all_modes if any(r['mode']==m for r in rs)]
+    tasks=['connected_components','max_clique','max_independent_set','min_vertex_cover']
+    fig,ax=plt.subplots(figsize=(7,3.2)); w=.16
+    for j,m in enumerate(modes):
+        vals=[]
+        for t in tasks:
+            x=[r for r in rs if r['set']=='disconnected120' and r['mode']==m and r['task']==t]
+            vals.append(float(x[0]['accuracy']) if x else 0)
+        ax.bar([i+j*w for i in range(len(tasks))],vals,width=w,label=m.replace('_',' '))
+    ax.set_xticks([i+2*w for i in range(len(tasks))]); ax.set_xticklabels(['components','max clique','MIS','MVC'],rotation=15)
+    ax.set_ylabel('accuracy'); ax.set_ylim(0,1); ax.legend(fontsize=6); save(fig,'fig_router120')
+
+# router pilot
 rows=[]
 for m in ['global','routed','decomposed']:
     text=open(ROOT/f'experiments/review_router/{m}/summary.txt').read(); line=[x for x in text.splitlines() if 'disconnected ALL' in x][0]

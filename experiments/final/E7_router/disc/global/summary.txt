@@ -1,0 +1,29 @@
+harness: baseline_b_v2    model: qwen3-4b    split: disconnected120
+problems: 120    errors: 6    duration: 163.7s    tokens: 2542045
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+disconnected120 connected_components      30    1133  100.0%    100.0%    100.0%
+disconnected120 max_clique                30    1133  100.0%     90.0%     23.3%
+disconnected120 max_independent_set       30    1133   43.3%     43.3%      0.0%
+disconnected120 min_vertex_cover          30    1133   50.0%      0.0%      0.0%
+disconnected120 ALL                      120    1133   73.3%     58.3%     30.8%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+301-499       40      400    80.0%     60.0%     32.5%
+500-1000      40     1000    70.0%     52.5%     30.0%
+1000+         40     2000    70.0%     62.5%     30.0%
+
+First failures:
+- max_clique/disc400/000 (max_clique, n=400): 1 and 2 are not connected, not a clique
+- max_clique/disc400/001 (max_clique, n=400): clique of size 3, maximum is 4
+- max_clique/disc400/005 (max_clique, n=400): clique of size 3, maximum is 4
+- max_clique/disc400/006 (max_clique, n=400): clique of size 3, maximum is 4
+- max_clique/disc400/007 (max_clique, n=400): clique of size 3, maximum is 4
+- max_clique/disc400/008 (max_clique, n=400): clique of size 3, maximum is 4
+- max_clique/disc400/009 (max_clique, n=400): clique of size 3, maximum is 4
+- max_independent_set/disc400/000 (max_independent_set, n=400): independent set of size 166, maximum is 188
+- max_independent_set/disc400/001 (max_independent_set, n=400): independent set of size 152, maximum is 179
+- max_independent_set/disc400/002 (max_independent_set, n=400): no prediction

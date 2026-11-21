@@ -1,0 +1,3 @@
+{"seed": 56241,
+ "tasks": ["shortest_path","connected_components","cycle_detection","diameter","max_clique"],
+ "splits": {"proxy_large": {"n_range": [500, 1000], "per_task": 10}}}

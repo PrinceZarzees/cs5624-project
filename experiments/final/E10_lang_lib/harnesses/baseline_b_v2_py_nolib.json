@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "name": "baseline_b_v2_py_nolib",
+  "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+  "rules": [
+    "Use `adj` and `edge_list` directly; never infer edges or distances from node ids.",
+    "Implement BFS, DFS or union-find yourself; NetworkX is not installed and imports fail.",
+    "For maximum clique, enumerate only on small graphs; on large graphs use a heuristic and verify pairwise adjacency.",
+    "Check feasibility before answering: path endpoints and edges, one representative per component, cycle closure, or clique pairwise adjacency.",
+    "Keep sandbox output short: print only the result, its length/size, and a small check.",
+    "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+    "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+    "For connected components, run BFS/DFS and return one node per component.",
+    "For diameter, run BFS from each node, find a farthest pair, and return a shortest path between them.",
+    "Always call print(...) on the value you need.",
+    "For maximum clique on small graphs, use branch and bound and verify the result.",
+    "Once a successful run prints a feasible result, stop and give that result in <answer> tags.",
+    "Never filter, sort, or index nodes by numeric value; node ids are arbitrary.",
+    "Do not mutate `adj` while iterating it; copy neighbour lists if needed."
+  ],
+  "graph_view": "summary",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "block_networkx": true,
+  "c_library": false,
+  "notes": "v2 rules rewritten for adjacency only; NetworkX blocked."
+}

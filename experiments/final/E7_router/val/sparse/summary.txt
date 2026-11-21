@@ -1,0 +1,24 @@
+harness: sparse    model: qwen3-4b    split: val
+problems: 150    errors: 0    duration: 72.6s    tokens: 785703
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+val          connected_components      30      27  100.0%    100.0%    100.0%
+val          cycle_detection           30      27  100.0%     93.3%     93.3%
+val          diameter                  30      26  100.0%    100.0%    100.0%
+val          max_clique                30      29  100.0%    100.0%     86.7%
+val          shortest_path             30      23  100.0%    100.0%    100.0%
+val          ALL                      150      27  100.0%     98.7%     96.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       27   100.0%     98.7%     96.0%
+
+First failures:
+- cycle_detection/val/00000 (cycle_detection, n=29): unknown node(s): ['2', '3']
+- cycle_detection/val/00018 (cycle_detection, n=44): unknown node(s): ['1', '2', '3']
+- max_clique/val/00004 (max_clique, n=22): clique of size 2, maximum is 3
+- max_clique/val/00008 (max_clique, n=23): clique of size 2, maximum is 6
+- max_clique/val/00010 (max_clique, n=18): clique of size 3, maximum is 4
+- max_clique/val/00027 (max_clique, n=42): clique of size 2, maximum is 4

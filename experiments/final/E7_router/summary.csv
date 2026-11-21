@@ -1,0 +1,12 @@
+set,mode,task,n,accuracy,parsed,feasible
+disconnected120,global_v2,ALL,120,0.30833333333333335,0.7333333333333333,0.5833333333333334
+disconnected120,global_v2,connected_components,30,1.0,1.0,1.0
+disconnected120,global_v2,max_clique,30,0.23333333333333334,1.0,0.9
+disconnected120,global_v2,max_independent_set,30,0.0,0.43333333333333335,0.43333333333333335
+disconnected120,global_v2,min_vertex_cover,30,0.0,0.5,0.0
+disconnected120,rule_router,ALL,240,0.2916666666666667,,
+disconnected120,rule_router,connected_components,30,1.0,1.0,1.0
+disconnected120,rule_router,max_clique,30,0.16666666666666666,1.0,0.8666666666666667
+disconnected120,rule_router,max_independent_set,30,0.0,0.4666666666666667,0.4
+disconnected120,rule_router,min_vertex_cover,30,0.0,0.5,0.0
+disconnected120,rule_router,ALL,120,0.2916666666666667,0.7416666666666667,0.5666666666666667
