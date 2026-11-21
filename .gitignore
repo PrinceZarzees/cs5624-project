@@ -56,3 +56,20 @@ experiments/results/
 # Additional generated data
 data/*.csv
 data/grapharena/
+
+# Downloaded/converted benchmark data (regenerate with the adapters)
+data/grapharena_raw/
+data/grapharena_smoke/
+data/grapharena_eval/
+data/graphqa_raw/
+data/graphqa_smoke/
+data/graphqa_eval/
+
+# Large generated experiment artifacts (keep summaries/plots/checkpoints)
+experiments/**/trajectories/
+experiments/**/predictions.jsonl
+experiments/**/scores.jsonl
+experiments/**/cache.sqlite
+experiments/**/sandbox/
+experiments/**/*.sqlite
+experiments/**/*.zip

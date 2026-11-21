@@ -88,3 +88,43 @@ def test_summary_and_cli(tmp_path):
     assert [s["correct"] for s in scores] == [True, False]
     rows = {r["task"]: r for r in summarize(scores)}
     assert rows["ALL"]["accuracy"] == 0.5
+
+
+def test_scalar_and_two_graph_answer_parsing():
+    from graphharness import build_data
+    import random
+    from graphharness.generators import graph_to_json
+    import networkx as nx
+
+    rng = random.Random(0)
+    for task in ["node_count", "edge_count", "triangle_counting", "node_degree"]:
+        rec = build_data.make_record(task, "test", 0, 6, rng)
+        answer = rec["answer"]
+        value = answer.get("count", answer.get("degree"))
+        assert score_response(rec, f"<answer>{value}</answer>")["correct"]
+
+    rec = build_data.make_record("edge_existence", "test", 0, 6, rng)
+    text = "yes" if rec["answer"]["exists"] else "no"
+    assert score_response(rec, f"<answer>{text}</answer>")["correct"]
+
+    rec = build_data.make_record("connected_nodes", "test", 0, 6, rng)
+    nodes = rec["answer"]["nodes"]
+    assert score_response(rec, "<answer>[" + ", ".join(map(str, nodes)) + "]</answer>")["correct"]
+
+    g1 = nx.Graph([(0, 1), (1, 2)])
+    g2 = nx.Graph([(0, 1), (1, 2)])
+    ged = {
+        "id": "ged/test/0", "task": "graph_edit_distance", "split": "test",
+        "graph": graph_to_json(g1), "graphs": [graph_to_json(g1), graph_to_json(g2)],
+        "params": {}, "question": "mapping", "answer": {"cost": 0, "mapping": [0, 1, 2]},
+        "meta": {},
+    }
+    assert score_response(ged, "<answer>[0, 1, 2]</answer>")["correct"]
+
+    mcs = {
+        "id": "mcs/test/0", "task": "max_common_subgraph", "split": "test",
+        "graph": graph_to_json(g1), "graphs": [graph_to_json(g1), graph_to_json(g2)],
+        "params": {}, "question": "subgraph", "answer": {"size": 3, "nodes1": [0, 1, 2], "nodes2": [0, 1, 2]},
+        "meta": {},
+    }
+    assert score_response(mcs, "<answer>[0, 1, 2], [0, 1, 2]</answer>")["correct"]

@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "name": "baseline_a-candidate",
+  "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For connected components, ensure each node in the output belongs to a distinct component. For cycles, only return a cycle if one exists; otherwise return an empty list. For diameter, compute shortest paths between all pairs and verify the maximum distance with a valid path. Never invent or use unknown node identifiers. Use only nodes present in the graph. Final answer must be in the required format.",
+  "rules": [
+    "Always verify that each node in the output belongs to a distinct connected component.",
+    "Never use node identifiers that are not present in the graph (e.g., '1', '2', '3') \u2014 use only nodes from the graph's actual node set.",
+    "For cycle detection, only return a cycle if one exists; otherwise return an empty list.",
+    "For diameter, compute all-pairs shortest paths and confirm the longest path exists between two actual nodes in the graph.",
+    "When generating a path, ensure it uses only nodes that are in the graph and that the path is valid (i.e., edges exist between consecutive nodes).",
+    "Do not assume node labels or order \u2014 use the graph's actual structure and node labels as provided.",
+    "If a tool fails due to invalid input (e.g., unknown nodes), recompute using only valid nodes from the graph.",
+    "Always output a list of nodes in the required format; do not add explanations or extra text."
+  ],
+  "graph_view": "edge_list",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "notes": "Failures occurred due to hallucinated node identifiers and lack of verification against actual graph structure. By enforcing node validity and structural verification, the harness ensures correctness even at scale. Using edge_list provides full structural access for validation in larger graphs."
+}

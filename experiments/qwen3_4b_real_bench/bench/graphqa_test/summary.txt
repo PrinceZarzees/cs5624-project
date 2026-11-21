@@ -1,0 +1,35 @@
+harness: baseline_b_v2    model: qwen3-4b    split: graphqa_test
+problems: 240    errors: 0    duration: 0.0s    tokens: 0
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+graphqa_test connected_nodes           20      13  100.0%    100.0%    100.0%
+graphqa_test cycle_detection           20      13  100.0%    100.0%     90.0%
+graphqa_test disconnected_nodes        20      13  100.0%    100.0%    100.0%
+graphqa_test edge_count                20      13  100.0%    100.0%    100.0%
+graphqa_test edge_existence            20      13  100.0%    100.0%    100.0%
+graphqa_test maximum_flow              20      13  100.0%    100.0%     15.0%
+graphqa_test node_classification       20      10  100.0%    100.0%     75.0%
+graphqa_test node_count                20      13  100.0%    100.0%    100.0%
+graphqa_test node_degree               20      13  100.0%    100.0%    100.0%
+graphqa_test reachability              20      13  100.0%     95.0%     95.0%
+graphqa_test shortest_path             20      13  100.0%     95.0%     95.0%
+graphqa_test triangle_counting         20      13  100.0%    100.0%     90.0%
+graphqa_test ALL                      240      13  100.0%     99.2%     88.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         240       13   100.0%     99.2%     88.3%
+
+First failures:
+- shortest_path/graphqa_test/00018 (shortest_path, n=14): empty answer
+- cycle_detection/graphqa_test/00009 (cycle_detection, n=5): said no cycle, but the graph has one
+- cycle_detection/graphqa_test/00013 (cycle_detection, n=17): said no cycle, but the graph has one
+- reachability/graphqa_test/00001 (reachability, n=10): no edge between 0 and 2
+- triangle_counting/graphqa_test/00007 (triangle_counting, n=8): answered 0, graph has 39 triangles
+- triangle_counting/graphqa_test/00010 (triangle_counting, n=9): answered 0, graph has 84 triangles
+- node_classification/graphqa_test/00003 (node_classification, n=4): answered '[d for d in g.degree()]', expected 'soccer'
+- node_classification/graphqa_test/00006 (node_classification, n=4): answered '[0]', expected 'golf'
+- node_classification/graphqa_test/00010 (node_classification, n=8): answered '[5, 7]', expected 'golf'
+- node_classification/graphqa_test/00018 (node_classification, n=4): answered '[node]', expected 'soccer'

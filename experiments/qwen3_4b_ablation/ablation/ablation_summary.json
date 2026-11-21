@@ -1,0 +1,844 @@
+{
+  "harness": {
+    "version": 1,
+    "name": "baseline_b_v2",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+      "For connected components, print `list(nx.connected_components(G))` and return one node from each component.",
+      "For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",
+      "Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",
+      "For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",
+      "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+      "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+      "Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "notes": "Baseline B plus explicit connected-components, diameter-witness and print rules."
+  },
+  "model": "qwen3-4b",
+  "split": "test_large",
+  "full_accuracy": 0.84,
+  "rows": [
+    {
+      "variant": "full",
+      "rule_index": null,
+      "rule": "",
+      "accuracy": 0.84,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "tokens": 136222,
+      "mean_tokens": 5448.88,
+      "mean_duration_s": 3.2271112371236086,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.2
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ]
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-0",
+      "rule_index": 0,
+      "rule": "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "accuracy": 0.96,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "tokens": 128304,
+      "mean_tokens": 5132.16,
+      "mean_duration_s": 4.528499384112656,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.8
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.12
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-1",
+      "rule_index": 1,
+      "rule": "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "accuracy": 0.84,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "tokens": 125605,
+      "mean_tokens": 5024.2,
+      "mean_duration_s": 3.03063910625875,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.2
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": 0.0
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-2",
+      "rule_index": 2,
+      "rule": "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "accuracy": 0.88,
+      "parsed": 1.0,
+      "feasible": 0.88,
+      "tokens": 130111,
+      "mean_tokens": 5204.44,
+      "mean_duration_s": 2.4205703867971895,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 0.4,
+          "accuracy": 0.4
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.040000000000000036
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-3",
+      "rule_index": 3,
+      "rule": "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "accuracy": 0.84,
+      "parsed": 1.0,
+      "feasible": 0.88,
+      "tokens": 127094,
+      "mean_tokens": 5083.76,
+      "mean_duration_s": 2.8897435426525773,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.8
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 0.6,
+          "accuracy": 0.4
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": 0.0
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-4",
+      "rule_index": 4,
+      "rule": "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "accuracy": 0.92,
+      "parsed": 1.0,
+      "feasible": 0.92,
+      "tokens": 135810,
+      "mean_tokens": 5432.4,
+      "mean_duration_s": 2.9648864321783184,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.8
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.8
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.08000000000000007
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-5",
+      "rule_index": 5,
+      "rule": "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "accuracy": 0.96,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "tokens": 149752,
+      "mean_tokens": 5990.08,
+      "mean_duration_s": 5.0740513546578585,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.8
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.12
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-6",
+      "rule_index": 6,
+      "rule": "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+      "accuracy": 0.8,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "tokens": 202101,
+      "mean_tokens": 8084.04,
+      "mean_duration_s": 4.439620884079486,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.8
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.2
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": 0.039999999999999925
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-7",
+      "rule_index": 7,
+      "rule": "For connected components, print `list(nx.connected_components(G))` and return one node from each component.",
+      "accuracy": 0.84,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "tokens": 125066,
+      "mean_tokens": 5002.64,
+      "mean_duration_s": 2.96822601871565,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.8
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.8
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.6
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": 0.0
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-8",
+      "rule_index": 8,
+      "rule": "For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",
+      "accuracy": 0.84,
+      "parsed": 0.96,
+      "feasible": 0.96,
+      "tokens": 119379,
+      "mean_tokens": 4974.125,
+      "mean_duration_s": 2.596105684118811,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 0.8,
+          "feasible": 0.8,
+          "accuracy": 0.6
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.6
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": 0.0
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-9",
+      "rule_index": 9,
+      "rule": "Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",
+      "accuracy": 0.88,
+      "parsed": 1.0,
+      "feasible": 0.92,
+      "tokens": 107219,
+      "mean_tokens": 4288.76,
+      "mean_duration_s": 3.632337080873549,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.6
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.8
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.040000000000000036
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-10",
+      "rule_index": 10,
+      "rule": "For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",
+      "accuracy": 0.88,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "tokens": 132168,
+      "mean_tokens": 5286.72,
+      "mean_duration_s": 3.008967936858535,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.6
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.8
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.040000000000000036
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-11",
+      "rule_index": 11,
+      "rule": "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+      "accuracy": 0.88,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "tokens": 180289,
+      "mean_tokens": 7211.56,
+      "mean_duration_s": 5.517762053385377,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 0.8,
+          "accuracy": 0.4
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.040000000000000036
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-12",
+      "rule_index": 12,
+      "rule": "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+      "accuracy": 0.88,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "tokens": 112233,
+      "mean_tokens": 4489.32,
+      "mean_duration_s": 2.571336455959827,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.4
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": -0.040000000000000036
+    },
+    {
+      "variant": "baseline_b_v2-no-rule-13",
+      "rule_index": 13,
+      "rule": "Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results.",
+      "accuracy": 0.8,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "tokens": 110094,
+      "mean_tokens": 4403.76,
+      "mean_duration_s": 2.559231006912887,
+      "by_task": [
+        {
+          "task": "connected_components",
+          "n": 5,
+          "mean_nodes": 616.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "cycle_detection",
+          "n": 5,
+          "mean_nodes": 727.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        },
+        {
+          "task": "diameter",
+          "n": 5,
+          "mean_nodes": 669.4,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.8
+        },
+        {
+          "task": "max_clique",
+          "n": 5,
+          "mean_nodes": 863.2,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 0.2
+        },
+        {
+          "task": "shortest_path",
+          "n": 5,
+          "mean_nodes": 789.8,
+          "parsed": 1.0,
+          "feasible": 1.0,
+          "accuracy": 1.0
+        }
+      ],
+      "delta": 0.039999999999999925
+    }
+  ]
+}

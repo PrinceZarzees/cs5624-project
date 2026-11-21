@@ -1,0 +1,16 @@
+variant,rule_index,rule,accuracy,delta
+full,,,0.76,
+baseline_b_v2-no-rule-0,0,Use the NetworkX `G` object directly; never infer edges or distances from node ids.,0.76,0.0
+baseline_b_v2-no-rule-1,1,"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",0.66,0.09999999999999998
+baseline_b_v2-no-rule-2,2,"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",0.7,0.06000000000000005
+baseline_b_v2-no-rule-3,3,"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",0.7,0.06000000000000005
+baseline_b_v2-no-rule-4,4,"Keep sandbox output short: print only the result, its length/size, and a small check.",0.76,0.0
+baseline_b_v2-no-rule-5,5,"If code times out or errors, change the algorithm instead of rerunning it unchanged.",0.76,0.0
+baseline_b_v2-no-rule-6,6,Put only the final node list inside <answer></answer>; use [] for a negative answer.,0.74,0.020000000000000018
+baseline_b_v2-no-rule-7,7,"For connected components, print `list(nx.connected_components(G))` and return one node from each component.",0.76,0.0
+baseline_b_v2-no-rule-8,8,"For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",0.72,0.040000000000000036
+baseline_b_v2-no-rule-9,9,"Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",0.66,0.09999999999999998
+baseline_b_v2-no-rule-10,10,"For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",0.68,0.07999999999999996
+baseline_b_v2-no-rule-11,11,"Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",0.72,0.040000000000000036
+baseline_b_v2-no-rule-12,12,"Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",0.74,0.020000000000000018
+baseline_b_v2-no-rule-13,13,Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results.,0.7,0.06000000000000005

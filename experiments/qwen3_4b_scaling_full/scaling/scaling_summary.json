@@ -1,0 +1,377 @@
+{
+  "splits": [
+    "test_small",
+    "test_medium",
+    "test_large",
+    "test_stress"
+  ],
+  "harnesses": [
+    {
+      "version": 1,
+      "name": "baseline_a",
+      "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+      "rules": [],
+      "graph_view": "summary",
+      "max_steps": 8,
+      "tool_timeout_s": 30.0,
+      "memory_mb": 2048,
+      "max_output_bytes": 16000,
+      "temperature": 0.0,
+      "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+    },
+    {
+      "version": 1,
+      "name": "baseline_b",
+      "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+      "rules": [
+        "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+        "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+        "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+        "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+        "Keep sandbox output short: print only the result, its length/size, and a small check.",
+        "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+        "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+      ],
+      "graph_view": "summary",
+      "max_steps": 8,
+      "tool_timeout_s": 30.0,
+      "memory_mb": 2048,
+      "max_output_bytes": 16000,
+      "temperature": 0.0,
+      "notes": "Human expert harness with explicit graph-algorithm best practices."
+    },
+    {
+      "version": 1,
+      "name": "baseline_b_v2",
+      "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+      "rules": [
+        "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+        "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+        "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+        "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+        "Keep sandbox output short: print only the result, its length/size, and a small check.",
+        "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+        "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+        "For connected components, print `list(nx.connected_components(G))` and return one node from each component.",
+        "For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",
+        "Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",
+        "For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",
+        "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+        "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+        "Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results."
+      ],
+      "graph_view": "summary",
+      "max_steps": 8,
+      "tool_timeout_s": 30.0,
+      "memory_mb": 2048,
+      "max_output_bytes": 16000,
+      "temperature": 0.0,
+      "notes": "Baseline B plus explicit connected-components, diameter-witness and print rules."
+    }
+  ],
+  "model": "qwen3-4b",
+  "runs": [
+    {
+      "harness": "baseline_a",
+      "split": "test_small",
+      "n": 150,
+      "accuracy": 0.8733333333333333,
+      "parsed": 1.0,
+      "feasible": 0.8733333333333333,
+      "mean_nodes": 26.293333333333333,
+      "tokens": 135075,
+      "mean_tokens": 3972.794117647059,
+      "mean_duration_s": 2.430828013443662,
+      "errors": 0,
+      "by_size": [
+        {
+          "size_bin": "4-50",
+          "n": 150,
+          "mean_nodes": 26.293333333333333,
+          "parsed": 1.0,
+          "feasible": 0.8733333333333333,
+          "accuracy": 0.8733333333333333
+        }
+      ]
+    },
+    {
+      "harness": "baseline_a",
+      "split": "test_medium",
+      "n": 150,
+      "accuracy": 0.8066666666666666,
+      "parsed": 0.9866666666666667,
+      "feasible": 0.86,
+      "mean_nodes": 191.23333333333332,
+      "tokens": 673376,
+      "mean_tokens": 4519.302013422819,
+      "mean_duration_s": 3.147267154505439,
+      "errors": 1,
+      "by_size": [
+        {
+          "size_bin": "100-300",
+          "n": 150,
+          "mean_nodes": 191.23333333333332,
+          "parsed": 0.9866666666666667,
+          "feasible": 0.86,
+          "accuracy": 0.8066666666666666
+        }
+      ]
+    },
+    {
+      "harness": "baseline_a",
+      "split": "test_large",
+      "n": 100,
+      "accuracy": 0.81,
+      "parsed": 1.0,
+      "feasible": 0.86,
+      "mean_nodes": 741.24,
+      "tokens": 372162,
+      "mean_tokens": 3721.62,
+      "mean_duration_s": 3.2721035970188677,
+      "errors": 0,
+      "by_size": [
+        {
+          "size_bin": "500-1000",
+          "n": 100,
+          "mean_nodes": 741.24,
+          "parsed": 1.0,
+          "feasible": 0.86,
+          "accuracy": 0.81
+        }
+      ]
+    },
+    {
+      "harness": "baseline_a",
+      "split": "test_stress",
+      "n": 50,
+      "accuracy": 0.62,
+      "parsed": 0.86,
+      "feasible": 0.76,
+      "mean_nodes": 2000.0,
+      "tokens": 369328,
+      "mean_tokens": 7694.333333333333,
+      "mean_duration_s": 6.469918648295182,
+      "errors": 2,
+      "by_size": [
+        {
+          "size_bin": "1000+",
+          "n": 50,
+          "mean_nodes": 2000.0,
+          "parsed": 0.86,
+          "feasible": 0.76,
+          "accuracy": 0.62
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b",
+      "split": "test_small",
+      "n": 150,
+      "accuracy": 0.94,
+      "parsed": 1.0,
+      "feasible": 0.94,
+      "mean_nodes": 26.293333333333333,
+      "tokens": 592948,
+      "mean_tokens": 3952.9866666666667,
+      "mean_duration_s": 2.587016056670497,
+      "errors": 0,
+      "by_size": [
+        {
+          "size_bin": "4-50",
+          "n": 150,
+          "mean_nodes": 26.293333333333333,
+          "parsed": 1.0,
+          "feasible": 0.94,
+          "accuracy": 0.94
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b",
+      "split": "test_medium",
+      "n": 150,
+      "accuracy": 0.9066666666666666,
+      "parsed": 1.0,
+      "feasible": 0.9533333333333334,
+      "mean_nodes": 191.23333333333332,
+      "tokens": 540762,
+      "mean_tokens": 3605.08,
+      "mean_duration_s": 2.704634128042186,
+      "errors": 0,
+      "by_size": [
+        {
+          "size_bin": "100-300",
+          "n": 150,
+          "mean_nodes": 191.23333333333332,
+          "parsed": 1.0,
+          "feasible": 0.9533333333333334,
+          "accuracy": 0.9066666666666666
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b",
+      "split": "test_large",
+      "n": 100,
+      "accuracy": 0.86,
+      "parsed": 0.99,
+      "feasible": 0.92,
+      "mean_nodes": 741.24,
+      "tokens": 537414,
+      "mean_tokens": 5428.424242424242,
+      "mean_duration_s": 3.932930144547212,
+      "errors": 1,
+      "by_size": [
+        {
+          "size_bin": "500-1000",
+          "n": 100,
+          "mean_nodes": 741.24,
+          "parsed": 0.99,
+          "feasible": 0.92,
+          "accuracy": 0.86
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b",
+      "split": "test_stress",
+      "n": 50,
+      "accuracy": 0.6,
+      "parsed": 0.8,
+      "feasible": 0.64,
+      "mean_nodes": 2000.0,
+      "tokens": 411024,
+      "mean_tokens": 9341.454545454546,
+      "mean_duration_s": 7.363320566491563,
+      "errors": 6,
+      "by_size": [
+        {
+          "size_bin": "1000+",
+          "n": 50,
+          "mean_nodes": 2000.0,
+          "parsed": 0.8,
+          "feasible": 0.64,
+          "accuracy": 0.6
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b_v2",
+      "split": "test_small",
+      "n": 150,
+      "accuracy": 0.94,
+      "parsed": 1.0,
+      "feasible": 0.9666666666666667,
+      "mean_nodes": 26.293333333333333,
+      "tokens": 939899,
+      "mean_tokens": 6265.993333333333,
+      "mean_duration_s": 3.352999847754836,
+      "errors": 0,
+      "by_size": [
+        {
+          "size_bin": "4-50",
+          "n": 150,
+          "mean_nodes": 26.293333333333333,
+          "parsed": 1.0,
+          "feasible": 0.9666666666666667,
+          "accuracy": 0.94
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b_v2",
+      "split": "test_medium",
+      "n": 150,
+      "accuracy": 0.9,
+      "parsed": 0.9933333333333333,
+      "feasible": 0.9466666666666667,
+      "mean_nodes": 191.23333333333332,
+      "tokens": 853278,
+      "mean_tokens": 5726.697986577181,
+      "mean_duration_s": 4.371951537828693,
+      "errors": 1,
+      "by_size": [
+        {
+          "size_bin": "100-300",
+          "n": 150,
+          "mean_nodes": 191.23333333333332,
+          "parsed": 0.9933333333333333,
+          "feasible": 0.9466666666666667,
+          "accuracy": 0.9
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b_v2",
+      "split": "test_large",
+      "n": 100,
+      "accuracy": 0.85,
+      "parsed": 1.0,
+      "feasible": 0.98,
+      "mean_nodes": 741.24,
+      "tokens": 593565,
+      "mean_tokens": 5935.65,
+      "mean_duration_s": 4.270004133833572,
+      "errors": 0,
+      "by_size": [
+        {
+          "size_bin": "500-1000",
+          "n": 100,
+          "mean_nodes": 741.24,
+          "parsed": 1.0,
+          "feasible": 0.98,
+          "accuracy": 0.85
+        }
+      ]
+    },
+    {
+      "harness": "baseline_b_v2",
+      "split": "test_stress",
+      "n": 50,
+      "accuracy": 0.74,
+      "parsed": 0.84,
+      "feasible": 0.8,
+      "mean_nodes": 2000.0,
+      "tokens": 491250,
+      "mean_tokens": 10234.375,
+      "mean_duration_s": 5.835433816343236,
+      "errors": 2,
+      "by_size": [
+        {
+          "size_bin": "1000+",
+          "n": 50,
+          "mean_nodes": 2000.0,
+          "parsed": 0.84,
+          "feasible": 0.8,
+          "accuracy": 0.74
+        }
+      ]
+    }
+  ],
+  "generalization_gaps": [
+    {
+      "harness": "baseline_a",
+      "small_split": "test_small",
+      "large_split": "test_large",
+      "small_accuracy": 0.8733333333333333,
+      "large_accuracy": 0.81,
+      "delta_gen": 0.06333333333333324
+    },
+    {
+      "harness": "baseline_b",
+      "small_split": "test_small",
+      "large_split": "test_large",
+      "small_accuracy": 0.94,
+      "large_accuracy": 0.86,
+      "delta_gen": 0.07999999999999996
+    },
+    {
+      "harness": "baseline_b_v2",
+      "small_split": "test_small",
+      "large_split": "test_large",
+      "small_accuracy": 0.94,
+      "large_accuracy": 0.85,
+      "delta_gen": 0.08999999999999997
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+run: experiments/qwen3_4b/baseline/baseline_a
+harness: baseline_a    model: qwen3-4b    split: test_small
+problems: 150    accuracy: 87.3%    feasible: 90.0%    parsed: 99.3%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components     30  100.0%     2.7     1.7        0
+cycle_detection          30   73.3%     4.5     3.5        0
+diameter                 30   86.7%     3.7     2.7        0
+max_clique               30   93.3%     2.6     1.6        0
+shortest_path            30   83.3%     3.2     2.2        0
+
+cycle_detection failure notes:
+- 4x said no cycle, but the graph has one
+- 3x unknown node(s): ['1', '2', '3']
+- 1x unknown node(s): ['1', '2']
+
+diameter failure notes:
+- 1x unknown node(s): ['1', '2', '4', '5']
+- 1x unknown node(s): ['1', '2']
+- 1x no prediction
+- 1x unknown node(s): ['2']
+
+max_clique failure notes:
+- 2x unknown node(s): ['1', '2', '3', '4', '5']
+
+shortest_path failure notes:
+- 1x empty answer
+- 1x no edge between 53 and 137
+- 1x no edge between 38 and 94
+- 1x unknown node(s): ['165']
+- 1x no edge between 109 and 108
+
+Failure excerpts:
+
+[shortest_path/test_small/00001] n=7 note=empty answer
+code:
+import networkx as nx
+
+# Check if nodes 29 and 59 exist in the graph
+node_29_exists = 29 in G.nodes()
+node_59_exists = 59 in G.nodes()
+
+# If either node does not exist, return empty list
+if not node_29_exists or not node_59_exists:
+    []
+else:
+    try:
+        # Attempt to find the shortest path from node 29 to node 59
+        shortest_path = list(nx.shortest_path(G, source=29, target=59, weight=None))
+        shortest_path
+    except nx.NetworkXNoPath:
+        []
+
+
+[shortest_path/test_small/00011] n=16 note=no edge between 53 and 137
+code:
+import networkx as nx
+
+try:
+    # Attempt to find the shortest path from node 53 to node 137
+    shortest_path = list(nx.shortest_path(G, source=53, target=137, weight=None))
+    shortest_path
+except nx.NetworkXNoPath:
+    []
+
+
+[shortest_path/test_small/00016] n=10 note=no edge between 38 and 94
+code:
+from collections import deque
+
+def bfs_shortest_path(G, start, end):
+    if start == end:
+        return [start]
+    
+    visited = set()
+    queue = deque([(start, [start])])
+    visited.add(start)
+    
+    while queue:
+        node, path = queue.popleft()
+        
+        for neighbor in G.neighbors(node):
+            if neighbor not in visited:
+                new_path = path + [neighbor]
+                if neighbor == end:
+                    return new_path
+                visited.add(neighbor)
+                queue.append((neighbor, new_path))
+    
+    return []  # No path found
+
+# Check if nodes 38 and 94 exist
+if 38 not in G.nodes() or 94 not in G.nodes():
+    []
+else:
+    bfs_shortest_path(G, 38, 94)
+
+
+run: experiments/qwen3_4b/baseline/baseline_b
+harness: baseline_b    model: qwen3-4b    split: test_small
+problems: 150    accuracy: 90.0%    feasible: 92.0%    parsed: 100.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components     30   76.7%     3.1     2.1        0
+cycle_detection          30  100.0%     3.9     2.9        0
+diameter                 30  100.0%     2.4     1.4        0
+max_clique               30   80.0%     3.5     2.5        0
+shortest_path            30   93.3%     3.3     2.3        0
+
+connected_components failure notes:
+- 2x two answer nodes are in the same component (e.g. 135)
+- 1x two answer nodes are in the same component (e.g. 148)
+- 1x two answer nodes are in the same component (e.g. 237)
+- 1x two answer nodes are in the same component (e.g. 134)
+- 1x two answer nodes are in the same component (e.g. 136)
+- 1x two answer nodes are in the same component (e.g. 100)
+
+max_clique failure notes:
+- 3x empty answer
+- 1x clique of size 5, maximum is 10
+- 1x clique of size 1, maximum is 3
+- 1x clique of size 3, maximum is 8
+
+shortest_path failure notes:
+- 2x empty answer
+
+Failure excerpts:
+
+[shortest_path/test_small/00001] n=7 note=empty answer
+code:
+try:
+    path = nx.shortest_path(G, source=29, target=59)
+    print(f"Path found: {path} (length: {len(path) - 1})")
+except nx.NetworkXNoPath:
+    path = []
+    print("No path exists between 29 and 59")
+path
+
+observation:
+stderr: Traceback (most recent call last):
+  File "user_code.py", line 2, in <module>
+    path = nx.shortest_path(G, source=29, target=59)
+           ^^
+NameError: name 'nx' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/projects/psgroup/saminrk/cs5624-project/experiments/qwen3_4b/sandbox/gh-sandbox-il2or7nw/step.py", line 27, in <module>
+    exec(compile(_gh_tree, "user_code.py", "exec"), globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "user_code.py", line 4, in <module>
+    except nx.NetworkXNoPath:
+           ^^
+NameError: name 'nx' is not defined
+
+
+[shortest_path/test_small/00007] n=13 note=empty answer
+code:
+# Final attempt: compute shortest path from 36 to 120
+try:
+    path = nx.shortest_path(G, source=36, target=120)
+    print(f"Path found: {path}")
+    print(f"Path length: {len(path) - 1}")
+    path
+except Exception as e:
+    print(f"Error: {e}")
+    []
+
+observation:
+stdout: Error: name 'nx' is not defined
+
+
+[connected_components/test_small/00005] n=33 note=two answer nodes are in the same component (e.g. 148)
+code:
+import networkx as nx
+components = list(nx.connected_components(G))
+result = list(components[0])  # One node from each component
+print(f"Number of components: {len(components)}, Result: {result}")
+result
+
+observation:
+stdout: Number of components: 2, Result: [264, 148, 35, 36, 293, 170, 306, 178, 64, 325, 328, 91, 102, 232, 109, 111, 242, 244, 125]
+[264, 148, 35, 36, 293, 170, 306, 178, 64, 325, 328, 91, 102, 232, 109, 111, 242, 244, 125]
+
+
+run: experiments/qwen3_4b/baseline/baseline_b_v2
+harness: baseline_b_v2    model: qwen3-4b    split: test_small
+problems: 150    accuracy: 93.3%    feasible: 98.0%    parsed: 100.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components     30  100.0%     3.0     2.0        0
+cycle_detection          30   96.7%     3.2     2.2        0
+diameter                 30   86.7%     6.2     5.2        0
+max_clique               30   83.3%     4.0     3.0        1
+shortest_path            30  100.0%     3.0     2.0        0
+
+cycle_detection failure notes:
+- 1x said no cycle, but the graph has one
+
+diameter failure notes:
+- 1x distance 3, diameter is 5
+- 1x unknown node(s): ['1', '2', '3', '4']
+- 1x distance 12, diameter is 20
+- 1x distance 0, diameter is 4
+
+max_clique failure notes:
+- 2x empty answer
+- 1x clique of size 3, maximum is 8
+- 1x clique of size 1, maximum is 4
+- 1x clique of size 4, maximum is 5
+
+Failure excerpts:
+
+[cycle_detection/test_small/00013] n=6 note=said no cycle, but the graph has one
+code:
+try:
+    cycle = list(nx.find_cycle(G))
+    if cycle:
+        print(cycle)
+    else:
+        print([])
+except Exception as e:
+    print([])
+
+observation:
+stdout: []
+
+
+[diameter/test_small/00010] n=21 note=distance 3, diameter is 5
+code:
+import networkx as nx
+
+# Convert node view to a list to pick an arbitrary source
+source = list(G.nodes())[0]
+
+# Compute shortest path distances from the source to all nodes
+distances = nx.shortest_path_length(G, source=source)
+
+# Find the maximum distance (diameter)
+diameter = max(distances.values())
+
+# Find the target node that is farthest from the source
+farthest_node = max(distances, key=distances.get)
+
+# Get the shortest path from source to farthest_node
+shortest_path = nx.shortest_path(G, source=source, target=farthest_node)
+
+print(shortest_path)
+print(f"Diameter: {diameter}")
+
+observation:
+stdout: [100, 43, 95, 188]
+Diameter: 3
+
+
+[diameter/test_small/00011] n=35 note=unknown node(s): ['1', '2', '3', '4']
+code:
+import networkx as nx
+
+# Compute all pairs shortest path lengths
+all_pairs = nx.all_pairs_shortest_path_length(G)
+
+# Extract all distances and find the diameter
+distances = []
+for u, v_distances in all_pairs:
+    for d in v_distances.values():
+        distances.append(d)
+diameter = max(distances)
+
+# Find a pair (u, v) such that shortest_path(u, v) = diameter
+u = None
+v = None
+for source, dist_dict in all_pairs:
+    if diameter in dist_dict.values():
+        # Get the target node with distance = diameter
+        for target in dist_dict:
+            if dist_dict[target] == diameter:
+                u = source
+                v = target
+                break
+        if u is not None and v is not None:
+            break
+
+# Validate: ensure u and v are different and the path exists
+if u is not None and v is not None and u != v:
+    shortest_path = nx.shortest_path(G, source=u, target=v)
+    print(f"Shortest path: {shortest_path}")
+    print(f"Diameter: {diameter}")
+else:
+    # Fallback: use a simple path in a connected graph
+    shortest_path = list(nx.shortest_path(G, source=0, target=1)) if G.number_of_nodes() > 1 else [0]
+    print(f"Fallback path: {shortest_path}")
+    print(f"Diame
+observation:
+stderr: Traceback (most recent call last):
+  File "/projects/psgroup/saminrk/cs5624-project/experiments/qwen3_4b/sandbox/gh-sandbox-_q86z2gc/step.py", line 27, in <module>
+    exec(compile(_gh_tree, "user_code.py", "exec"), globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "user_code.py", line 34, in <module>
+    shortest_path = list(nx.shortest_path(G, source=0, target=1)) if G.number_of_nodes() > 1 else [0]
+                         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/saminrk/workspace/choto/.venv/lib/python3.13/site-packages/networkx/utils/decorators.py", line 785, in func
+    return argmap._lazy_compile(__wrapper)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "<class 'networkx.utils.decorators.argmap'> compil

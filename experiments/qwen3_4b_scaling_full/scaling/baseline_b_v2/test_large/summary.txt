@@ -1,0 +1,28 @@
+harness: baseline_b_v2    model: qwen3-4b    split: test_large
+problems: 100    errors: 0    duration: 71.7s    tokens: 593565
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_large   connected_components      20     663  100.0%    100.0%    100.0%
+test_large   cycle_detection           20     722  100.0%     95.0%     95.0%
+test_large   diameter                  20     712  100.0%    100.0%     90.0%
+test_large   max_clique                20     830  100.0%     95.0%     40.0%
+test_large   shortest_path             20     780  100.0%    100.0%    100.0%
+test_large   ALL                      100     741  100.0%     98.0%     85.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+500-1000     100      741   100.0%     98.0%     85.0%
+
+First failures:
+- cycle_detection/test_large/00006 (cycle_detection, n=701): unknown node(s): ['(4098', '5806)', '(5806', '5085)', '(5085']
+- diameter/test_large/00005 (diameter, n=526): distance 45, diameter is 71
+- diameter/test_large/00014 (diameter, n=526): distance 5, diameter is 6
+- max_clique/test_large/00000 (max_clique, n=929): clique of size 3, maximum is 7
+- max_clique/test_large/00001 (max_clique, n=965): clique of size 4, maximum is 9
+- max_clique/test_large/00003 (max_clique, n=663): clique of size 3, maximum is 9
+- max_clique/test_large/00004 (max_clique, n=837): clique of size 3, maximum is 4
+- max_clique/test_large/00005 (max_clique, n=604): clique of size 3, maximum is 4
+- max_clique/test_large/00006 (max_clique, n=898): clique of size 1, maximum is 3
+- max_clique/test_large/00007 (max_clique, n=603): clique of size 3, maximum is 7

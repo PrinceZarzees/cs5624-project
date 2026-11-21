@@ -1,0 +1,12 @@
+harness: baseline_b_v2    model: qwen3-4b-q4    split: test_small
+problems: 4    errors: 0    duration: 230.2s    tokens: 37089
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   diameter                   4      22  100.0%    100.0%    100.0%
+test_small   ALL                        4      22  100.0%    100.0%    100.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50           4       22   100.0%    100.0%    100.0%

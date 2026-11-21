@@ -129,3 +129,56 @@ def test_grapharena_from_zip(tmp_path):
     assert [r["task"] for r in easy] == ["connected_components"]
     assert [r["task"] for r in hard] == ["diameter"]
     assert hard[0]["answer"]["diameter"] == 3
+
+
+def test_grapharena_neighbor_mis_mvc_adapter(tmp_path):
+    G = nx.Graph()
+    names = ["A", "B", "C", "D", "E"]
+    for i, n in enumerate(names):
+        G.add_node(i, name=n)
+    G.add_edges_from([(0, 1), (0, 2), (1, 2), (2, 3), (3, 4)])
+    (tmp_path / "Neighbor_easy.pkl").write_bytes(pickle.dumps([
+        {"id": 0, "graph": G, "node1": 0, "node2": 1, "exact_answer": 1}
+    ]))
+    (tmp_path / "MIS_easy.pkl").write_bytes(pickle.dumps([{"id": 0, "graph": G}]))
+    (tmp_path / "MVC_easy.pkl").write_bytes(pickle.dumps([{"id": 0, "graph": G}]))
+    recs = convert_dataset(tmp_path, "easy")
+    by_task = {r["task"]: r for r in recs}
+    assert {"common_neighbors", "max_independent_set", "min_vertex_cover"} <= set(by_task)
+    cn = by_task["common_neighbors"]
+    assert cn["params"] == {"node1": "A", "node2": "B"}
+    assert score_response(cn, "<answer>[C]</answer>")["correct"]
+    mis = by_task["max_independent_set"]
+    assert score_response(mis, "<answer>[" + ", ".join(mis["answer"]["nodes"]) + "]</answer>")["correct"]
+    mvc = by_task["min_vertex_cover"]
+    assert score_response(mvc, "<answer>[" + ", ".join(mvc["answer"]["nodes"]) + "]</answer>")["correct"]
+
+
+def test_grapharena_ged_mcs_tsp_adapter(tmp_path):
+    g1 = nx.Graph()
+    g1.add_nodes_from((i, {"label": label}) for i, label in enumerate(["C", "O", "N"]))
+    g1.add_edges_from([(0, 1), (1, 2)])
+    g2 = nx.Graph()
+    g2.add_nodes_from((i, {"label": label}) for i, label in enumerate(["C", "O", "N"]))
+    g2.add_edges_from([(0, 1), (1, 2)])
+    (tmp_path / "GED_easy.pkl").write_bytes(pickle.dumps([
+        {"id": 0, "graph": (g1, g2), "exact_answer": 0, "path": [0, 1, 2]}
+    ]))
+    (tmp_path / "MCS_easy.pkl").write_bytes(pickle.dumps([
+        {"id": 0, "graph": (g1, g2), "exact_answer": 3, "path": ([0, 1, 2], [0, 1, 2])}
+    ]))
+    tsp = nx.complete_graph(4)
+    for u, v in tsp.edges:
+        tsp.edges[u, v]["weight"] = 1
+    (tmp_path / "TSP_easy.pkl").write_bytes(pickle.dumps([
+        {"id": 0, "graph": tsp, "exact_answer": 4, "path": [0, 1, 2, 3, 0]}
+    ]))
+    recs = convert_dataset(tmp_path, "easy")
+    by_task = {r["task"]: r for r in recs}
+    assert {"graph_edit_distance", "max_common_subgraph", "traveling_salesman"} <= set(by_task)
+    ged = by_task["graph_edit_distance"]
+    assert score_response(ged, "<answer>[0, 1, 2]</answer>")["correct"]
+    mcs = by_task["max_common_subgraph"]
+    assert score_response(mcs, "<answer>[0, 1, 2], [0, 1, 2]</answer>")["correct"]
+    t = by_task["traveling_salesman"]
+    assert score_response(t, "<answer>[0, 1, 2, 3, 0]</answer>")["correct"]

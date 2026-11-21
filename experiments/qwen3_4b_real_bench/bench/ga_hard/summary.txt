@@ -1,0 +1,33 @@
+harness: baseline_b_v2    model: qwen3-4b    split: ga_hard
+problems: 200    errors: 0    duration: 0.0s    tokens: 0
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+ga_hard      common_neighbors          20      32  100.0%    100.0%    100.0%
+ga_hard      connected_components      20      18  100.0%    100.0%    100.0%
+ga_hard      diameter                  20      20  100.0%     90.0%     90.0%
+ga_hard      graph_edit_distance       20      12  100.0%     10.0%      0.0%
+ga_hard      max_clique                20      20  100.0%     95.0%     80.0%
+ga_hard      max_common_subgraph       20      12   75.0%     70.0%     50.0%
+ga_hard      max_independent_set       20      18  100.0%     95.0%     20.0%
+ga_hard      min_vertex_cover          20      19  100.0%     90.0%     70.0%
+ga_hard      shortest_path             20      33  100.0%    100.0%    100.0%
+ga_hard      traveling_salesman        20      13  100.0%     85.0%      0.0%
+ga_hard      ALL                      200      20   97.5%     83.5%     61.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         200       20    97.5%     83.5%     61.0%
+
+First failures:
+- diameter/ga_hard/00001 (diameter, n=28): unknown node(s): ['Linares Chile']
+- diameter/ga_hard/00005 (diameter, n=15): unknown node(s): ['Gol Kan South Khorasan']
+- max_clique/ga_hard/00002 (max_clique, n=22): clique of size 3, maximum is 4
+- max_clique/ga_hard/00010 (max_clique, n=20): clique of size 10, maximum is 11
+- max_clique/ga_hard/00011 (max_clique, n=16): clique of size 6, maximum is 9
+- max_clique/ga_hard/00013 (max_clique, n=18): unknown node(s): ['v']
+- max_independent_set/ga_hard/00000 (max_independent_set, n=17): independent set of size 4, maximum is 11
+- max_independent_set/ga_hard/00001 (max_independent_set, n=25): independent set of size 3, maximum is 12
+- max_independent_set/ga_hard/00003 (max_independent_set, n=15): independent set of size 3, maximum is 11
+- max_independent_set/ga_hard/00006 (max_independent_set, n=16): independent set of size 2, maximum is 13

@@ -1,0 +1,450 @@
+{
+  "harness": "baseline_b_v2",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b_v2",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+      "For connected components, print `list(nx.connected_components(G))` and return one node from each component.",
+      "For diameter, find a pair of nodes whose shortest-path distance equals the diameter (for example with nx.all_pairs_shortest_path_length), then return nx.shortest_path between that pair. Do not index the node list by distance.",
+      "Always call print(...) on the value you need. The sandbox also echoes a bare final expression, but explicit output is safer.",
+      "For maximum clique on small graphs, print `nx.max_weight_clique(G, weight=None)` and return the clique; on large graphs use a verified heuristic.",
+      "Once a successful run prints a feasible result, stop and give that result in <answer> tags; do not rerun identical code.",
+      "Never filter, sort, or index nodes by numeric value; node ids are arbitrary and may be larger than the graph size.",
+      "Materialize NetworkX generators with list(...) or dict(...) before iterating them more than once; exhausted generators silently produce empty results."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "notes": "Baseline B plus explicit connected-components, diameter-witness and print rules."
+  },
+  "model": "qwen3-4b",
+  "split": "ga_easy",
+  "started_at": "2026-11-21T01:58:12.845157+00:00",
+  "finished_at": "2026-11-21T01:58:12.875461+00:00",
+  "duration_s": 0.030304145999252796,
+  "n": 200,
+  "overall": {
+    "split": "ga_easy",
+    "task": "ALL",
+    "n": 200,
+    "parsed": 0.95,
+    "feasible": 0.84,
+    "accuracy": 0.745,
+    "mean_nodes": 6.89
+  },
+  "by_task": [
+    {
+      "task": "common_neighbors",
+      "n": 20,
+      "mean_nodes": 9.15,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.95
+    },
+    {
+      "task": "connected_components",
+      "n": 20,
+      "mean_nodes": 7.15,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "diameter",
+      "n": 20,
+      "mean_nodes": 7.1,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.9
+    },
+    {
+      "task": "graph_edit_distance",
+      "n": 20,
+      "mean_nodes": 6.05,
+      "parsed": 0.9,
+      "feasible": 0.1,
+      "accuracy": 0.1
+    },
+    {
+      "task": "max_clique",
+      "n": 20,
+      "mean_nodes": 6.75,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.95
+    },
+    {
+      "task": "max_common_subgraph",
+      "n": 20,
+      "mean_nodes": 5.25,
+      "parsed": 0.6,
+      "feasible": 0.55,
+      "accuracy": 0.55
+    },
+    {
+      "task": "max_independent_set",
+      "n": 20,
+      "mean_nodes": 6.3,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.95
+    },
+    {
+      "task": "min_vertex_cover",
+      "n": 20,
+      "mean_nodes": 7.25,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.85
+    },
+    {
+      "task": "shortest_path",
+      "n": 20,
+      "mean_nodes": 8.5,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "traveling_salesman",
+      "n": 20,
+      "mean_nodes": 5.4,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.2
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 200,
+      "mean_nodes": 6.89,
+      "parsed": 0.95,
+      "feasible": 0.84,
+      "accuracy": 0.745
+    }
+  ],
+  "tokens": {
+    "prompt": 0,
+    "completion": 0,
+    "total": 0,
+    "mean_total_per_problem": 0.0
+  },
+  "tool_calls": 0,
+  "mean_agent_duration_s": 0.0,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "diameter/ga_easy/00017",
+      "task": "diameter",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Bevern Schleswig-Holstein']"
+    },
+    {
+      "id": "diameter/ga_easy/00019",
+      "task": "diameter",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": true,
+      "note": "distance 1, diameter is 2"
+    },
+    {
+      "id": "max_clique/ga_easy/00001",
+      "task": "max_clique",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '2', '3', '4', '5']"
+    },
+    {
+      "id": "common_neighbors/ga_easy/00000",
+      "task": "common_neighbors",
+      "n_nodes": 7,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 1 common neighbors, graph has 2"
+    },
+    {
+      "id": "max_independent_set/ga_easy/00012",
+      "task": "max_independent_set",
+      "n_nodes": 7,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['1', '3', '5']"
+    },
+    {
+      "id": "min_vertex_cover/ga_easy/00002",
+      "task": "min_vertex_cover",
+      "n_nodes": 12,
+      "parsed": true,
+      "feasible": true,
+      "note": "vertex cover of size 10, minimum is 8"
+    },
+    {
+      "id": "min_vertex_cover/ga_easy/00003",
+      "task": "min_vertex_cover",
+      "n_nodes": 5,
+      "parsed": true,
+      "feasible": false,
+      "note": "edge Monica Willis-Steven Allen is not covered"
+    },
+    {
+      "id": "min_vertex_cover/ga_easy/00008",
+      "task": "min_vertex_cover",
+      "n_nodes": 5,
+      "parsed": true,
+      "feasible": true,
+      "note": "vertex cover of size 4, minimum is 3"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00000",
+      "task": "graph_edit_distance",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00001",
+      "task": "graph_edit_distance",
+      "n_nodes": 9,
+      "parsed": false,
+      "feasible": false,
+      "note": "could not parse mapping answer"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00002",
+      "task": "graph_edit_distance",
+      "n_nodes": 7,
+      "parsed": false,
+      "feasible": false,
+      "note": "could not parse mapping answer"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00003",
+      "task": "graph_edit_distance",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00004",
+      "task": "graph_edit_distance",
+      "n_nodes": 7,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00005",
+      "task": "graph_edit_distance",
+      "n_nodes": 8,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00006",
+      "task": "graph_edit_distance",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00007",
+      "task": "graph_edit_distance",
+      "n_nodes": 9,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must use every Graph B node exactly once"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00008",
+      "task": "graph_edit_distance",
+      "n_nodes": 5,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must use every Graph B node exactly once"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00009",
+      "task": "graph_edit_distance",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00010",
+      "task": "graph_edit_distance",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00011",
+      "task": "graph_edit_distance",
+      "n_nodes": 9,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00013",
+      "task": "graph_edit_distance",
+      "n_nodes": 8,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must use every Graph B node exactly once"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00015",
+      "task": "graph_edit_distance",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00016",
+      "task": "graph_edit_distance",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00017",
+      "task": "graph_edit_distance",
+      "n_nodes": 4,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    },
+    {
+      "id": "graph_edit_distance/ga_easy/00018",
+      "task": "graph_edit_distance",
+      "n_nodes": 5,
+      "parsed": true,
+      "feasible": false,
+      "note": "mapping must have one entry per Graph A node"
+    }
+  ],
+  "rows": [
+    {
+      "split": "ga_easy",
+      "task": "common_neighbors",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.95,
+      "mean_nodes": 9.15
+    },
+    {
+      "split": "ga_easy",
+      "task": "connected_components",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 7.15
+    },
+    {
+      "split": "ga_easy",
+      "task": "diameter",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.9,
+      "mean_nodes": 7.1
+    },
+    {
+      "split": "ga_easy",
+      "task": "graph_edit_distance",
+      "n": 20,
+      "parsed": 0.9,
+      "feasible": 0.1,
+      "accuracy": 0.1,
+      "mean_nodes": 6.05
+    },
+    {
+      "split": "ga_easy",
+      "task": "max_clique",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.95,
+      "mean_nodes": 6.75
+    },
+    {
+      "split": "ga_easy",
+      "task": "max_common_subgraph",
+      "n": 20,
+      "parsed": 0.6,
+      "feasible": 0.55,
+      "accuracy": 0.55,
+      "mean_nodes": 5.25
+    },
+    {
+      "split": "ga_easy",
+      "task": "max_independent_set",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.95,
+      "mean_nodes": 6.3
+    },
+    {
+      "split": "ga_easy",
+      "task": "min_vertex_cover",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.85,
+      "mean_nodes": 7.25
+    },
+    {
+      "split": "ga_easy",
+      "task": "shortest_path",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 8.5
+    },
+    {
+      "split": "ga_easy",
+      "task": "traveling_salesman",
+      "n": 20,
+      "parsed": 1.0,
+      "feasible": 0.95,
+      "accuracy": 0.2,
+      "mean_nodes": 5.4
+    },
+    {
+      "split": "ga_easy",
+      "task": "ALL",
+      "n": 200,
+      "parsed": 0.95,
+      "feasible": 0.84,
+      "accuracy": 0.745,
+      "mean_nodes": 6.89
+    }
+  ]
+}

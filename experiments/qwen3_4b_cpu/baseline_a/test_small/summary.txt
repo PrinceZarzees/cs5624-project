@@ -1,0 +1,28 @@
+harness: baseline_a    model: qwen3-4b-q4    split: test_small
+problems: 150    errors: 0    duration: 3632.0s    tokens: 465047
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%    100.0%    100.0%
+test_small   cycle_detection           30      26  100.0%     73.3%     70.0%
+test_small   diameter                  30      27  100.0%     96.7%     96.7%
+test_small   max_clique                30      27  100.0%     80.0%     73.3%
+test_small   shortest_path             30      21  100.0%     83.3%     83.3%
+test_small   ALL                      150      26  100.0%     86.7%     84.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     86.7%     84.7%
+
+First failures:
+- shortest_path/test_small/00000 (shortest_path, n=8): no edge between 78 and 52
+- shortest_path/test_small/00009 (shortest_path, n=41): no edge between 342 and 271
+- shortest_path/test_small/00013 (shortest_path, n=15): empty answer
+- shortest_path/test_small/00017 (shortest_path, n=27): empty answer
+- shortest_path/test_small/00026 (shortest_path, n=9): empty answer
+- cycle_detection/test_small/00007 (cycle_detection, n=37): unknown node(s): ['node']
+- cycle_detection/test_small/00008 (cycle_detection, n=44): no edge from the last node back to the first
+- cycle_detection/test_small/00011 (cycle_detection, n=23): said no cycle, but the graph has one
+- cycle_detection/test_small/00013 (cycle_detection, n=6): unknown node(s): ['1', '2']
+- cycle_detection/test_small/00015 (cycle_detection, n=15): unknown node(s): ['1', '2']

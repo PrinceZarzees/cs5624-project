@@ -22,7 +22,7 @@ echo "============================================="
 export PYTHONUNBUFFERED=1
 
 # Navigate to project root
-cd "${HOME}/cs5624"
+cd "${SLURM_SUBMIT_DIR:-$(dirname "$0")/..}"
 
 # Ensure pytest is on PATH
 export PATH="${HOME}/.local/bin:${PATH}"

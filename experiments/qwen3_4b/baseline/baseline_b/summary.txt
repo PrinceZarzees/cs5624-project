@@ -1,0 +1,28 @@
+harness: baseline_b    model: qwen3-4b    split: test_small
+problems: 150    errors: 0    duration: 39.9s    tokens: 534810
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%     76.7%     76.7%
+test_small   cycle_detection           30      26  100.0%    100.0%    100.0%
+test_small   diameter                  30      27  100.0%    100.0%    100.0%
+test_small   max_clique                30      27  100.0%     90.0%     80.0%
+test_small   shortest_path             30      21  100.0%     93.3%     93.3%
+test_small   ALL                      150      26  100.0%     92.0%     90.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     92.0%     90.0%
+
+First failures:
+- shortest_path/test_small/00001 (shortest_path, n=7): empty answer
+- shortest_path/test_small/00007 (shortest_path, n=13): empty answer
+- connected_components/test_small/00005 (connected_components, n=33): two answer nodes are in the same component (e.g. 148)
+- connected_components/test_small/00012 (connected_components, n=40): two answer nodes are in the same component (e.g. 135)
+- connected_components/test_small/00015 (connected_components, n=44): two answer nodes are in the same component (e.g. 237)
+- connected_components/test_small/00023 (connected_components, n=47): two answer nodes are in the same component (e.g. 134)
+- connected_components/test_small/00025 (connected_components, n=39): two answer nodes are in the same component (e.g. 135)
+- connected_components/test_small/00027 (connected_components, n=50): two answer nodes are in the same component (e.g. 136)
+- connected_components/test_small/00029 (connected_components, n=35): two answer nodes are in the same component (e.g. 100)
+- max_clique/test_small/00001 (max_clique, n=19): clique of size 5, maximum is 10

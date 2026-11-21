@@ -1,0 +1,21 @@
+harness: baseline_b_v2-no-rule-9    model: qwen3-4b    split: test_large
+problems: 25    errors: 0    duration: 39.3s    tokens: 107219
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_large   connected_components       5     616  100.0%    100.0%    100.0%
+test_large   cycle_detection            5     728  100.0%     80.0%     60.0%
+test_large   diameter                   5     669  100.0%    100.0%    100.0%
+test_large   max_clique                 5     863  100.0%     80.0%     80.0%
+test_large   shortest_path              5     790  100.0%    100.0%    100.0%
+test_large   ALL                       25     733  100.0%     92.0%     88.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+500-1000      25      733   100.0%     92.0%     88.0%
+
+First failures:
+- cycle_detection/test_large/00001 (cycle_detection, n=501): said no cycle, but the graph has one
+- cycle_detection/test_large/00002 (cycle_detection, n=893): unknown node(s): ['(1073', '4887)', '(4887', '3844)', '(3844']
+- max_clique/test_large/00002 (max_clique, n=922): empty answer

@@ -1,0 +1,27 @@
+harness: baseline_b    model: qwen3-4b    split: test_small
+problems: 150    errors: 0    duration: 67.4s    tokens: 592948
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%     83.3%     83.3%
+test_small   cycle_detection           30      26  100.0%    100.0%    100.0%
+test_small   diameter                  30      27  100.0%     96.7%     96.7%
+test_small   max_clique                30      27  100.0%    100.0%    100.0%
+test_small   shortest_path             30      21  100.0%     90.0%     90.0%
+test_small   ALL                      150      26  100.0%     94.0%     94.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     94.0%     94.0%
+
+First failures:
+- shortest_path/test_small/00003 (shortest_path, n=26): empty answer
+- shortest_path/test_small/00014 (shortest_path, n=11): empty answer
+- shortest_path/test_small/00016 (shortest_path, n=10): no edge between 38 and 94
+- connected_components/test_small/00005 (connected_components, n=33): two answer nodes are in the same component (e.g. 148)
+- connected_components/test_small/00012 (connected_components, n=40): two answer nodes are in the same component (e.g. 135)
+- connected_components/test_small/00015 (connected_components, n=44): two answer nodes are in the same component (e.g. 237)
+- connected_components/test_small/00025 (connected_components, n=39): two answer nodes are in the same component (e.g. 135)
+- connected_components/test_small/00027 (connected_components, n=50): two answer nodes are in the same component (e.g. 136)
+- diameter/test_small/00028 (diameter, n=4): unknown node(s): ['2']

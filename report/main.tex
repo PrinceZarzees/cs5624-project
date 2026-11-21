@@ -1,0 +1,101 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\title{Harness Optimization for Graph Reasoning: Learn Small, Run Big}
+\author{Bikash Kumar Paul \and Abdullah Al Noman \and Samin Rahman Khan \and Md Zarzees Uddin Shah Chowdhury}
+\date{CS 5624, December 2026}
+
+\begin{document}
+\maketitle
+
+% Course policy: the prose below must be written by the authors. This file is a
+% skeleton that points to the generated tables and figures only.
+
+\begin{abstract}
+% TODO: human-written abstract.
+\end{abstract}
+
+\section{Introduction}
+% TODO: research question, contributions, motivation.
+
+\section{Related Work}
+% TODO: harness optimization, graph reasoning benchmarks, GraphArena, GraphQA.
+
+\section{Problem Setup}
+% TODO: tasks, splits, harness definition, answer protocol, metrics.
+Tasks implemented: shortest path, connected components, cycle detection,
+diameter, reachability, max clique, Hamiltonian path, common neighbors, MIS,
+MVC, GED, MCS, TSP, and the GraphQA scalar/classification/flow tasks.
+See \texttt{experiments/BENCHMARK\_COVERAGE.md} for the coverage matrix.
+
+\section{Baselines and Harnesses}
+% TODO: Baseline A, Baseline B, Baseline B v2, H* selection.
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Harness & test\_small (150) & notes \\
+\midrule
+Baseline A & 87.3\% & minimal protocol \\
+Baseline B & 90.0\% & original expert rules \\
+Baseline B v2 (13 rules) & 93.3\% & pilot-tuned \\
+Baseline B v2 (14 rules) & 94.0\% & full scaling run \\
+\bottomrule
+\end{tabular}
+\caption{Full synthetic \texttt{test\_small} results, Qwen3-4B BF16 on one B200.}
+\end{table}
+
+\section{Small-Graph Optimization}
+% TODO: SkillOpt/GEPA loop, accepted/rejected edits, why no candidate improved.
+Two optimizer runs (8 rounds from v2, 10 rounds from A) rejected every
+candidate. The validation gate prevented regressions; v2 is frozen as
+$H^*_{\text{small}}$.
+
+\section{Scaling Results}
+% TODO: full scaling curves and delta_gen.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/scaling_4b_accuracy_vs_size.png}
+\caption{Accuracy versus graph size for Baselines A/B/B v2.}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Harness & small & medium & large & stress \\
+\midrule
+Baseline A & 87.3\% & 80.7\% & 81.0\% & 62.0\% \\
+Baseline B & 94.0\% & 90.7\% & 86.0\% & 60.0\% \\
+Baseline B v2 & 94.0\% & 90.0\% & 85.0\% & 74.0\% \\
+\bottomrule
+\end{tabular}
+\caption{Full synthetic scaling results.}
+\end{table}
+
+\section{Rule Ablations}
+% TODO: interpret test\_large, test\_stress, and val ablations.
+See \texttt{experiments/qwen3\_4b\_ablation\_*/ablation/ablation\_summary.txt}
+and \texttt{report/tables/ablation\_*.csv}.
+
+\section{Real Benchmark Evaluation}
+% TODO: GraphArena/GraphQA results and error analysis.
+GraphArena (20 problems/task): easy 74.5\%, hard 61.0\%.
+GraphQA test (20/task): 88.3\%.
+See \texttt{experiments/qwen3\_4b\_real\_bench/}.
+
+\section{Discussion and Limitations}
+% TODO: synthetic vs real benchmarks, scale, model choice, sandbox assumptions,
+% test\_small tuning caveat, source-answer caveat for maximum flow and node
+% classification.
+
+\section{Conclusion}
+% TODO: human-written conclusion.
+
+\bibliographystyle{plain}
+% \bibliography{references}
+
+\end{document}

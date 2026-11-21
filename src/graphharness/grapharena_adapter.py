@@ -17,16 +17,24 @@ ways to get it:
 Raw files go to ``data/grapharena/`` (ignored by git) and the converted
 problems to ``data/ga_easy.jsonl`` and ``data/ga_hard.jsonl``.
 
-Only the GraphArena tasks that match our tasks are converted:
+All ten GraphArena tasks are converted:
 
     Distance  -> shortest_path
     Connected -> connected_components
     Diameter  -> diameter
     MCP       -> max_clique
+    Neighbor  -> common_neighbors
+    MIS       -> max_independent_set
+    MVC       -> min_vertex_cover
+    GED       -> graph_edit_distance
+    MCS       -> max_common_subgraph
+    TSP       -> traveling_salesman
 
-Nodes are named by GraphArena's ``name`` attribute (e.g. real author names).
-Ground truth is recomputed with our own solvers so it is checked exactly the
-same way as synthetic data; GraphArena's own answer is kept in ``meta``.
+GED/MCS use two-graph records (``graphs``) and TSP uses weighted edges.
+Ground truth is recomputed with our solvers where feasible; for hard GED/MCS/TSP
+instances whose exact solver is outside the small-instance limit, the source
+answer/path is retained and marked in ``meta``. GraphArena's own answer is
+always kept in ``meta``.
 
 Note: GraphArena's "hard" graphs have at most 50 nodes, so they are still
 "small" for this project. Larger test graphs come from ``build_data``.
@@ -57,6 +65,12 @@ GA_TO_OURS = {
     "Connected": "connected_components",
     "Diameter": "diameter",
     "MCP": "max_clique",
+    "Neighbor": "common_neighbors",
+    "MIS": "max_independent_set",
+    "MVC": "min_vertex_cover",
+    "GED": "graph_edit_distance",
+    "MCS": "max_common_subgraph",
+    "TSP": "traveling_salesman",
 }
 
 
@@ -64,6 +78,63 @@ def convert_problem(problem: dict, ga_task: str, difficulty: str, index: int) ->
     """Convert one GraphArena problem dict. Returns None if it cannot be used."""
     task_name = GA_TO_OURS[ga_task]
     task = get_task(task_name)
+
+    if task_name in {"graph_edit_distance", "max_common_subgraph"}:
+        g1, g2 = problem["graph"]
+        try:
+            answer = task.solve((g1, g2), {})
+        except (ValueError, nx.NetworkXError):
+            if problem.get("exact_answer") is None:
+                return None
+            if task_name == "graph_edit_distance":
+                mapping = list(problem.get("path") or [])
+                if not mapping or any(v is None for v in mapping):
+                    return None
+                answer = {"cost": problem["exact_answer"], "mapping": mapping}
+            else:
+                path = problem.get("path")
+                if not path or len(path) != 2:
+                    return None
+                answer = {"size": problem["exact_answer"],
+                          "nodes1": list(path[0]), "nodes2": list(path[1])}
+        split = f"ga_{difficulty}"
+        return {
+            "id": f"{task_name}/{split}/{index:05d}",
+            "source": "grapharena", "task": task_name, "split": split,
+            "graph": graph_to_json(g1),
+            "graphs": [graph_to_json(g1), graph_to_json(g2)],
+            "graph_labels": ["A", "B"],
+            "params": {},
+            "question": task.question({}),
+            "answer": as_json_value(answer),
+            "meta": {"n_nodes": g1.number_of_nodes(), "n_edges": g1.number_of_edges(),
+                     "task_kind": task.kind, "grapharena_task": ga_task,
+                     "grapharena_id": problem.get("id", index),
+                     "grapharena_exact_answer": as_json_value(problem.get("exact_answer"))},
+        }
+
+    if task_name == "traveling_salesman":
+        G0 = problem["graph"]
+        if not all("weight" in d for _, _, d in G0.edges(data=True)):
+            return None
+        try:
+            answer = task.solve(G0, {})
+        except (ValueError, nx.NetworkXError):
+            if problem.get("exact_answer") is None or problem.get("path") is None:
+                return None
+            answer = {"cost": problem["exact_answer"], "route": list(problem["path"])}
+        split = f"ga_{difficulty}"
+        return {
+            "id": f"{task_name}/{split}/{index:05d}", "source": "grapharena",
+            "task": task_name, "split": split, "graph": graph_to_json(G0),
+            "params": {}, "question": task.question({}),
+            "answer": as_json_value(answer),
+            "meta": {"n_nodes": G0.number_of_nodes(), "n_edges": G0.number_of_edges(),
+                     "task_kind": task.kind, "grapharena_task": ga_task,
+                     "grapharena_id": problem.get("id", index),
+                     "grapharena_exact_answer": as_json_value(problem.get("exact_answer"))},
+        }
+
     G0: nx.Graph = problem["graph"]
 
     names = {v: str(d.get("name", v)) for v, d in G0.nodes(data=True)}
@@ -76,6 +147,8 @@ def convert_problem(problem: dict, ga_task: str, difficulty: str, index: int) ->
 
     if task_name == "shortest_path":
         params = {"source": names[problem["source"]], "target": names[problem["target"]]}
+    elif task_name == "common_neighbors":
+        params = {"node1": names[problem["node1"]], "node2": names[problem["node2"]]}
     else:
         params = {}
     if task_name == "diameter" and not nx.is_connected(G):

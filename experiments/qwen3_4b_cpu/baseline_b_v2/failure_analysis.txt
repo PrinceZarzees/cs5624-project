@@ -1,0 +1,246 @@
+run: experiments/qwen3_4b_cpu/baseline_b_v2/test_small
+harness: baseline_b_v2    model: qwen3-4b-q4    split: test_small
+problems: 150    accuracy: 93.3%    feasible: 94.0%    parsed: 100.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components     30  100.0%     3.0     2.0        0
+cycle_detection          30  100.0%     3.1     2.1        0
+diameter                 30   86.7%     5.7     4.7        0
+max_clique               30   80.0%     3.2     2.2        2
+shortest_path            30  100.0%     3.3     2.3        0
+
+diameter failure notes:
+- 2x unknown node(s): ['0', '1', '2']
+- 1x unknown node(s): ['1', '3']
+- 1x unknown node(s): ['2', '3']
+
+max_clique failure notes:
+- 1x unknown node(s): ['node', 'n1', 'n2']
+- 1x clique of size 3, maximum is 8
+- 1x unknown node(s): ['k']
+- 1x unknown node(s): ['j']
+- 1x empty answer
+- 1x unknown node(s): ['n']
+
+Failure excerpts:
+
+[diameter/test_small/00014] n=46 note=unknown node(s): ['0', '1', '2']
+code:
+import networkx as nx
+
+# Compute all pairs shortest path lengths to find the diameter
+all_pairs = nx.all_pairs_shortest_path_length(G)
+
+# Extract all distances (the values in the distance dictionaries)
+distances = []
+for _, dist_dict in all_pairs:
+    for d in dist_dict.values():
+        distances.append(d)
+
+# Find the maximum distance (the diameter)
+max_distance = max(distances)
+
+# Find a pair of nodes with this distance and return their shortest path
+for u, dist_dict in all_pairs:
+    if max_distance in dist_dict.values():
+        v = next(node for node, d in dist_dict.items() if d == max_distance)
+        path = nx.shortest_path(G, source=u, target=v)
+        print(f"Diameter: {max_distance}, Path: {path}")
+        print(f"Path length: {len(path) - 1}")
+        break
+
+
+[diameter/test_small/00026] n=32 note=unknown node(s): ['1', '3']
+code:
+import networkx as nx
+
+# Verify G is a valid NetworkX graph
+if not isinstance(G, nx.Graph):
+    raise ValueError("G is not a NetworkX Graph object")
+
+# Compute all pairs shortest path lengths
+try:
+    all_pairs = nx.all_pairs_shortest_path_length(G)
+except Exception as e:
+    print(f"Error computing all_pairs: {e}")
+    # Fallback: use pairwise BFS for small graphs
+    distances = {}
+    nodes = list(G.nodes())
+    for i, u in enumerate(nodes):
+        dist_dict = {}
+        for j, v in enumerate(nodes):
+            if u != v:
+                try:
+                    path_length = nx.shortest_path_length(G, u, v)
+                    dist_dict[v] = path_length
+                except:
+                    dist_dict[v] = float('inf')
+            else:
+                dist_dict[v] = 0
+        distances[u] = dist_dict
+
+    # Find diameter
+    diameter = 0
+    for u in nodes:
+        for v in nodes:
+            if u != v and distances[u][v] > diameter:
+                diameter = distances[u][v]
+
+    # Find a pair with this distance
+    source, target = None, None
+    for u in nodes:
+        for v in nodes:
+            if u != v and distances[u][v] == diameter:
+                source, targ
+
+[diameter/test_small/00027] n=4 note=unknown node(s): ['0', '1', '2']
+code:
+import networkx as nx
+
+# Get all pairs shortest path lengths
+all_pairs = nx.all_pairs_shortest_path_length(G)
+distances = []
+
+# Extract all distances from the generator
+for u, dist_dict in all_pairs:
+    for d in dist_dict.values():
+        distances.append(d)
+
+# Find the maximum distance (diameter)
+max_distance = max(distances)
+
+# Find a pair of nodes with this distance and return their shortest path
+for u, dist_dict in all_pairs:
+    if max_distance in dist_dict.values():
+        v = next(node for node, d in dist_dict.items() if d == max_distance)
+        path = nx.shortest_path(G, source=u, target=v)
+        print(f"Diameter: {max_distance}, Path: {path}")
+        break
+
+
+[diameter/test_small/00028] n=4 note=unknown node(s): ['2', '3']
+code:
+import networkx as nx
+
+# Compute all-pairs shortest path lengths
+all_pairs = nx.all_pairs_shortest_path_length(G)
+
+# Extract all distances to find the maximum (diameter)
+distances = []
+for u, dist_dict in all_pairs:
+    for v in dist_dict:
+        distances.append(dist_dict[v])
+
+diameter = max(distances) if distances else 0
+
+# Find a pair of nodes with distance equal to diameter
+path_found = False
+for u, dist_dict in all_pairs:
+    for v in dist_dict:
+        if dist_dict[v] == diameter:
+            path = nx.shortest_path(G, source=u, target=v)
+            print(f"Diameter: {diameter}, Path: {path}")
+            path_found = True
+            break
+    if path_found:
+        break
+
+# Final answer: the shortest path between two nodes at maximum distance
+
+
+[max_clique/test_small/00004] n=35 note=unknown node(s): ['node', 'n1', 'n2']
+code:
+import networkx as nx
+print(f"Number of connected components: {len(list(nx.connected_components(G)))}")
+print(f"Number of isolated nodes: {sum(1 for node in G.nodes() if G.degree(node) == 0)}")
+
+observation:
+stdout: Number of connected components: 7
+Number of isolated nodes: 6
+
+
+[max_clique/test_small/00006] n=28 note=clique of size 3, maximum is 8
+code:
+# Check if the graph is small enough for exact maximum clique computation
+# Since the graph has 28 nodes, we can use NetworkX's max_clique function which works efficiently for small graphs
+
+import networkx as nx
+
+# Use exact algorithm to find maximum clique
+clique = list(nx.find_cliques(G))[0] if nx.find_cliques(G) else []
+
+# Verify that it is indeed a clique (every pair of nodes in the set must be connected)
+if len(clique) > 0:
+    # Check all pairs in the clique for adjacency
+    is_valid_clique = True
+    for i in range(len(clique)):
+        for j in range(i + 1, len(clique)):
+            if not G.has_edge(clique[i], clique[j]):
+                is_valid_clique = False
+                break
+        if not is_valid_clique:
+            break
+    
+    if is_valid_clique:
+        print(f"Maximum clique found: {clique} (size: {len(clique)})")
+    else:
+        # Fallback to heuristic for larger graphs, but only if exact fails
+        # For now, we rely on the fact that small graphs have manageable cliques
+        # Try a different approach: use max_weight_clique with weight=1
+        try:
+            clique = list(nx.max_weight_clique(G, weight=None))
+     
+observation:
+stdout: Maximum clique found: [128, 161, 26] (size: 3)
+[128, 161, 26]
+
+
+[max_clique/test_small/00017] n=41 note=unknown node(s): ['k']
+
+[max_clique/test_small/00021] n=27 note=unknown node(s): ['j']
+code:
+# Check if the graph is connected to ensure we can find a meaningful clique
+is_connected = nx.is_connected(G)
+
+# If not connected, we need to consider each component separately
+components = list(nx.connected_components(G))
+
+# For maximum clique, we'll use exact search since the graph is small (27 nodes)
+# We'll check all possible subsets of nodes and verify if they form a complete subgraph
+
+max_clique = []
+for node in G.nodes():
+    # Start with single-node cliques
+    current_clique = [node]
+    max_clique = current_clique
+    
+    # Try to extend the clique by adding neighbors
+    for next_node in G.neighbors(node):
+        if next_node not in current_clique:
+            new_clique = current_clique + [next_node]
+            # Check if all pairs are connected (complete subgraph)
+            is_complete = True
+            for i in range(len(new_clique)):
+                for j in range(i+1, len(new_clique)):
+                    if next_node not in G.neighbors(new_clique[j]):
+                        is_complete = False
+                        break
+                if not is_complete:
+                    break
+            
+            if is_complete and len(new_clique) > len(max_cliqu
+observation:
+stderr: Traceback (most recent call last):
+  File "/localscratch-nvme/1534890/gh-sandbox-7wcvc6q0/step.py", line 27, in <module>
+    exec(compile(_gh_tree, "user_code.py", "exec"), globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "user_code.py", line 2, in <module>
+    is_connected = nx.is_connected(G)
+                   ^^
+NameError: name 'nx' is not defined
+
+
+[max_clique/test_small/00024] n=34 note=empty answer
+
+[max_clique/test_small/00025] n=17 note=unknown node(s): ['n']
