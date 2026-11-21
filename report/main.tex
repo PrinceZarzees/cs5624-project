@@ -31,21 +31,43 @@ diameter, reachability, max clique, Hamiltonian path, common neighbors, MIS,
 MVC, GED, MCS, TSP, and the GraphQA scalar/classification/flow tasks.
 See \texttt{experiments/BENCHMARK\_COVERAGE.md} for the coverage matrix.
 
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\paragraph{Setup facts.}
+Actor: Qwen3-4B-Instruct-2507 (snapshot \texttt{cdbee75f}, BF16, vLLM 0.34.0),
+temperature 0, 8{,}192-token context unless stated otherwise. Synthetic
+splits: train 300, val 150, \texttt{test\_small} 150, \texttt{test\_medium}
+150, \texttt{test\_large} 100, \texttt{test\_stress} 50; node ranges 4--50,
+100--299, 501--997 and 2{,}000. The fresh held-out split
+\texttt{test\_small\_fresh} has 150 problems (seed 56240) and zero graph
+overlap with the six frozen splits. Real benchmarks: GraphArena easy and hard
+at 100 problems per task and GraphQA test at 50 per task, taken in adapter
+order; the original 20/task records are a subset. Harnesses: Baseline A
+(minimal protocol), Baseline B (expert rules) and Baseline B v2 (14 rules).
+Tool runs use a Python/NetworkX sandbox with a 30\,s timeout, a 2\,GB memory
+cap and an 8-step limit. The model must put its final answer in
+\texttt{<answer>...</answer>}; scoring checks feasibility and then the
+task-specific exact answer. Reported metrics are accuracy, parsed rate,
+feasible rate, tokens and wall time. Every synthetic cell for A/B/v2 has three
+repeats; values are mean $\pm$ population std.
+% <<< AI-DRAFT
+
 \section{Baselines and Harnesses}
 % TODO: Baseline A, Baseline B, Baseline B v2, H* selection.
 \begin{table}[h]
 \centering
 \begin{tabular}{lrr}
 \toprule
-Harness & test\_small (150) & notes \\
+Harness & test\_small (150, k=3) & notes \\
 \midrule
-Baseline A & 87.3\% & minimal protocol \\
-Baseline B & 90.0\% & original expert rules \\
-Baseline B v2 (13 rules) & 93.3\% & pilot-tuned \\
-Baseline B v2 (14 rules) & 94.0\% & full scaling run \\
+Baseline A & 89.3 $\pm$ 1.6\% & minimal protocol \\
+Baseline B & 94.4 $\pm$ 0.6\% & original expert rules \\
+Baseline B v2 (13 rules) & 93.3\% & pilot-tuned, single run \\
+Baseline B v2 (14 rules) & 95.8 $\pm$ 1.4\% & full scaling harness \\
 \bottomrule
 \end{tabular}
-\caption{Full synthetic \texttt{test\_small} results, Qwen3-4B BF16 on one B200.}
+\caption{Synthetic \texttt{test\_small} results, Qwen3-4B BF16 on one B200.
+Values with $\pm$ are mean and population std over three repeats; the 13-rule
+v2 value is the original single run and was not repeated.}
 \end{table}
 
 \section{Small-Graph Optimization}
@@ -68,12 +90,14 @@ $H^*_{\text{small}}$.
 \toprule
 Harness & small & medium & large & stress \\
 \midrule
-Baseline A & 87.3\% & 80.7\% & 81.0\% & 62.0\% \\
-Baseline B & 94.0\% & 90.7\% & 86.0\% & 60.0\% \\
-Baseline B v2 & 94.0\% & 90.0\% & 85.0\% & 74.0\% \\
+Baseline A & 89.3 $\pm$ 1.6 & 86.2 $\pm$ 3.9 & 84.3 $\pm$ 2.4 & 66.0 $\pm$ 2.8 \\
+Baseline B & 94.4 $\pm$ 0.6 & 92.0 $\pm$ 1.1 & 90.7 $\pm$ 3.7 & 72.7 $\pm$ 9.0 \\
+Baseline B v2 & 95.8 $\pm$ 1.4 & 90.7 $\pm$ 0.9 & 85.3 $\pm$ 0.5 & 73.3 $\pm$ 0.9 \\
 \bottomrule
 \end{tabular}
-\caption{Full synthetic scaling results.}
+\caption{Full synthetic scaling accuracy (\%): mean and population std over
+three repeats. The same data appear with $n$ per split in the final-results
+section.}
 \end{table}
 
 \section{Rule Ablations}

@@ -41,3 +41,11 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 | SLIDES.md | Scaling: stress 62/60/74 and "v2 best at 2000 nodes" → 66.0/72.7/73.3 and B higher on large | `E2_repeats/summary.csv` |
 | SLIDES.md | appended AI-DRAFT slide stubs 15-21 | new results |
 | main.tex "Tool access" | single-run values (96.0/35.3) → 3-repeat means ± std, added medium/large and Baseline A | `experiments/final/E2_tool_access/summary.csv` |
+
+## 2026-11-21 superseded numbers in existing (human) text
+
+| Location | Old → new | Source |
+|---|---|---|
+| Sec. 4 table | A 87.3 → 89.3±1.6, B 90.0 → 94.4±0.6, v2(14) 94.0 → 95.8±1.4 on test_small; caption states k=3 | `experiments/final/E2_repeats/summary.csv` |
+| Sec. 6 table | A 87.3/80.7/81.0/62.0 → 89.3±1.6/86.2±3.9/84.3±2.4/66.0±2.8; B 94.0/90.7/86.0/60.0 → 94.4±0.6/92.0±1.1/90.7±3.7/72.7±9.0; v2 94.0/90.0/85.0/74.0 → 95.8±1.4/90.7±0.9/85.3±0.5/73.3±0.9 | `experiments/final/E2_repeats/summary.csv` |
+| Sec. 3 | added AI-DRAFT "Setup facts" block (model, splits, seeds, harnesses, sandbox, protocol, repeats) | `experiments/final/INTERFACES.md`, `data/manifest_final.json` |
