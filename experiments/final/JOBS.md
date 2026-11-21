@@ -13,7 +13,10 @@ All jobs use `--account=psgroup --partition=b200_normal_q --qos=owl_b200_normal_
 | 1546388 | scripts/final/run_e3.sbatch | 1 GPU, full grid | E3 full optimizer grid | – | – | cancelled (start projected 16:53, 6 h, after the session) | – |
 | 1546394 | scripts/final/run_e4.sbatch | 1 GPU | E4 full EvoSkill | – | – | cancelled (start projected 22:54) | – |
 | 1547370 | scripts/final/run_e2_fixup.sbatch | Qwen3-4B BF16, 8k | E2 replacement repeat for Baseline B `test_stress` (rep1 had 6/50 no-prediction errors; reps 1 and 3 are flagged) | pending | | pending | experiments/final/E2_repeats/baseline_b/rep4 |
-| 1547527 | scripts/final/run_e3_lite.sbatch | 1 GPU, 4B actor + 7B critic | Reduced E3: SkillOpt/GEPA/RRSI/Meta-Harness from B, 6 rounds; EvoSkill from B, 4 rounds | pending | | pending | experiments/final/E3_optimizers, E4_evoskill |
+| 1547527 | scripts/final/run_e3_lite.sbatch | 1 GPU, 4B actor + 7B critic | Reduced E3: SkillOpt/GEPA/RRSI/Meta-Harness from B, 6 rounds; EvoSkill from B, 4 rounds | 2026-11-21 11:19 | 2026-11-21 12:49 (limit) | RUNNING | experiments/final/E3_optimizers, E4_evoskill |
+| 1547590 | scripts/final/run_e11.sbatch | Qwen3-4B BF16, 32k context, port 8010 | E11 no-tools A/v2 on medium+large | 2026-11-21 12:49 | 2026-11-21 15:19 | PENDING | experiments/final/E11_notools_longctx |
+| 1547895 | scripts/final/run_e3b.sbatch | 1 GPU, B actor/critic, ports 8002/8003 | E3d eval of changed harnesses + RRSI (4 rounds) + EvoSkill (3 rounds) | 2026-11-21 15:20 | 2026-11-21 16:35 | PENDING | E3_optimizers, E4_evoskill |
+| 1547901 | scripts/final/run_e6b.sbatch | Qwen3-4B BF16, port 8020 | Balanced fallback: B/v2 at 30/task on GraphArena easy/hard + GraphQA | unknown | | PENDING | experiments/final/E6_real_bench30 |
 
 ## Notes on job changes
 

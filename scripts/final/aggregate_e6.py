@@ -78,5 +78,55 @@ def main():
               f"acc={r['accuracy_original_ids']}")
 
 
+def balanced_30():
+    """Compare A (100/task run) with B/v2 (30/task run) on identical ids."""
+    OUT30 = ROOT / "experiments/final/E6_real_bench30"
+    rows, tasks = [], []
+    for split, label in SPLITS.items():
+        # ids evaluated by the 30/task job (baseline_b is representative)
+        ref = OUT30 / split / "baseline_b" / "scores.jsonl"
+        if not ref.exists():
+            continue
+        ids = {r["id"] for r in map(json.loads, open(ref)) if r}
+        for h in HARNESSES:
+            d30 = OUT30 / split / h / "scores.jsonl"
+            d100 = OUT / split / h / "scores.jsonl"
+            path = d30 if d30.exists() else d100
+            if not path.exists():
+                continue
+            xs = [r for r in map(json.loads, open(path)) if r and r["id"] in ids]
+            if not xs:
+                continue
+            n = len(xs)
+            k = sum(bool(x.get("correct")) for x in xs)
+            lo, hi = wilson_ci(k, n)
+            by_task = {}
+            for x in xs:
+                by_task.setdefault(x["task"], []).append(x)
+            has_oracle = all(x.get("task") != "graphqa_max_flow" for x in xs)
+            rows.append({"benchmark": label, "split": split, "harness": h,
+                         "n": n, "accuracy": k / n, "wilson_lo": lo, "wilson_hi": hi,
+                         "parsed": sum(bool(x.get("parsed")) for x in xs) / n,
+                         "feasible": sum(bool(x.get("feasible")) for x in xs) / n,
+                         "graphqa_max_flow_present": int(not has_oracle)})
+            for t, ys in sorted(by_task.items()):
+                kk = sum(bool(y.get("correct")) for y in ys)
+                l, u = wilson_ci(kk, len(ys))
+                tasks.append({"benchmark": label, "split": split, "harness": h,
+                              "task": t, "n": len(ys), "accuracy": kk / len(ys),
+                              "wilson_lo": l, "wilson_hi": u})
+    if rows:
+        for name, rws in [("summary30.csv", rows), ("per_task30.csv", tasks)]:
+            with open(OUT / name, "w", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=list(rws[0]))
+                w.writeheader()
+                w.writerows(rws)
+        print(f"wrote summary30.csv ({len(rows)} rows) and per_task30.csv ({len(tasks)} rows)")
+        for r in rows:
+            print(f"{r['benchmark']:16s} {r['harness']:14s} n={r['n']:4d} acc={r['accuracy']:.3f}")
+
+
 if __name__ == "__main__":
     main()
+    if (ROOT / "experiments/final/E6_real_bench30").exists():
+        balanced_30()

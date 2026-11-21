@@ -22,12 +22,12 @@ export GRAPH_HARNESS_SANDBOX_DIR=$OUT/sandbox PYTHONPATH="$PWD/src"
 module load cuda13.1/toolkit/13.1.1
 export CUDA_HOME=${CUDA_HOME:-/cm/shared/apps/cuda13.1/toolkit/13.1.1}
 export PATH="$VENV/bin:$CUDA_HOME/bin:$PATH" TOKENIZERS_PARALLELISM=false
-"$VENV/bin/vllm" serve "$MODEL_PATH" --served-model-name qwen3-4b --host 127.0.0.1 --port 8000 \
+"$VENV/bin/vllm" serve "$MODEL_PATH" --served-model-name qwen3-4b --host 127.0.0.1 --port 8010 \
   --dtype bfloat16 --max-model-len 32768 --gpu-memory-utilization 0.80 --max-num-seqs 4 \
   --seed 1 --disable-log-requests > "$OUT/logs/vllm32k.log" 2>&1 &
 PID=$!
-scripts/final/wait_for_vllm.sh 127.0.0.1 8000 420 || { tail -80 "$OUT/logs/vllm32k.log"; exit 1; }
-M="--model qwen3-4b --base-url http://127.0.0.1:8000/v1 --max-tokens 768 --request-timeout 300"
+scripts/final/wait_for_vllm.sh 127.0.0.1 8010 420 || { tail -80 "$OUT/logs/vllm32k.log"; exit 1; }
+M="--model qwen3-4b --base-url http://127.0.0.1:8010/v1 --max-tokens 768 --request-timeout 300"
 for H in baseline_a_text baseline_b_v2_text; do
   for S in test_medium test_large; do
     "$CLIENT_PYTHON" -m graphharness.runner \

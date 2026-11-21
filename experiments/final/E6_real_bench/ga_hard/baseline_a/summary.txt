@@ -1,0 +1,33 @@
+harness: baseline_a    model: qwen3-4b    split: ga_hard
+problems: 1000    errors: 0    duration: 878.8s    tokens: 4995712
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+ga_hard      common_neighbors         100      31  100.0%     99.0%     98.0%
+ga_hard      connected_components     100      19  100.0%    100.0%    100.0%
+ga_hard      diameter                 100      20  100.0%     87.0%     86.0%
+ga_hard      graph_edit_distance      100      12   99.0%     26.0%      1.0%
+ga_hard      max_clique               100      19  100.0%     97.0%     95.0%
+ga_hard      max_common_subgraph      100      13   73.0%     64.0%     42.0%
+ga_hard      max_independent_set      100      19  100.0%     96.0%     62.0%
+ga_hard      min_vertex_cover         100      19  100.0%     78.0%     61.0%
+ga_hard      shortest_path            100      32  100.0%     46.0%     46.0%
+ga_hard      traveling_salesman       100      13  100.0%     55.0%      0.0%
+ga_hard      ALL                     1000      20   97.2%     74.8%     59.1%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50        1000       20    97.2%     74.8%     59.1%
+
+First failures:
+- shortest_path/ga_hard/00001 (shortest_path, n=21): empty answer
+- shortest_path/ga_hard/00003 (shortest_path, n=43): empty answer
+- shortest_path/ga_hard/00004 (shortest_path, n=32): empty answer
+- shortest_path/ga_hard/00005 (shortest_path, n=27): empty answer
+- shortest_path/ga_hard/00007 (shortest_path, n=33): empty answer
+- shortest_path/ga_hard/00009 (shortest_path, n=50): empty answer
+- shortest_path/ga_hard/00013 (shortest_path, n=45): empty answer
+- shortest_path/ga_hard/00017 (shortest_path, n=23): empty answer
+- shortest_path/ga_hard/00018 (shortest_path, n=39): empty answer
+- shortest_path/ga_hard/00019 (shortest_path, n=50): empty answer

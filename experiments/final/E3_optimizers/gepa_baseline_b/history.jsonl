@@ -1,0 +1,3 @@
+{"round": 0, "role": "initial", "val_accuracy": 1.0, "best_val_accuracy": 1.0, "tokens": 166051}
+{"round": 1, "accepted": false, "reason": "no valid candidate", "best_val_accuracy": 1.0, "tokens": 235732}
+{"round": 2, "accepted": false, "reason": "no valid candidate", "best_val_accuracy": 1.0, "tokens": 328381}

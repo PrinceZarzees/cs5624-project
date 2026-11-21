@@ -1,0 +1,446 @@
+{
+  "harness": "baseline_b",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "model": "qwen3-4b",
+  "split": "ga_hard",
+  "started_at": "2026-11-21T16:33:55.854972+00:00",
+  "finished_at": "2026-11-21T16:43:39.387687+00:00",
+  "duration_s": 583.5327197210863,
+  "n": 1000,
+  "overall": {
+    "split": "ga_hard",
+    "task": "ALL",
+    "n": 1000,
+    "parsed": 0.975,
+    "feasible": 0.835,
+    "accuracy": 0.626,
+    "mean_nodes": 19.694
+  },
+  "by_task": [
+    {
+      "task": "common_neighbors",
+      "n": 100,
+      "mean_nodes": 30.52,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.98
+    },
+    {
+      "task": "connected_components",
+      "n": 100,
+      "mean_nodes": 19.3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "diameter",
+      "n": 100,
+      "mean_nodes": 19.58,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.96
+    },
+    {
+      "task": "graph_edit_distance",
+      "n": 100,
+      "mean_nodes": 12.36,
+      "parsed": 1.0,
+      "feasible": 0.18,
+      "accuracy": 0.02
+    },
+    {
+      "task": "max_clique",
+      "n": 100,
+      "mean_nodes": 19.37,
+      "parsed": 1.0,
+      "feasible": 0.9,
+      "accuracy": 0.82
+    },
+    {
+      "task": "max_common_subgraph",
+      "n": 100,
+      "mean_nodes": 12.96,
+      "parsed": 0.75,
+      "feasible": 0.69,
+      "accuracy": 0.52
+    },
+    {
+      "task": "max_independent_set",
+      "n": 100,
+      "mean_nodes": 18.9,
+      "parsed": 1.0,
+      "feasible": 0.98,
+      "accuracy": 0.45
+    },
+    {
+      "task": "min_vertex_cover",
+      "n": 100,
+      "mean_nodes": 19.28,
+      "parsed": 1.0,
+      "feasible": 0.78,
+      "accuracy": 0.55
+    },
+    {
+      "task": "shortest_path",
+      "n": 100,
+      "mean_nodes": 31.57,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.96
+    },
+    {
+      "task": "traveling_salesman",
+      "n": 100,
+      "mean_nodes": 13.1,
+      "parsed": 1.0,
+      "feasible": 0.9,
+      "accuracy": 0.0
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 1000,
+      "mean_nodes": 19.694,
+      "parsed": 0.975,
+      "feasible": 0.835,
+      "accuracy": 0.626
+    }
+  ],
+  "tokens": {
+    "prompt": 3588269,
+    "completion": 704065,
+    "total": 4292334,
+    "mean_total_per_problem": 4292.334
+  },
+  "tool_calls": 1840,
+  "mean_agent_duration_s": 4.60557584483549,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "shortest_path/ga_hard/00010",
+      "task": "shortest_path",
+      "n_nodes": 20,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00029",
+      "task": "shortest_path",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00033",
+      "task": "shortest_path",
+      "n_nodes": 24,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Lugo Emilia-Romagna']"
+    },
+    {
+      "id": "shortest_path/ga_hard/00037",
+      "task": "shortest_path",
+      "n_nodes": 27,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "diameter/ga_hard/00009",
+      "task": "diameter",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Brookline Massachusetts']"
+    },
+    {
+      "id": "diameter/ga_hard/00072",
+      "task": "diameter",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "diameter/ga_hard/00077",
+      "task": "diameter",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Berkeley California', 'Pasadena California']"
+    },
+    {
+      "id": "diameter/ga_hard/00081",
+      "task": "diameter",
+      "n_nodes": 16,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Seattle Sounders (1994\u2013208)']"
+    },
+    {
+      "id": "max_clique/ga_hard/00000",
+      "task": "max_clique",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['neighbor']"
+    },
+    {
+      "id": "max_clique/ga_hard/00016",
+      "task": "max_clique",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 4, maximum is 6"
+    },
+    {
+      "id": "max_clique/ga_hard/00019",
+      "task": "max_clique",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/ga_hard/00022",
+      "task": "max_clique",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['j']"
+    },
+    {
+      "id": "max_clique/ga_hard/00024",
+      "task": "max_clique",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/ga_hard/00030",
+      "task": "max_clique",
+      "n_nodes": 23,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 3, maximum is 8"
+    },
+    {
+      "id": "max_clique/ga_hard/00056",
+      "task": "max_clique",
+      "n_nodes": 20,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/ga_hard/00059",
+      "task": "max_clique",
+      "n_nodes": 24,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/ga_hard/00061",
+      "task": "max_clique",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 6, maximum is 8"
+    },
+    {
+      "id": "max_clique/ga_hard/00065",
+      "task": "max_clique",
+      "n_nodes": 20,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 7, maximum is 8"
+    },
+    {
+      "id": "max_clique/ga_hard/00075",
+      "task": "max_clique",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 10, maximum is 11"
+    },
+    {
+      "id": "max_clique/ga_hard/00082",
+      "task": "max_clique",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 10, maximum is 12"
+    },
+    {
+      "id": "max_clique/ga_hard/00084",
+      "task": "max_clique",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 1, maximum is 4"
+    },
+    {
+      "id": "max_clique/ga_hard/00088",
+      "task": "max_clique",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): [\"Ciro D\\\\'Apice\"]"
+    },
+    {
+      "id": "max_clique/ga_hard/00090",
+      "task": "max_clique",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Alex']"
+    },
+    {
+      "id": "max_clique/ga_hard/00094",
+      "task": "max_clique",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "max_clique/ga_hard/00096",
+      "task": "max_clique",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    }
+  ],
+  "rows": [
+    {
+      "split": "ga_hard",
+      "task": "common_neighbors",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.98,
+      "mean_nodes": 30.52
+    },
+    {
+      "split": "ga_hard",
+      "task": "connected_components",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 19.3
+    },
+    {
+      "split": "ga_hard",
+      "task": "diameter",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.96,
+      "mean_nodes": 19.58
+    },
+    {
+      "split": "ga_hard",
+      "task": "graph_edit_distance",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.18,
+      "accuracy": 0.02,
+      "mean_nodes": 12.36
+    },
+    {
+      "split": "ga_hard",
+      "task": "max_clique",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.9,
+      "accuracy": 0.82,
+      "mean_nodes": 19.37
+    },
+    {
+      "split": "ga_hard",
+      "task": "max_common_subgraph",
+      "n": 100,
+      "parsed": 0.75,
+      "feasible": 0.69,
+      "accuracy": 0.52,
+      "mean_nodes": 12.96
+    },
+    {
+      "split": "ga_hard",
+      "task": "max_independent_set",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.98,
+      "accuracy": 0.45,
+      "mean_nodes": 18.9
+    },
+    {
+      "split": "ga_hard",
+      "task": "min_vertex_cover",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.78,
+      "accuracy": 0.55,
+      "mean_nodes": 19.28
+    },
+    {
+      "split": "ga_hard",
+      "task": "shortest_path",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.96,
+      "mean_nodes": 31.57
+    },
+    {
+      "split": "ga_hard",
+      "task": "traveling_salesman",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.9,
+      "accuracy": 0.0,
+      "mean_nodes": 13.1
+    },
+    {
+      "split": "ga_hard",
+      "task": "ALL",
+      "n": 1000,
+      "parsed": 0.975,
+      "feasible": 0.835,
+      "accuracy": 0.626,
+      "mean_nodes": 19.694
+    }
+  ]
+}

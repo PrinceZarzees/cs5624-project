@@ -7,6 +7,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 ROOT=Path(__file__).resolve().parents[2]; F=ROOT/'report/figures'; F.mkdir(exist_ok=True)
 colors={'baseline_a':'#4C78A8','baseline_b':'#F58518','baseline_b_v2':'#54A24B'}
+labels={'baseline_a':'Baseline A','baseline_b':'Baseline B','baseline_b_v2':'Baseline B v2'}
 
 def save(fig,name):
     for ext in ['pdf','png']: fig.savefig(F/f'{name}.{ext}',bbox_inches='tight',dpi=200)
@@ -23,11 +24,11 @@ if e2.exists():
     for h in ['baseline_a','baseline_b','baseline_b_v2']:
         rows=sorted([r for r in agg if r['harness']==h], key=lambda r: mean_nodes[r['split']])
         ax.errorbar([mean_nodes[r['split']] for r in rows],[float(r['mean']) for r in rows],
-                    yerr=[float(r['std']) for r in rows],marker='o',capsize=3,label=h,color=colors[h])
+                    yerr=[float(r['std']) for r in rows],marker='o',capsize=3,label=labels[h],color=colors[h])
 else:
     for h in ['baseline_a','baseline_b','baseline_b_v2']:
         rows=[r for r in s['runs'] if r['harness']==h]
-        ax.plot([r['mean_nodes'] for r in rows],[r['accuracy'] for r in rows],marker='o',label=h,color=colors[h])
+        ax.plot([r['mean_nodes'] for r in rows],[r['accuracy'] for r in rows],marker='o',label=labels[h],color=colors[h])
 ax.set_xscale('log'); ax.set_xlabel('mean nodes'); ax.set_ylabel('accuracy'); ax.set_ylim(0.55,1.0); ax.grid(alpha=.3); ax.legend(); save(fig,'fig_scaling')
 
 # gen gap (mean over repeats when available)
@@ -41,7 +42,7 @@ if gg.exists():
 else:
     g=s['generalization_gaps']; g=[dict(x,std=0) for x in g]
 fig,ax=plt.subplots(figsize=(5,3.2))
-ax.bar([x['harness'] for x in g],[x['delta_gen'] for x in g],yerr=[x.get('std',0) for x in g],
+ax.bar([labels[x['harness']] for x in g],[x['delta_gen'] for x in g],yerr=[x.get('std',0) for x in g],
        capsize=3,color=[colors[x['harness']] for x in g])
 ax.axhline(0,color='k',lw=.8); ax.set_ylabel('small - large accuracy'); save(fig,'fig_gen_gap')
 
@@ -116,15 +117,27 @@ print('figures written')
 
 # characteristics: family and density bars from the E8 CSV
 rows=list(csv.DictReader(open(ROOT/'experiments/final/E8_characteristics/characteristics.csv')))
-fig,ax=plt.subplots(figsize=(7,3.4))
-fams=sorted({r['value'] for r in rows if r['section']=='by_family'})
-for j,h in enumerate(['Baseline A','Baseline B','Baseline B v2']):
-    vals=[]
-    for f in fams:
-        x=[r for r in rows if r['section']=='by_family' and r['run']==h and r['value']==f]
-        vals.append(float(x[0]['accuracy']) if x else 0)
-    ax.bar([i+j*.25 for i in range(len(fams))],vals,width=.25,label=h)
-ax.set_xticks(range(len(fams))); ax.set_xticklabels(fams,rotation=20); ax.set_ylabel('accuracy'); ax.legend(); save(fig,'fig_characteristics')
+# family x size-bin heatmap, one panel per harness (E8)
+fs=list(csv.DictReader(open(ROOT/'experiments/final/E8_characteristics/family_x_size.csv')))
+fams=['ba','er','ws','tree','mixed']; bins=['4-50','100-300','500-1000','2000']
+plt.rcParams.update({'font.size':7})
+fig,axes=plt.subplots(1,3,figsize=(7.4,2.7),sharey=True)
+for ax,(h,lab) in zip(axes,[('baseline_a','A'),('baseline_b','B'),('baseline_b_v2','B v2')]):
+    M=[[float('nan')]*len(bins) for _ in fams]; N=[[0]*len(bins) for _ in fams]
+    for r in fs:
+        if r['harness']!=h: continue
+        i=fams.index(r['family']); j=bins.index(r['size_bin'])
+        M[i][j]=float(r['accuracy']); N[i][j]=int(r['n'])
+    im=ax.imshow(M,vmin=0.4,vmax=1.0,cmap='viridis',aspect='auto')
+    for i in range(len(fams)):
+        for j in range(len(bins)):
+            if N[i][j]:
+                ax.text(j,i,f"{M[i][j]:.2f}\n{N[i][j]}",ha='center',va='center',fontsize=5.5,
+                        color='white' if M[i][j]<0.75 else 'black')
+    ax.set_xticks(range(len(bins))); ax.set_xticklabels(bins,rotation=30,ha='right')
+    ax.set_xlabel(lab)
+axes[0].set_yticks(range(len(fams))); axes[0].set_yticklabels(fams)
+fig.colorbar(im,ax=axes,label='accuracy',shrink=0.8); save(fig,'fig_characteristics')
 fig,ax=plt.subplots(figsize=(6,3.2))
 for h in ['Baseline A','Baseline B','Baseline B v2']:
     vals=[float(r['accuracy']) for r in rows if r['section']=='by_density' and r['run']==h]

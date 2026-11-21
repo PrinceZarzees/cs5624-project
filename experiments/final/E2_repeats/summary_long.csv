@@ -23,6 +23,7 @@ baseline_b,3,test_large,100,0.91,1.0,0.96,0,0.0,387561
 baseline_b,1,test_stress,50,0.6,0.8,0.64,6,0.12,411024
 baseline_b,2,test_stress,50,0.78,0.8,0.8,2,0.04,478180
 baseline_b,3,test_stress,50,0.8,0.82,0.82,3,0.06,390194
+baseline_b,4,test_stress,50,0.8,0.82,0.82,3,0.06,388361
 baseline_b_v2,1,test_small,150,0.94,1.0,0.9666666666666667,0,0.0,939899
 baseline_b_v2,2,test_small,150,0.9733333333333334,1.0,1.0,0,0.0,880073
 baseline_b_v2,3,test_small,150,0.96,1.0,0.9933333333333333,0,0.0,794917
