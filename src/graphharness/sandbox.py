@@ -159,9 +159,10 @@ class PythonSandbox:
     """A temporary working directory plus a method to execute code in it."""
 
     def __init__(self, record: dict, limits: SandboxLimits | None = None,
-                 workdir: str | Path | None = None):
+                 workdir: str | Path | None = None, preamble: str = ""):
         self.record = record
         self.limits = limits or SandboxLimits()
+        self.preamble = preamble or ""
         self._owns_dir = workdir is None
         if workdir:
             self.workdir = Path(workdir)
@@ -195,7 +196,8 @@ class PythonSandbox:
         if not isinstance(code, str):
             code = str(code)
         step = self.workdir / "step.py"
-        (self.workdir / "user_code.py").write_text(code + "\n", encoding="utf-8")
+        user_code = (self.preamble + "\n" + code) if self.preamble else code
+        (self.workdir / "user_code.py").write_text(user_code + "\n", encoding="utf-8")
         step.write_text(_PREAMBLE, encoding="utf-8")
 
         out_path = self.workdir / "_stdout.txt"

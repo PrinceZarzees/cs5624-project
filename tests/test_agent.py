@@ -157,3 +157,15 @@ def test_harness_round_trip_and_ablation(tmp_path):
     assert loaded == h
     assert len(loaded.without_rule(0).rules) == len(h.rules) - 1
     assert "Rules:" in loaded.system_message()
+
+
+def test_no_tools_harness_refuses_code_and_answers():
+    h = BASELINE_A.copy(graph_view="adjacency_list", allow_tools=False)
+    model = ScriptedModel([
+        "```python\nprint(G.number_of_nodes())\n```",
+        "<answer>[1, 2, 3, 4]</answer>",
+    ])
+    result = run_agent(h, model, record())
+    assert result.tool_calls == 0
+    assert result.steps[0]["action"] == "code"
+    assert score_response(record(), result.response)["correct"]

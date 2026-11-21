@@ -1,0 +1,28 @@
+harness: baseline_b_v2_text    model: qwen3-4b    split: test_medium
+problems: 150    errors: 18    duration: 55.3s    tokens: 1093609
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188   83.3%     30.0%      3.3%
+test_medium  cycle_detection           30     203  100.0%     50.0%     50.0%
+test_medium  diameter                  30     182   90.0%     23.3%      0.0%
+test_medium  max_clique                30     194   76.7%     13.3%      3.3%
+test_medium  shortest_path             30     189   90.0%     20.0%     20.0%
+test_medium  ALL                      150     191   88.0%     27.3%     15.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191    88.0%     27.3%     15.3%
+
+First failures:
+- shortest_path/test_medium/00000 (shortest_path, n=130): no edge between 1246 and 25
+- shortest_path/test_medium/00002 (shortest_path, n=163): no edge between 1410 and 1418
+- shortest_path/test_medium/00003 (shortest_path, n=135): no edge between 262 and 484
+- shortest_path/test_medium/00005 (shortest_path, n=224): no edge between 1350 and 1417
+- shortest_path/test_medium/00006 (shortest_path, n=107): path does not start/end at the given nodes
+- shortest_path/test_medium/00007 (shortest_path, n=128): no edge between 264 and 541
+- shortest_path/test_medium/00008 (shortest_path, n=127): no edge between 1129 and 1079
+- shortest_path/test_medium/00009 (shortest_path, n=141): no edge between 886 and 733
+- shortest_path/test_medium/00010 (shortest_path, n=122): path repeats a node
+- shortest_path/test_medium/00012 (shortest_path, n=281): empty answer

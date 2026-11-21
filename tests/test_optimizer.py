@@ -114,3 +114,90 @@ def test_optimizer_accepts_a_validated_improvement(tmp_path):
     rows = [json.loads(line) for line in (out / "history.jsonl").read_text().splitlines()]
     assert rows[0]["role"] == "initial"
     assert rows[1]["accepted"] is True
+
+
+def test_optimizer_rrs_accepts_single_rule_edit(tmp_path):
+    from graphharness.optimizer import optimize_rrs, OptimizerConfig
+    train, val = build_train_val(tmp_path)
+    by_message = {BASELINE_A.user_message(r): truth_text(r) for r in train + val}
+    wrong = "<answer>[99999]</answer>"
+
+    def actor(messages):
+        if "EXPERT RULE" not in messages[0]["content"]:
+            return wrong
+        return by_message.get(messages[-1]["content"], wrong)
+
+    def critic(messages):
+        return json.dumps({
+            "system_prompt": BASELINE_A.system_prompt,
+            "rules": ["EXPERT RULE: use NetworkX and verify the result."],
+            "reason": "add a reusable verification rule",
+        })
+
+    out = tmp_path / "rrs"
+    result = optimize_rrs(
+        BASELINE_A, CallableModel(actor, name="actor"), CallableModel(critic, name="critic"),
+        train, val, out,
+        OptimizerConfig(rounds=1, train_per_task=2, val_per_task=1, seed=3, rrs=True),
+    )
+    assert result.best_val_accuracy == 1.0
+    assert "EXPERT RULE" in result.best_harness.rules[0]
+    assert (out / "best_harness.json").exists()
+
+
+def test_gepa_accepts_a_prompt_improvement(tmp_path):
+    from graphharness.gepa import optimize_gepa, GEPAConfig
+    train, val = build_train_val(tmp_path)
+    by_message = {BASELINE_A.user_message(r): truth_text(r) for r in train + val}
+    wrong = "<answer>[99999]</answer>"
+
+    def actor(messages):
+        if "EXPERT MODE" not in messages[0]["content"]:
+            return wrong
+        return by_message.get(messages[-1]["content"], wrong)
+
+    def critic(messages):
+        return json.dumps({
+            "system_prompt": "EXPERT MODE: verify every graph answer.",
+            "rules": [],
+            "reason": "ask for verification",
+        })
+
+    summary = optimize_gepa(
+        BASELINE_A, CallableModel(actor), CallableModel(critic), train, val,
+        tmp_path / "gepa", GEPAConfig(rounds=1, candidates_per_round=1,
+                                     train_per_task=2, val_per_task=2, seed=7),
+    )
+    assert summary["best_val_accuracy"] == 1.0
+    assert "EXPERT MODE" in summary["best_harness"]["system_prompt"]
+    assert (tmp_path / "gepa" / "best_harness.json").exists()
+
+
+def test_meta_harness_accepts_helper_preamble(tmp_path):
+    from graphharness.meta_harness import MetaConfig, optimize_meta
+    train, val = build_train_val(tmp_path)
+    by_message = {BASELINE_A.user_message(r): truth_text(r) for r in train + val}
+    wrong = "<answer>[99999]</answer>"
+
+    def actor(messages):
+        if "HELPER" not in messages[0]["content"]:
+            return wrong
+        return by_message.get(messages[-1]["content"], wrong)
+
+    def critic(messages):
+        return json.dumps({
+            "system_prompt": BASELINE_A.system_prompt,
+            "rules": [],
+            "graph_view": "summary",
+            "tool_backend": "python",
+            "tool_preamble": "# HELPER\nhelper = 1",
+            "reason": "inject a reusable helper",
+        })
+
+    summary = optimize_meta(
+        BASELINE_A, CallableModel(actor), CallableModel(critic), train, val,
+        tmp_path / "meta", MetaConfig(rounds=1, train_per_task=2, val_per_task=2, seed=9),
+    )
+    assert summary["best_val_accuracy"] == 1.0
+    assert "HELPER" in summary["best_harness"]["tool_preamble"]
+    assert (tmp_path / "meta" / "best_harness.json").exists()

@@ -21,6 +21,7 @@ import networkx as nx
 from .encoding import STYLES
 from .jsonutil import loads_relaxed
 from .models import ChatResult, Model
+from .csandbox import CSandbox
 from .sandbox import PythonSandbox, SandboxLimits
 from .tasks import get_task
 
@@ -30,6 +31,35 @@ _FENCE_RE = re.compile(
     re.DOTALL,
 )
 _BRACKET_RE = re.compile(r"\[([^\[\]]*)\]", re.DOTALL)
+
+TOOL_PROTOCOL_C = """\
+## C tool and answer format
+
+You may write C code and compile it with `gcc`. NetworkX is not available. The
+working directory contains `graph_io.h`, `graph_io.c`, `graph.txt` and
+`params.txt`.
+
+`graph.txt` format: first line `n m`, then `m` lines `u v weight`. Node ids are
+integers; `Graph` from `graph_io.h` exposes `n`, `m`, `max_id`, `eu`, `ev`,
+`ew`, plus `load_graph()` and `get_param("source")`.
+
+Reply with a ```c fenced block or a JSON call. Minimal example:
+
+```c
+#include "graph_io.h"
+int main() {
+    Graph g = load_graph();
+    printf("nodes=%d edges=%d\n", g.n, g.m);
+    free_graph(&g);
+    return 0;
+}
+```
+
+{"tool": "run_c", "code": "#include \"graph_io.h\"\nint main(){...}"}
+
+When ready, give the final answer in the task-requested format, e.g.
+<answer>[1, 2, 3]</answer>.
+"""
 
 TOOL_PROTOCOL = """\
 ## Tools and answer format
@@ -83,6 +113,9 @@ class Harness:
     memory_mb: int = 2048
     max_output_bytes: int = 16_000
     temperature: float = 0.0
+    allow_tools: bool = True
+    tool_backend: str = "python"
+    tool_preamble: str = ""
     notes: str = ""
 
     def __post_init__(self):
@@ -90,19 +123,36 @@ class Harness:
             raise ValueError(f"unknown graph_view {self.graph_view!r}")
         if self.max_steps < 1:
             raise ValueError("max_steps must be positive")
+        if not self.allow_tools and self.graph_view == "summary":
+            raise ValueError("allow_tools=False needs a text graph view (edge_list or adjacency_list)")
+        if self.tool_backend not in {"python", "c"}:
+            raise ValueError(f"unknown tool_backend {self.tool_backend!r}")
 
     def system_message(self) -> str:
         parts = [self.system_prompt.strip()]
         rules = [r.strip() for r in self.rules if str(r).strip()]
         if rules:
             parts.append("Rules:\n" + "\n".join(f"{i}. {rule}" for i, rule in enumerate(rules, 1)))
-        parts.append(TOOL_PROTOCOL.strip())
+        if self.tool_preamble:
+            parts.append("Helper code already loaded in the sandbox:\n```python\n"
+                         + self.tool_preamble.strip() + "\n```")
+        if self.allow_tools:
+            parts.append((TOOL_PROTOCOL_C if self.tool_backend == "c" else TOOL_PROTOCOL).strip())
+        else:
+            parts.append(
+                "## No tools\nYou cannot run code or call tools for this task. "
+                "Read the graph text carefully and reason directly. Give the "
+                "final answer in the requested format."
+            )
         return "\n\n".join(p for p in parts if p)
 
     def user_message(self, record: dict) -> str:
         graph_text = render_graph(record, self.graph_view)
         question = record["question"].strip()
-        if record.get("graphs"):
+        if self.tool_backend == "c":
+            hint = ("Use the C tool (`run_c`). The graph is in `graph.txt`; "
+                    "include `graph_io.h` and compile with gcc.")
+        elif record.get("graphs"):
             hint = ("The two graphs are available as `G1` and `G2` (and also `G` = G1) "
                     "in the sandbox. Use `run_python` to inspect or compute the answer.")
         elif self.graph_view == "summary":
@@ -133,6 +183,9 @@ class Harness:
             "memory_mb": self.memory_mb,
             "max_output_bytes": self.max_output_bytes,
             "temperature": self.temperature,
+            "allow_tools": self.allow_tools,
+            "tool_backend": self.tool_backend,
+            "tool_preamble": self.tool_preamble,
             "notes": self.notes,
         }
 
@@ -140,7 +193,8 @@ class Harness:
     def from_dict(cls, data: dict) -> "Harness":
         allowed = {
             "name", "system_prompt", "rules", "graph_view", "max_steps",
-            "tool_timeout_s", "memory_mb", "max_output_bytes", "temperature", "notes",
+            "tool_timeout_s", "memory_mb", "max_output_bytes", "temperature",
+            "allow_tools", "tool_backend", "tool_preamble", "notes",
         }
         kwargs = {k: v for k, v in data.items() if k in allowed}
         kwargs.setdefault("name", "harness")
@@ -402,7 +456,7 @@ def parse_action(response: str) -> Action:
     for match in _FENCE_RE.finditer(response):
         lang = (match.group("lang") or "").lower()
         code = match.group("code")
-        if lang in {"python", "py", "python3", ""}:
+        if lang in {"python", "py", "python3", "c", "cpp", "c11", ""}:
             candidates.append((match.start(), Action("code", code=code)))
         elif lang == "json":
             try:
@@ -455,7 +509,7 @@ def _find_any_answer(text: str) -> str | None:
 
 def _action_from_json(value: dict) -> Action:
     tool = str(value.get("tool", "")).strip().lower()
-    if tool in {"run_python", "python", "execute", "code"}:
+    if tool in {"run_python", "python", "execute", "code", "run_c", "c", "compile"}:
         code = value.get("code")
         if not isinstance(code, str):
             return Action("none", note="run_python call has no string `code`")
@@ -549,9 +603,17 @@ def run_agent(
                 break
 
             if action.kind == "code" and action.code is not None:
+                if not harness.allow_tools:
+                    messages.append({"role": "user", "content":
+                        "Tools are disabled for this task. Answer from the graph text."})
+                    continue
                 tool_calls += 1
                 if sandbox is None:
-                    sandbox = PythonSandbox(record, limits=harness.sandbox_limits())
+                    if harness.tool_backend == "c":
+                        sandbox = CSandbox(record, limits=harness.sandbox_limits())
+                    else:
+                        sandbox = PythonSandbox(record, limits=harness.sandbox_limits(),
+                                                preamble=harness.tool_preamble)
                 run = sandbox.run(action.code)
                 observation = run.observation()
                 steps[-1].update({
@@ -566,11 +628,15 @@ def run_agent(
                 continue
 
             # No usable action: nudge the model once per step.
-            nudge = (
-                "I could not find a tool call or a final answer. Reply with a "
-                '{"tool": "run_python", ...} object, a ```python block, or '
-                "<answer>[...]</answer>."
-            )
+            if harness.allow_tools:
+                nudge = (
+                    "I could not find a tool call or a final answer. Reply with a "
+                    '{"tool": "run_python", ...} object, a ```python block, or '
+                    "<answer>[...]</answer>."
+                )
+            else:
+                nudge = ("I could not find a final answer. Tools are disabled; "
+                         "reply with <answer>...</answer> in the requested format.")
             messages.append({"role": "user", "content": nudge})
 
         if stopped_reason == "max_steps":

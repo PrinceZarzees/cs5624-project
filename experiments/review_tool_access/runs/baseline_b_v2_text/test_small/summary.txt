@@ -1,0 +1,28 @@
+harness: baseline_b_v2_text    model: qwen3-4b    split: test_small
+problems: 150    errors: 0    duration: 42.9s    tokens: 442094
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%     46.7%     16.7%
+test_small   cycle_detection           30      26  100.0%     66.7%     63.3%
+test_small   diameter                  30      27  100.0%     30.0%     13.3%
+test_small   max_clique                30      27  100.0%     36.7%     16.7%
+test_small   shortest_path             30      21  100.0%     70.0%     66.7%
+test_small   ALL                      150      26  100.0%     50.0%     35.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     50.0%     35.3%
+
+First failures:
+- shortest_path/test_small/00002 (shortest_path, n=38): no edge between 178 and 149
+- shortest_path/test_small/00006 (shortest_path, n=22): no edge between 126 and 134
+- shortest_path/test_small/00008 (shortest_path, n=23): path has 3 edges, shortest is 2
+- shortest_path/test_small/00009 (shortest_path, n=41): no edge between 292 and 361
+- shortest_path/test_small/00011 (shortest_path, n=16): no edge between 12 and 137
+- shortest_path/test_small/00012 (shortest_path, n=36): unknown node(s): ['a', 'b', 'c']
+- shortest_path/test_small/00013 (shortest_path, n=15): no edge between 141 and 143
+- shortest_path/test_small/00015 (shortest_path, n=42): path does not start/end at the given nodes
+- shortest_path/test_small/00020 (shortest_path, n=43): no edge between 262 and 126
+- shortest_path/test_small/00023 (shortest_path, n=22): no edge between 44 and 102

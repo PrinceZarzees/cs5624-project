@@ -49,6 +49,11 @@ class OptimizerConfig:
     max_prompt_chars: int = 4000
     max_examples: int = 12
     critic_temperature: float = 0.7
+    rrs: bool = False
+    rrs_views: int = 2
+    rrs_view_tolerance: float = 0.05
+    rrs_max_rule_edits: int = 1
+    rrs_max_prompt_growth: float = 0.25
 
 
 def sample_records(records: list[dict], per_task: int, rng: random.Random) -> list[dict]:
@@ -250,6 +255,162 @@ def validate_proposal(proposal: dict, current: Harness,
     return candidate.copy(notes=reason), reason
 
 
+def make_val_views(records: list[dict], per_task: int, seed: int,
+                   n_views: int = 2) -> list[list[dict]]:
+    """Disjoint-ish validation views, one per view, stratified by task."""
+    rng = random.Random(seed)
+    groups: dict[str, list[dict]] = {}
+    for record in records:
+        groups.setdefault(record["task"], []).append(record)
+    views: list[list[dict]] = [[] for _ in range(n_views)]
+    for task in sorted(groups):
+        pool = list(groups[task])
+        rng.shuffle(pool)
+        for i, record in enumerate(pool):
+            view = i % n_views
+            if len([r for r in views[view] if r["task"] == task]) < per_task:
+                views[view].append(record)
+    return [sorted(v, key=lambda r: r["id"]) for v in views]
+
+
+def _rrs_filter(candidate: Harness, current: Harness, config: OptimizerConfig,
+                seen: set[str]) -> tuple[Harness | None, str]:
+    if candidate.system_prompt.strip() != current.system_prompt.strip():
+        return None, "RRSI rejects full system-prompt rewrites"
+    added = [r for r in candidate.rules if r not in current.rules]
+    removed = [r for r in current.rules if r not in candidate.rules]
+    edits = len(added) + len(removed)
+    if edits == 0:
+        return None, "RRSI pruner: no rule edit"
+    if edits > config.rrs_max_rule_edits:
+        return None, f"RRSI edit budget: {edits} rule edits > {config.rrs_max_rule_edits}"
+    for rule in added:
+        if re.search(r"\bnode\s+\d+\b", rule, re.IGNORECASE):
+            return None, "RRSI critic: rule mentions a specific node id"
+        if re.search(r"\b\d{1,4}\s*-\s*\d{1,4}\b", rule):
+            return None, "RRSI critic: rule mentions a numeric node range"
+    grew = len(candidate.system_message()) - len(current.system_message())
+    if grew > config.rrs_max_prompt_growth * max(1, len(current.system_message())):
+        return None, "RRSI pruner: prompt grew too much"
+    digest = _harness_hash(candidate)
+    if digest in seen:
+        return None, "RRSI novelty: duplicate harness"
+    seen.add(digest)
+    return candidate, "RRSI accepted candidate"
+
+
+def optimize_rrs(
+    start: Harness,
+    actor: Model,
+    critic: Model,
+    train: list[dict],
+    val: list[dict],
+    out_dir: str | Path,
+    config: OptimizerConfig,
+) -> OptimizationResult:
+    """Regularized recursive self-improvement (RRSI-lite)."""
+    out_dir = Path(out_dir)
+    (out_dir / "checkpoints").mkdir(parents=True, exist_ok=True)
+    (out_dir / "candidates").mkdir(parents=True, exist_ok=True)
+    history_path = out_dir / "history.jsonl"
+    if history_path.exists():
+        history_path.unlink()
+    views = make_val_views(val, config.val_per_task, config.seed + 7, config.rrs_views)
+    seen: set[str] = {_harness_hash(start)}
+    current = start
+    total_tokens = 0
+    history: list[dict] = []
+    started_at = datetime.now(timezone.utc).isoformat()
+    started = time.perf_counter()
+
+    initial_view_accs = [accuracy(_evaluate(current, actor, view, config)) for view in views]
+    best_view_accs = initial_view_accs
+    best_val = sum(initial_view_accs) / len(initial_view_accs)
+    best = current
+    best.save(out_dir / "best_harness.json")
+    row = {"round": 0, "role": "initial", "accepted": True,
+           "view_accuracies": initial_view_accs, "val_accuracy": best_val,
+           "best_val_accuracy": best_val, "harness_hash": _harness_hash(current)}
+    history.append(row); _append_history(out_dir, row)
+
+    for round_index in range(1, config.rounds + 1):
+        train_records = sample_records(
+            train, config.train_per_task, random.Random(config.seed * 1000 + round_index)
+        )
+        train_results = _evaluate(current, actor, train_records, config)
+        round_tokens = sum(r.agent.total_tokens for r in train_results if r.agent)
+        rrs_prompt = critic_prompt(current, train_results, config) + (
+            "\n\nRRSI constraints: do NOT rewrite the system prompt. "
+            "Add or remove at most one rule. Do not mention specific node ids "
+            "or numeric node ranges."
+        )
+        critique = critic.chat([
+            {"role": "system", "content": CRITIC_SYSTEM},
+            {"role": "user", "content": rrs_prompt},
+        ], temperature=config.critic_temperature)
+        round_tokens += critique.prompt_tokens + critique.completion_tokens
+        proposal = extract_proposal(critique.text)
+        row = {"round": round_index, "train_accuracy": accuracy(train_results),
+               "critic_response": critique.text[:4000]}
+        if proposal is None:
+            row.update(accepted=False, reason="could not parse proposal",
+                       best_val_accuracy=best_val, view_accuracies=best_view_accs)
+        else:
+            candidate, validation_reason = validate_proposal(proposal, current, config)
+            if candidate is not None:
+                candidate, rrs_reason = _rrs_filter(candidate, current, config, seen)
+            else:
+                rrs_reason = validation_reason
+            if candidate is None:
+                row.update(accepted=False, reason=rrs_reason, proposal=proposal,
+                           best_val_accuracy=best_val, view_accuracies=best_view_accs)
+            else:
+                candidate.save(out_dir / "candidates" / f"round_{round_index:02d}.json")
+                candidate_views = [_evaluate(candidate, actor, view, config) for view in views]
+                candidate_accs = [accuracy(r) for r in candidate_views]
+                round_tokens += sum(r.agent.total_tokens for view in candidate_views
+                                    for r in view if r.agent)
+                candidate_val = sum(candidate_accs) / len(candidate_accs)
+                consistent = all(
+                    a >= b - config.rrs_view_tolerance
+                    for a, b in zip(candidate_accs, best_view_accs)
+                )
+                accepted = candidate_val > best_val + config.min_gain and consistent
+                row.update(accepted=accepted, reason=rrs_reason,
+                           proposal=proposal, val_accuracy=candidate_val,
+                           view_accuracies=candidate_accs,
+                           best_val_accuracy=max(best_val, candidate_val))
+                if accepted:
+                    current, best, best_val, best_view_accs = (
+                        candidate, candidate, candidate_val, candidate_accs
+                    )
+                    best.save(out_dir / "best_harness.json")
+                    current.save(out_dir / "checkpoints" / f"round_{round_index:02d}.json")
+        total_tokens += round_tokens
+        row["tokens"] = round_tokens
+        row["total_tokens"] = total_tokens
+        history.append(row); _append_history(out_dir, row)
+        print(f"RRSI round {round_index:>2}/{config.rounds}: "
+              f"val {row.get('val_accuracy', float('nan')):.3f} best {best_val:.3f} "
+              f"[{'ACCEPT' if row.get('accepted') else 'reject'}] {row.get('reason','')[:80]}",
+              flush=True)
+
+    best.save(out_dir / "best_harness.json")
+    summary = {
+        "start_harness": start.to_dict(), "best_harness": best.to_dict(),
+        "config": config.__dict__, "initial_val_accuracy": sum(initial_view_accs) / len(initial_view_accs),
+        "best_val_accuracy": best_val, "rounds": config.rounds,
+        "total_tokens": total_tokens, "duration_s": time.perf_counter() - started,
+        "started_at": started_at, "finished_at": datetime.now(timezone.utc).isoformat(),
+        "history": history, "rrs": True,
+    }
+    (out_dir / "optimization_summary.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8"
+    )
+    return OptimizationResult(best, best_val, summary["initial_val_accuracy"], history,
+                              total_tokens, str(out_dir))
+
+
 def _harness_hash(harness: Harness) -> str:
     blob = json.dumps(harness.to_dict(), sort_keys=True).encode("utf-8")
     return hashlib.sha256(blob).hexdigest()[:12]
@@ -431,6 +592,8 @@ def main(argv=None):
     ap.add_argument("--critic-model", help="separate critic model (default: actor model)")
     ap.add_argument("--critic-base-url")
     ap.add_argument("--critic-temperature", type=float, default=0.7)
+    ap.add_argument("--rrs", action="store_true",
+                    help="use RRSI-style edit budget, shortcut filter and multi-view validation")
     ap.add_argument("--critic-max-tokens", type=int, default=1500)
     add_model_arguments(ap)
     args = ap.parse_args(argv)
@@ -454,9 +617,13 @@ def main(argv=None):
         seed=args.seed,
         min_gain=args.min_gain,
         critic_temperature=args.critic_temperature,
+        rrs=args.rrs,
     )
     try:
-        result = optimize(start, actor, critic, train, val, args.out, config)
+        if config.rrs:
+            result = optimize_rrs(start, actor, critic, train, val, args.out, config)
+        else:
+            result = optimize(start, actor, critic, train, val, args.out, config)
     except KeyboardInterrupt:
         print("\ninterrupted; inspect the latest files under " + args.out, file=sys.stderr)
         raise SystemExit(130) from None

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "name": "baseline_a-meta",
+  "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Do not include any code blocks or tags in your final answer. Use the tools when they help, then give the final answer in the required format. Always output only the answer as a list of nodes or empty list, with no extra text or syntax like <answer> or code blocks.",
+  "rules": [
+    "For cycle_detection: use DFS to detect cycles and reconstruct the cycle path if found.",
+    "For diameter: compute shortest paths between all pairs using BFS from each node and track the maximum distance and corresponding path.",
+    "For max_clique: use greedy approach by starting from high-degree nodes and build cliques iteratively.",
+    "For connected_components: use BFS/DFS to find all components and return one representative node from each."
+  ],
+  "graph_view": "adjacency_list",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "import networkx as nx\nfrom collections import deque\n\ndef bfs_shortest_path(graph, start, end):\n    if start == end:\n        return [start]\n    visited = set()\n    queue = deque([(start, [start])])\n    visited.add(start)\n    while queue:\n        node, path = queue.popleft()\n        for neighbor in graph.get(node, []):\n            if neighbor not in visited:\n                new_path = path + [neighbor]\n                if neighbor == end:\n                    return new_path\n                visited.add(neighbor)\n                queue.append((neighbor, new_path))\n    return []",
+  "notes": "The failures occurred because the model incorrectly wrapped answers in <answer> tags, which caused syntax errors during parsing. This was especially common in tasks requiring list outputs. By removing any code tags or syntax wrappers in the system prompt and enforcing direct output formatting, we eliminate parsing errors. Using adjacency_list view provides better access to node neighbors for algorithms like DFS and BFS. The rules now specify clear algorithmic strategies that scale to larger graphs (100-2000 nodes) and avoid heuristic overreach. The tool preamble includes reusable BFS for pathfinding, which is critical for diameter and cycle detection."
+}

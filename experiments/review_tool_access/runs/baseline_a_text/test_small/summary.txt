@@ -1,0 +1,28 @@
+harness: baseline_a_text    model: qwen3-4b    split: test_small
+problems: 150    errors: 0    duration: 46.1s    tokens: 396455
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%     60.0%     23.3%
+test_small   cycle_detection           30      26  100.0%     73.3%     73.3%
+test_small   diameter                  30      27  100.0%     33.3%     16.7%
+test_small   max_clique                30      27  100.0%     40.0%     33.3%
+test_small   shortest_path             30      21  100.0%     73.3%     70.0%
+test_small   ALL                      150      26  100.0%     56.0%     43.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     56.0%     43.3%
+
+First failures:
+- shortest_path/test_small/00003 (shortest_path, n=26): path does not start/end at the given nodes
+- shortest_path/test_small/00004 (shortest_path, n=24): no edge between 163 and 110
+- shortest_path/test_small/00009 (shortest_path, n=41): no edge between 127 and 271
+- shortest_path/test_small/00013 (shortest_path, n=15): no edge between 132 and 143
+- shortest_path/test_small/00015 (shortest_path, n=42): no edge between 103 and 110
+- shortest_path/test_small/00017 (shortest_path, n=27): no edge between 162 and 168
+- shortest_path/test_small/00020 (shortest_path, n=43): no edge between 393 and 399
+- shortest_path/test_small/00023 (shortest_path, n=22): no edge between 161 and 102
+- shortest_path/test_small/00024 (shortest_path, n=33): path has 5 edges, shortest is 4
+- connected_components/test_small/00001 (connected_components, n=41): gave 1 components, graph has 9

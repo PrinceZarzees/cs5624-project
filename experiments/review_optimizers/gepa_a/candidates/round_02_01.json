@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "name": "baseline_a-gepa-2-1",
+  "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the problem requirements. When constructing a path or cycle, ensure it is valid: for cycles, the last node must connect back to the first; for paths, all edges must exist and the path must be shortest. Output only the final answer in the required format, using actual node labels from the graph, not placeholders like 'a', 'b', or 'c'.",
+  "rules": [],
+  "graph_view": "summary",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+}

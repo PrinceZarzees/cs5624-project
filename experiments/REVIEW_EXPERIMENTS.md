@@ -297,3 +297,32 @@ log every rejected edit and reason.
 The remaining work is implementation and running of R1, R2, R4, R6, R7; the
 designs above are written to reuse the existing runner, optimizer, sandbox, and
 job templates.
+
+## Run status log
+
+- R1 static rubric: run on 18 optimizer candidates; Spearman(proxy, val) =
+  -0.217, pairwise ranking = 41.8%, top-3 recall = false.
+- R1 learned static proxy: leave-one-out linear proxy from prompt/rule features;
+  Spearman = 0.553, pairwise = 70.1% (results in
+  `experiments/review_rubric_proxy/learned_proxy_results.json`).
+- R1 cheap rollout proxy: one `val` problem per task per candidate, running on
+  CPU; results will be in
+  `experiments/review_rubric_proxy/cheap_proxy_results.json`.
+- R2 full GPU tool-access ablation: Slurm job `1541927`, queued.
+- R2 reduced CPU tool-access ablation: running in
+  `experiments/review_tool_access_cpu/`.
+- R7 RRSI and R4 GEPA: in Slurm job `1542235`, queued behind `1541927`.
+- R6 routed/decomposed: inside `1542235`.
+
+## Updated run status
+
+- R1: static rubric ρ=-0.217; learned static proxy ρ=0.553; cheap 1/task proxy
+  ρ=-0.172. See `experiments/REVIEW_RESULTS.md`.
+- R2: full GPU tool ablation completed: Bv2 tools 96.0/93.3/92.0% vs text
+  35.3/15.3/0.0% on small/medium/large. Reduced CPU replication agrees.
+- R4: GEPA, RRSI, Meta-Harness pilots accepted zero improving edits.
+- R6: CPU disconnected-additive pilot is 50% routed / 50% decomposed; a
+  16k-context B200 rerun is queued (`1543102`).
+- C backend: implemented and unit-tested; CPU-Q4 5-problem pilot 0/5; BF16 GPU
+  pilot queued (`1543097`).
+- R5/R3: complete.
