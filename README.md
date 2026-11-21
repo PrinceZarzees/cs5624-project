@@ -267,8 +267,11 @@ python -m graphharness.characteristics --run "Bv2=experiments/qwen3_4b_scaling_f
 python -m graphharness.cost_analysis --run "from_A=experiments/qwen3_4b_opt_a/optimizer" --run "from_Bv2=experiments/qwen3_4b/optimizer"
 ```
 
-Results are in `experiments/analysis_by_characteristics.md` and
-`experiments/optimization_costs.md`.
+Results are in `experiments/analysis_by_characteristics.md`,
+`experiments/optimization_costs.md`, and `experiments/REVIEW_RESULTS.md`.
+The C tool backend is in `graphharness.csandbox`; Meta-Harness code evolution is
+in `graphharness.meta_harness`; routing/decomposition is in
+`graphharness.router`.
 
 ## Dataset and run inspection
 

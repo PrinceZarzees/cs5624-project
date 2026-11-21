@@ -104,30 +104,35 @@ validated improvements.
 
 ## R6. Routing and decomposition
 
-CPU-Q4 pilot on a controlled disconnected additive set (4 tasks, 1 problem
-each):
+BF16 B200 run on a controlled disconnected additive set (4 tasks, 2 problems
+each, 400 nodes / 5 components; job `1543102`, larger context):
 
-| Mode | Accuracy |
-|---|---:|
-| Global / routed | 50% |
-| Decomposed per component | 50% |
+| Mode | Accuracy | Max clique | MIS | MVC | Components |
+|---|---:|---:|---:|---:|---:|
+| Global B v2 | 25.0% | 0% | 0% | 0% | 100% |
+| Routed library | 37.5% | 50% | 0% | 0% | 100% |
+| Decomposed per component | **50.0%** | **100%** | 0% | 0% | 100% |
 
-The decomposed path did run for max clique and connected components and produced
-correct answers. MIS/MVC fell back to global because one component answer was
-not optimal. The full B200 router run initially hit an 8k context overflow; a
-16k-context rerun is queued as `1543102`.
+The decomposed path runs one harness per connected component and correctly
+aggregates for max clique and connected components. MIS/MVC still fail because
+per-component answers are not optimal. The 1-problem CPU pilot showed the same
+qualitative pattern (50% global, 50% decomposed; max clique correct under
+decomposition).
 
-**Interpretation:** decomposition is implementable and correct for additive
-tasks, but only helps when the per-component harness is reliable. It is not a
-free win; the router must also fall back safely.
+**Interpretation:** decomposition is a real win when the task is additive and
+the per-component harness is reliable. The router must respect decomposability
+and safely fall back; a generic global harness cannot exploit the component
+structure.
 
 ## C tool backend and Meta-Harness
 
 - `CSandbox` compiles model-written C with `gcc` against a minimal
   `graph_io.h`/`graph_io.c`; no NetworkX.
-- A 5-problem CPU-Q4 C pilot scored **0/5**: the model answered without writing
-  C or produced non-compiling or placeholder code. A BF16 GPU run is queued as
-  `1543097` to separate model-size effects from the language effect.
+- A 5-problem CPU-Q4 C pilot scored **0/5**. The BF16 B200 run (`1543097`)
+  scored **12.0%** on 25 problems (cycle detection 60%, everything else 0-20%).
+  The BF16 model can compile some C, but C without NetworkX is dramatically
+  harder than Python/NetworkX (compare 96% on `test_small` with tools and
+  35.3% text-only).
 - `Meta-Harness-lite` lets the proposer edit the prompt, rules, graph view, tool
   backend, and sandbox helper preamble. Its 3-round pilot accepted no edit.
 
@@ -144,5 +149,6 @@ free win; the router must also fall back safely.
 - Automated harness development (SkillOpt, GEPA, RRSI, Meta-Harness) currently
   fails to beat the human v2 harness. The next bottleneck is better proposal
   generation/critique, not rollout cost.
-- C/Meta-Harness/C-router experiments are implemented; their full BF16 runs are
-  queued/partial and should be treated as pilot evidence.
+- C/Meta-Harness/C-router experiments are implemented; the C pilot is 12% and
+  the decomposition router is 50% vs 25% global on the controlled disconnected
+  set. These are pilot results, not full-budget claims.

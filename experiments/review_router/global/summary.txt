@@ -1,0 +1,23 @@
+harness: baseline_b_v2    model: qwen3-4b    split: disconnected_additive
+problems: 8    errors: 0    duration: 20.2s    tokens: 119377
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+disconnected connected_components       2     400  100.0%    100.0%    100.0%
+disconnected max_clique                 2     400  100.0%     50.0%      0.0%
+disconnected max_independent_set        2     400   50.0%     50.0%      0.0%
+disconnected min_vertex_cover           2     400   50.0%      0.0%      0.0%
+disconnected ALL                        8     400   75.0%     50.0%     25.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+301-499        8      400    75.0%     50.0%     25.0%
+
+First failures:
+- max_clique/disconnected/000 (max_clique, n=400): clique of size 3, maximum is 4
+- max_clique/disconnected/001 (max_clique, n=400): empty answer
+- max_independent_set/disconnected/000 (max_independent_set, n=400): independent set of size 137, maximum is 79
+- max_independent_set/disconnected/001 (max_independent_set, n=400): no prediction
+- min_vertex_cover/disconnected/000 (min_vertex_cover, n=400): no prediction
+- min_vertex_cover/disconnected/001 (min_vertex_cover, n=400): unknown node(s): ['node for node in G.nodes() if G.degree(node) > 5']

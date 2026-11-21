@@ -321,8 +321,8 @@ job templates.
 - R2: full GPU tool ablation completed: Bv2 tools 96.0/93.3/92.0% vs text
   35.3/15.3/0.0% on small/medium/large. Reduced CPU replication agrees.
 - R4: GEPA, RRSI, Meta-Harness pilots accepted zero improving edits.
-- R6: CPU disconnected-additive pilot is 50% routed / 50% decomposed; a
-  16k-context B200 rerun is queued (`1543102`).
-- C backend: implemented and unit-tested; CPU-Q4 5-problem pilot 0/5; BF16 GPU
-  pilot queued (`1543097`).
+- R6: B200 disconnected-additive run: global 25%, routed 37.5%, decomposed
+  50%; decomposed max clique 100%.
+- C backend: implemented and unit-tested; CPU-Q4 5-problem pilot 0/5; BF16 B200
+  pilot 12.0% on 25 problems.
 - R5/R3: complete.

@@ -1,0 +1,50 @@
+{
+  "rows": [
+    {
+      "split": "disconnected",
+      "task": "connected_components",
+      "n": 2,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 400.0
+    },
+    {
+      "split": "disconnected",
+      "task": "max_clique",
+      "n": 2,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 400.0
+    },
+    {
+      "split": "disconnected",
+      "task": "max_independent_set",
+      "n": 2,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.0,
+      "mean_nodes": 400.0
+    },
+    {
+      "split": "disconnected",
+      "task": "min_vertex_cover",
+      "n": 2,
+      "parsed": 0.5,
+      "feasible": 0.0,
+      "accuracy": 0.0,
+      "mean_nodes": 400.0
+    },
+    {
+      "split": "disconnected",
+      "task": "ALL",
+      "n": 8,
+      "parsed": 0.875,
+      "feasible": 0.75,
+      "accuracy": 0.5,
+      "mean_nodes": 400.0
+    }
+  ],
+  "mode": "decomposed"
+}

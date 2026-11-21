@@ -24,6 +24,9 @@ experiments/
   analysis_by_characteristics.md  accuracy by density/topology/task
   optimization_costs.md     optimizer token/time/cost accounting
   REVIEW_EXPERIMENTS.md     review-driven experiment designs
+  REVIEW_RESULTS.md         review experiment results
+  review_c_backend/         C/gcc tool backend pilot
+  review_optimizers/        GEPA, RRSI, Meta-Harness, router pilots
   qwen3_4b_cpu/             Qwen3-4B Q4_K_M CPU fallback
   qwen2_5_7b_cpu_pilot/     Qwen2.5-7B Q4_K_M CPU pilot
   qwen2_5_7b_cpu/           full Qwen2.5-7B CPU fallback
