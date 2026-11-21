@@ -476,9 +476,11 @@ components (100\%) but return no correct MIS or MVC answer and only
 choosing a harness per graph. A learned router over cheap graph features
 predicts the most likely-correct library harness with 96.7\% five-fold CV
 accuracy against a 100\% oracle-any ceiling; its GPU run failed on a router
-interface bug, and the fixed module is unit-tested but not rerun. The
-120-problem decomposition runs exceeded the job window, so the earlier
-8-problem pilot remains the only decomposition result
+interface bug, and the fixed module is unit-tested but not rerun. On a
+12-problem subset (one problem per task and size, 400/1000/2000 nodes),
+decomposition with exact component repair scores 100\% on all four tasks
+(Table~\ref{tab:router-decomp}); the full 120-problem decomposition and the
+learned-router rerun did not finish in the available GPU window
 (Table~\ref{tab:router120}, Figure~\ref{fig:router120}).
 
 \begin{figure}[h]
@@ -494,6 +496,14 @@ interface bug, and the fixed module is unit-tested but not rerun. The
 \input{tables/tab_router120.tex}
 \caption{Router modes on the 120-problem disconnected set.}
 \label{tab:router120}
+\end{table}
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_router_decomp.tex}
+\caption{Decomposition with exact component repair on 12 disconnected graphs
+(one per task and size).}
+\label{tab:router-decomp}
 \end{table}
 \paragraph{Not completed.}
 The language $\times$ library 2$\times$2, the full 40-candidate proxy study and
