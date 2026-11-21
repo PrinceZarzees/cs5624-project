@@ -1,0 +1,4 @@
+run,checkpoint,val,test_large,small-large (pp)
+skillopt,start,93.3%,91.0%,+2.3
+rrsi,start,92.7%,95.0%,-2.3
+rrsi,round_01,98.7%,90.0%,+8.7

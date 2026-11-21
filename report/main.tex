@@ -415,6 +415,31 @@ the same 15 candidates.}
 (one run each), next to Baseline B's three-repeat means.}
 \label{tab:optimizer-outputs}
 \end{table}
+\paragraph{Overfitting probe.}
+Acceptance was also decided on a 10-problem training batch instead of
+validation. RRSI-lite accepted one edit: validation accuracy rose from 92.7\%
+to 98.7\% while \texttt{test\_large} fell from 95.0\% to 90.0\%, so the
+small--large gap grew from 2.3 to 8.7 points. SkillOpt-style accepted no edit
+because its 10-problem acceptance batch was already at 100\%. In the standard
+validation-gated run the RRSI output kept 94.0\% on \texttt{test\_large}
+(Table~\ref{tab:optimizers}). Table~\ref{tab:overfit} and
+Figure~\ref{fig:overfit} show the probe.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\linewidth]{figures/fig_overfit_probe.pdf}
+\caption{Validation versus \texttt{test\_large} accuracy for each probe
+checkpoint.}
+\label{fig:overfit}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_overfit.tex}
+\caption{Overfitting probe: acceptance on 10 training problems.}
+\label{tab:overfit}
+\end{table}
 
 \begin{table}[h]
 \centering
@@ -443,6 +468,41 @@ Table~\ref{tab:router} show the pilot.
 \caption{Router modes on the disconnected additive set.}
 \label{tab:router}
 \end{table}
+\paragraph{Router at scale.}
+On the 120-problem disconnected set (sizes 400/1000/2000, 5/10/20 components),
+global v2 scores 30.8\% and the feature router 29.2\%. Both solve connected
+components (100\%) but return no correct MIS or MVC answer and only
+23.3/16.7\% on max clique: merging component answers is the bottleneck, not
+choosing a harness per graph. A learned router over cheap graph features
+predicts the most likely-correct library harness with 96.7\% five-fold CV
+accuracy against a 100\% oracle-any ceiling; its GPU run failed on a router
+interface bug, and the fixed module is unit-tested but not rerun. The
+120-problem decomposition runs exceeded the job window, so the earlier
+8-problem pilot remains the only decomposition result
+(Table~\ref{tab:router120}, Figure~\ref{fig:router120}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_router120.pdf}
+\caption{Router modes on the 120-problem disconnected set.}
+\label{fig:router120}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_router120.tex}
+\caption{Router modes on the 120-problem disconnected set.}
+\label{tab:router120}
+\end{table}
+\paragraph{Not completed.}
+The language $\times$ library 2$\times$2, the full 40-candidate proxy study and
+the cross-model check are not included. Their code, splits and unit tests are
+in \texttt{experiments/final/} and \texttt{scripts/final/}, but the B200 queue
+was fully reserved for the rest of the run window; the jobs are queued as
+1549257, 1549258 and 1549291. The learned router is implemented and reaches
+96.7\% five-fold CV, but its run failed on an interface bug; decomposition on
+the 120-problem set exceeded the job time limit.
 % <<< AI-DRAFT
 
 \end{document}

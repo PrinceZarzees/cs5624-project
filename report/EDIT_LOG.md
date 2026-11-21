@@ -65,3 +65,11 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 |---|---|---|
 | final section "Optimization and proxies" | replaced "all optimizers accepted zero edits" with 7B-critic outcomes (SkillOpt 1, RRSI 1, GEPA 0, Meta 0) and changed-harness test numbers; added `tab_optimizer_outputs` and `tab_optimizers` | `experiments/final/E3_optimizers/{summary.csv,eval_*}` |
 | final section | counterfactual ratio 1.90 -> 1.94 (fixed denominator = six 4B-critic pilot runs) | `experiments/final/E9_costs/counterfactual.csv` |
+
+## 2026-11-21 remaining-experiment integration
+
+| Location | Change | Source |
+|---|---|---|
+| final section | added "Overfitting probe" paragraph + `tab_overfit`, `fig_overfit_probe` | `experiments/final/E3_probe/summary.csv` |
+| final section | added "Router at scale" paragraph + `tab_router120`, `fig_router120` | `experiments/final/E7_router/summary.csv` |
+| final section | added "Not completed" paragraph (E10/E5/E14, learned-router bug, decomposition timeout) | `experiments/final/{RESULTS_INDEX,JOBS}.md` |

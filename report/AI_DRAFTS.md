@@ -9,4 +9,4 @@ explicitly approved by the authors before submission.
 | `report/main.tex` | 34-52 (19 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
 | `report/main.tex` | 73-89 (17 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
 | `report/main.tex` | 97-109 (13 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
-| `report/main.tex` | 160-446 (287 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
+| `report/main.tex` | 160-506 (347 lines) | `% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission` |
