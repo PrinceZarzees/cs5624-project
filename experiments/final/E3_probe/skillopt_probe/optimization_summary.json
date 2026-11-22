@@ -1,0 +1,331 @@
+{
+  "start_harness": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "best_harness": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "config": {
+    "rounds": 8,
+    "train_per_task": 4,
+    "val_per_task": 2,
+    "max_steps": null,
+    "workers": 1,
+    "seed": 5624,
+    "min_gain": 0.0,
+    "max_rules": 16,
+    "max_rule_chars": 500,
+    "max_prompt_chars": 4000,
+    "max_examples": 12,
+    "critic_temperature": 0.7,
+    "rrs": false,
+    "rrs_views": 2,
+    "rrs_view_tolerance": 0.05,
+    "rrs_max_rule_edits": 1,
+    "rrs_max_prompt_growth": 0.25
+  },
+  "initial_val_accuracy": 1.0,
+  "best_val_accuracy": 1.0,
+  "rounds": 8,
+  "total_tokens": 981970,
+  "duration_s": 628.2446021589858,
+  "started_at": "2026-11-21T19:04:33.004477+00:00",
+  "finished_at": "2026-11-21T19:15:01.249054+00:00",
+  "history": [
+    {
+      "round": 0,
+      "accepted": true,
+      "role": "initial",
+      "val_accuracy": 1.0,
+      "best_val_accuracy": 1.0,
+      "harness_hash": "5d01aff584b7",
+      "tokens": 33472
+    },
+    {
+      "round": 1,
+      "train_accuracy": 0.85,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"Verify the correctness of your cycle detection by checking that the cycle is closed and contains no duplicate nodes.\",\n    \"When finding a maximum clique, ensure that the returned set is indeed maximal by checking that adding any other node would break the clique property.\",\n    \"For connected components, ensure that the returned nodes are from distinct components and that there are no missing components.\",\n    \"For diameter, confirm the path is valid and the distance matches the reported diameter.\",\n    \"Avoid using specific node names like 'a', 'b', 'c'; use generic variable names.\",\n    \"If code times out or errors, change the algorithm or approach instead of rerunning it unchanged.\",\n    \"Put only the final node list inside <answer></answer>; use [] for a negative answer.\"\n  ],\n  \"graph_view\": \"summary\",\n  \"reason\": \"Added rules for verifying the correctness of cycle detection, maximum clique, connected components, and diameter solutions. These rules are transferable to larger graphs and will help avoid common pitfalls.\"\n}",
+      "tokens": 134638,
+      "accepted": false,
+      "reason": "Added rules for verifying the correctness of cycle detection, maximum clique, connected components, and diameter solutions. These rules are transferable to larger graphs and will help avoid common pitfalls.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "Verify the correctness of your cycle detection by checking that the cycle is closed and contains no duplicate nodes.",
+          "When finding a maximum clique, ensure that the returned set is indeed maximal by checking that adding any other node would break the clique property.",
+          "For connected components, ensure that the returned nodes are from distinct components and that there are no missing components.",
+          "For diameter, confirm the path is valid and the distance matches the reported diameter.",
+          "Avoid using specific node names like 'a', 'b', 'c'; use generic variable names.",
+          "If code times out or errors, change the algorithm or approach instead of rerunning it unchanged.",
+          "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+        ],
+        "graph_view": "summary",
+        "reason": "Added rules for verifying the correctness of cycle detection, maximum clique, connected components, and diameter solutions. These rules are transferable to larger graphs and will help avoid common pitfalls."
+      },
+      "val_accuracy": 0.9,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "3b2a1fb22aaf",
+      "candidate_prompt_chars": 2654,
+      "total_tokens": 168110
+    },
+    {
+      "round": 2,
+      "train_accuracy": 0.9,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"Keep sandbox output short: print only the result, its length/size, and a small check.\",\n    \"If code times out or errors, change the algorithm instead of rerunning it unchanged.\",\n    \"Put only the final node list inside <answer></answer>; use [] for a negative answer.\",\n    \"Always start cycle detection with `nx.find_cycle`, which is more robust for detecting cycles in directed graphs.\",\n    \"For connected components, use `nx.connected_components` and select one node from each component as a representative.\",\n    \"For diameter, use `nx.diameter` and provide a path between the two nodes that achieve the diameter.\"\n  ],\n  \"graph_view\": \"summary\",\n  \"reason\": \"Revised rules to ensure robustness in cycle detection, connected components, and diameter calculation, focusing on using exact library routines and verifying results.\"\n}",
+      "tokens": 131205,
+      "accepted": false,
+      "reason": "Revised rules to ensure robustness in cycle detection, connected components, and diameter calculation, focusing on using exact library routines and verifying results.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "Keep sandbox output short: print only the result, its length/size, and a small check.",
+          "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+          "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+          "Always start cycle detection with `nx.find_cycle`, which is more robust for detecting cycles in directed graphs.",
+          "For connected components, use `nx.connected_components` and select one node from each component as a representative.",
+          "For diameter, use `nx.diameter` and provide a path between the two nodes that achieve the diameter."
+        ],
+        "graph_view": "summary",
+        "reason": "Revised rules to ensure robustness in cycle detection, connected components, and diameter calculation, focusing on using exact library routines and verifying results."
+      },
+      "val_accuracy": 0.9,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "29ee631b23df",
+      "candidate_prompt_chars": 2491,
+      "total_tokens": 299315
+    },
+    {
+      "round": 3,
+      "train_accuracy": 0.95,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"Keep sandbox output short: print only the result, its length/size, and a small check.\",\n    \"If code times out or errors, change the algorithm instead of rerunning it unchanged.\",\n    \"For maximum clique, after finding a clique, verify that every pair of nodes within the clique is connected by checking all possible pairs.\",\n    \"For cycle detection, ensure the cycle path is correctly ordered and closed.\",\n    \"For diameter, confirm the path is indeed the longest by comparing it with other known paths.\",\n    \"Always provide a representative node for each connected component.\",\n    \"Use adjacency lists for visualizing and understanding the graph structure.\",\n    \"Prefer heuristics for large graphs but ensure they are verified against exact methods where possible.\"\n  ],\n  \"graph_view\": \"adjacency_list\",\n  \"reason\": \"Added rules for verifying clique adjacency, cycle ordering, and path length to ensure correctness even on larger graphs.\"\n}",
+      "tokens": 133282,
+      "accepted": false,
+      "reason": "Added rules for verifying clique adjacency, cycle ordering, and path length to ensure correctness even on larger graphs.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "Keep sandbox output short: print only the result, its length/size, and a small check.",
+          "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+          "For maximum clique, after finding a clique, verify that every pair of nodes within the clique is connected by checking all possible pairs.",
+          "For cycle detection, ensure the cycle path is correctly ordered and closed.",
+          "For diameter, confirm the path is indeed the longest by comparing it with other known paths.",
+          "Always provide a representative node for each connected component.",
+          "Use adjacency lists for visualizing and understanding the graph structure.",
+          "Prefer heuristics for large graphs but ensure they are verified against exact methods where possible."
+        ],
+        "graph_view": "adjacency_list",
+        "reason": "Added rules for verifying clique adjacency, cycle ordering, and path length to ensure correctness even on larger graphs."
+      },
+      "val_accuracy": 0.2,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "0ebb5f0917b5",
+      "candidate_prompt_chars": 2636,
+      "total_tokens": 432597
+    },
+    {
+      "round": 4,
+      "train_accuracy": 1.0,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"Keep sandbox output short: print only the result, its length/size, and a small check.\",\n    \"If code times out or errors, change the algorithm instead of rerunning it unchanged.\",\n    \"Put only the final node list inside <answer></answer>; use [] for a negative answer.\",\n    \"Verify the correctness of cycles and paths by checking their lengths and endpoints.\",\n    \"Ensure that the diameter path is correctly identified by verifying both the distance and the path itself.\",\n    \"When using heuristics for maximum clique, validate that the returned nodes are indeed part of a clique.\",\n    \"Always validate the connectivity of the graph before performing operations like finding cycles or paths.\"\n  ],\n  \"graph_view\": \"summary\",\n  \"reason\": \"Added rules to ensure correctness and robustness of cycle detection, path identification, and clique validation, which will be crucial for larger graphs.\"\n}",
+      "tokens": 97995,
+      "accepted": false,
+      "reason": "Added rules to ensure correctness and robustness of cycle detection, path identification, and clique validation, which will be crucial for larger graphs.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "Keep sandbox output short: print only the result, its length/size, and a small check.",
+          "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+          "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+          "Verify the correctness of cycles and paths by checking their lengths and endpoints.",
+          "Ensure that the diameter path is correctly identified by verifying both the distance and the path itself.",
+          "When using heuristics for maximum clique, validate that the returned nodes are indeed part of a clique.",
+          "Always validate the connectivity of the graph before performing operations like finding cycles or paths."
+        ],
+        "graph_view": "summary",
+        "reason": "Added rules to ensure correctness and robustness of cycle detection, path identification, and clique validation, which will be crucial for larger graphs."
+      },
+      "val_accuracy": 1.0,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "6c8fe2cd4cff",
+      "candidate_prompt_chars": 2564,
+      "total_tokens": 530592
+    },
+    {
+      "round": 5,
+      "train_accuracy": 0.95,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"Verify the correctness of cycles and paths by checking both direction and length.\",\n    \"For connected components, ensure that the returned representatives are correctly chosen from each component.\",\n    \"When using heuristics for large graphs, validate the results by checking a subset of pairs or components.\",\n    \"Keep sandbox output short: print only the result, its length/size, and a small check.\",\n    \"If code times out or errors, change the algorithm instead of rerunning it unchanged.\",\n    \"Put only the final node list inside <answer></answer>; use [] for a negative answer.\"\n  ],\n  \"graph_view\": \"summary\",\n  \"reason\": \"Addressed issues with cycle detection, path validation, and representative selection in connected components. Added rules for verifying heuristic results on larger graphs.\"\n}",
+      "tokens": 99913,
+      "accepted": false,
+      "reason": "Addressed issues with cycle detection, path validation, and representative selection in connected components. Added rules for verifying heuristic results on larger graphs.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "Verify the correctness of cycles and paths by checking both direction and length.",
+          "For connected components, ensure that the returned representatives are correctly chosen from each component.",
+          "When using heuristics for large graphs, validate the results by checking a subset of pairs or components.",
+          "Keep sandbox output short: print only the result, its length/size, and a small check.",
+          "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+          "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+        ],
+        "graph_view": "summary",
+        "reason": "Addressed issues with cycle detection, path validation, and representative selection in connected components. Added rules for verifying heuristic results on larger graphs."
+      },
+      "val_accuracy": 1.0,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "9bba55f6aa6f",
+      "candidate_prompt_chars": 2458,
+      "total_tokens": 630505
+    },
+    {
+      "round": 6,
+      "train_accuracy": 0.9,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"Verify cycle detection by checking if the returned cycle is valid and covers the entire graph.\",\n    \"For connected components, ensure that the returned representatives are from distinct components and validate the solution.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"If code times out or errors, change the algorithm or optimize the implementation rather than rerunning it unchanged.\"\n  ],\n  \"graph_view\": \"summary\",\n  \"reason\": \"Added rules for validating cycle detection and connected components to ensure correctness even when the graph size increases.\"\n}",
+      "tokens": 121338,
+      "accepted": false,
+      "reason": "Added rules for validating cycle detection and connected components to ensure correctness even when the graph size increases.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "Verify cycle detection by checking if the returned cycle is valid and covers the entire graph.",
+          "For connected components, ensure that the returned representatives are from distinct components and validate the solution.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "If code times out or errors, change the algorithm or optimize the implementation rather than rerunning it unchanged."
+        ],
+        "graph_view": "summary",
+        "reason": "Added rules for validating cycle detection and connected components to ensure correctness even when the graph size increases."
+      },
+      "val_accuracy": 0.8,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "95c8c56be592",
+      "candidate_prompt_chars": 2079,
+      "total_tokens": 751843
+    },
+    {
+      "round": 7,
+      "train_accuracy": 0.9,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"Verify cycles and paths by checking that all nodes are distinct and that the path forms a valid cycle.\",\n    \"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"Keep sandbox output short: print only the result, its length/size, and a small check.\",\n    \"If code times out or errors, change the algorithm instead of rerunning it unchanged.\",\n    \"For connected components, ensure the representative nodes are from distinct components and are unique.\",\n    \"For diameter, confirm the path is the longest shortest path and spans the entire graph.\",\n    \"Always validate the output against the problem statement to avoid false negatives.\",\n    \"Use adjacency lists for large graphs to reduce memory usage and improve performance.\",\n    \"When using heuristics for large graphs, validate the results with a small sample check.\"\n  ],\n  \"graph_view\": \"summary\",\n  \"reason\": \"Added rules to verify the correctness of cycle detection, connected components, and diameter solutions. These rules will help prevent false negatives and ensure the solution is valid even on larger graphs.\"\n}",
+      "tokens": 119583,
+      "accepted": false,
+      "reason": "Added rules to verify the correctness of cycle detection, connected components, and diameter solutions. These rules will help prevent false negatives and ensure the solution is valid even on larger graphs.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "Verify cycles and paths by checking that all nodes are distinct and that the path forms a valid cycle.",
+          "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "Keep sandbox output short: print only the result, its length/size, and a small check.",
+          "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+          "For connected components, ensure the representative nodes are from distinct components and are unique.",
+          "For diameter, confirm the path is the longest shortest path and spans the entire graph.",
+          "Always validate the output against the problem statement to avoid false negatives.",
+          "Use adjacency lists for large graphs to reduce memory usage and improve performance.",
+          "When using heuristics for large graphs, validate the results with a small sample check."
+        ],
+        "graph_view": "summary",
+        "reason": "Added rules to verify the correctness of cycle detection, connected components, and diameter solutions. These rules will help prevent false negatives and ensure the solution is valid even on larger graphs."
+      },
+      "val_accuracy": 0.9,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "0534ce465cc5",
+      "candidate_prompt_chars": 2634,
+      "total_tokens": 871426
+    },
+    {
+      "round": 8,
+      "train_accuracy": 0.85,
+      "critic_response": "{\n  \"system_prompt\": \"You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.\",\n  \"rules\": [\n    \"Use the NetworkX `G` object directly; never infer edges or distances from node ids.\",\n    \"Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.\",\n    \"For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.\",\n    \"Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.\",\n    \"Verify the correctness of cycles and paths by checking that they are closed and follow actual edges.\",\n    \"For connected components, ensure that the representative nodes are valid and belong to their respective components.\",\n    \"When reporting the diameter, validate the path by ensuring it is a shortest path between the reported nodes.\",\n    \"Keep sandbox output short: print only the result, its length/size, and a small check.\",\n    \"If code times out or errors, change the algorithm instead of rerunning it unchanged.\",\n    \"Put only the final node list inside <answer></answer>; use [] for a negative answer.\",\n    \"Avoid using node labels that do not exist in the graph; use generic node labels like 'node1', 'node2' for demonstration purposes.\",\n    \"Always validate the input and output against the problem constraints.\"\n  ],\n  \"graph_view\": \"summary\",\n  \"reason\": \"Added rules to ensure cycle and path correctness, validated representative nodes, and verified the diameter path. These rules will help prevent errors in larger graphs.\"\n}",
+      "tokens": 110544,
+      "accepted": false,
+      "reason": "Added rules to ensure cycle and path correctness, validated representative nodes, and verified the diameter path. These rules will help prevent errors in larger graphs.",
+      "proposal": {
+        "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+        "rules": [
+          "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+          "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+          "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+          "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+          "Verify the correctness of cycles and paths by checking that they are closed and follow actual edges.",
+          "For connected components, ensure that the representative nodes are valid and belong to their respective components.",
+          "When reporting the diameter, validate the path by ensuring it is a shortest path between the reported nodes.",
+          "Keep sandbox output short: print only the result, its length/size, and a small check.",
+          "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+          "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+          "Avoid using node labels that do not exist in the graph; use generic node labels like 'node1', 'node2' for demonstration purposes.",
+          "Always validate the input and output against the problem constraints."
+        ],
+        "graph_view": "summary",
+        "reason": "Added rules to ensure cycle and path correctness, validated representative nodes, and verified the diameter path. These rules will help prevent errors in larger graphs."
+      },
+      "val_accuracy": 1.0,
+      "best_val_accuracy": 1.0,
+      "candidate_hash": "fc4e90feda23",
+      "candidate_prompt_chars": 2695,
+      "total_tokens": 981970
+    }
+  ]
+}

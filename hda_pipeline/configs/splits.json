@@ -1,0 +1,160 @@
+{
+ "seed": 5625,
+ "note": "examples = pool the HDA's k I/O examples are drawn from; val = hidden scored validation; test_* = final held-out evaluation. Seen families: er, ba, tree, components. test_* adds unseen families ws, grid, path_like, dense, regular, powerlaw.",
+ "splits": {
+  "examples": {
+   "n_range": [
+    4,
+    50
+   ],
+   "per_task": 120,
+   "families": "seen",
+   "time_limit_s": 1.0,
+   "seed_offset": 1,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
+  },
+  "val": {
+   "n_range": [
+    4,
+    50
+   ],
+   "per_task": 40,
+   "families": "seen",
+   "time_limit_s": 1.0,
+   "seed_offset": 2,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
+  },
+  "test_small": {
+   "n_range": [
+    4,
+    50
+   ],
+   "per_task": 40,
+   "families": "all",
+   "time_limit_s": 1.0,
+   "seed_offset": 3,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
+  },
+  "test_medium": {
+   "n_range": [
+    100,
+    300
+   ],
+   "per_task": 30,
+   "families": "all",
+   "time_limit_s": 2.0,
+   "seed_offset": 4,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
+  },
+  "test_large": {
+   "n_range": [
+    500,
+    1000
+   ],
+   "per_task": 30,
+   "families": "all",
+   "time_limit_s": 2.0,
+   "seed_offset": 5,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
+  },
+  "test_xl": {
+   "n_range": [
+    2000,
+    2000
+   ],
+   "per_task": 20,
+   "families": "all",
+   "time_limit_s": 3.0,
+   "seed_offset": 6,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
+  },
+  "test_stress": {
+   "n_range": [
+    10000,
+    100000
+   ],
+   "per_task": 10,
+   "families": "all",
+   "time_limit_s": 5.0,
+   "seed_offset": 7,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
+  }
+ }
+}

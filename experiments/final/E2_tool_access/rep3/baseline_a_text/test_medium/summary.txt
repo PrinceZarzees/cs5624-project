@@ -1,0 +1,28 @@
+harness: baseline_a_text    model: qwen3-4b    split: test_medium
+problems: 150    errors: 20    duration: 70.5s    tokens: 1263006
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188   80.0%     40.0%      3.3%
+test_medium  cycle_detection           30     203   96.7%     50.0%     50.0%
+test_medium  diameter                  30     182   86.7%     10.0%      0.0%
+test_medium  max_clique                30     194   76.7%     16.7%      3.3%
+test_medium  shortest_path             30     189   80.0%     30.0%     20.0%
+test_medium  ALL                      150     191   84.0%     29.3%     15.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191    84.0%     29.3%     15.3%
+
+First failures:
+- shortest_path/test_medium/00000 (shortest_path, n=130): no edge between 1084 and 1222
+- shortest_path/test_medium/00001 (shortest_path, n=231): no edge between 673 and 1597
+- shortest_path/test_medium/00002 (shortest_path, n=163): no [ ... ] answer found
+- shortest_path/test_medium/00003 (shortest_path, n=135): path has 7 edges, shortest is 6
+- shortest_path/test_medium/00004 (shortest_path, n=141): no edge between 65 and 136
+- shortest_path/test_medium/00005 (shortest_path, n=224): no edge between 1501 and 1350
+- shortest_path/test_medium/00006 (shortest_path, n=107): path does not start/end at the given nodes
+- shortest_path/test_medium/00007 (shortest_path, n=128): no edge between 445 and 906
+- shortest_path/test_medium/00008 (shortest_path, n=127): path repeats a node
+- shortest_path/test_medium/00009 (shortest_path, n=141): no edge between 274 and 86

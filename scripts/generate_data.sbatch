@@ -22,7 +22,7 @@ echo "============================================="
 export PYTHONUNBUFFERED=1
 
 # Navigate to project root
-cd "${HOME}/cs5624"
+cd "${SLURM_SUBMIT_DIR:-$(dirname "$0")/..}"
 
 # Generate the full benchmark dataset
 python3 -m graphharness.build_data

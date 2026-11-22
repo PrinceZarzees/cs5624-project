@@ -1,0 +1,4 @@
+training graphs,tok/prob,s/prob,10-round tokens (M),GPU-h,ratio vs measured run
+small,4731,2.8,3.31,0.54,1.82
+medium,4617,3.4,3.23,0.66,1.78
+large,5029,3.8,3.52,0.74,1.94

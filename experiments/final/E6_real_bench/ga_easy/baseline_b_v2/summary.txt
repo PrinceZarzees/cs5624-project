@@ -1,0 +1,33 @@
+harness: baseline_b_v2    model: qwen3-4b    split: ga_easy
+problems: 1000    errors: 0    duration: 564.3s    tokens: 5847933
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+ga_easy      common_neighbors         100       9  100.0%    100.0%     98.0%
+ga_easy      connected_components     100       7  100.0%    100.0%    100.0%
+ga_easy      diameter                 100       7  100.0%     93.0%     92.0%
+ga_easy      graph_edit_distance      100       6   94.0%     43.0%     26.0%
+ga_easy      max_clique               100       7  100.0%     96.0%     92.0%
+ga_easy      max_common_subgraph      100       5   66.0%     58.0%     54.0%
+ga_easy      max_independent_set      100       6  100.0%     94.0%     83.0%
+ga_easy      min_vertex_cover         100       9   99.0%     89.0%     80.0%
+ga_easy      shortest_path            100      10  100.0%     99.0%     99.0%
+ga_easy      traveling_salesman       100       5  100.0%     93.0%     13.0%
+ga_easy      ALL                     1000       7   95.9%     86.5%     73.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50        1000        7    95.9%     86.5%     73.7%
+
+First failures:
+- shortest_path/ga_easy/00049 (shortest_path, n=11): unknown node(s): ['Chah Mir Hormozgan']
+- diameter/ga_easy/00001 (diameter, n=4): unknown node(s): ['Rock', 'Jazz']
+- diameter/ga_easy/00017 (diameter, n=6): unknown node(s): ['Bevern Schleswig-Holstein']
+- diameter/ga_easy/00019 (diameter, n=4): no edge between Red and Yellow
+- diameter/ga_easy/00021 (diameter, n=5): unknown node(s): ['0', '1', '2', '3']
+- diameter/ga_easy/00024 (diameter, n=7): unknown node(s): ['Golujeh Nir']
+- diameter/ga_easy/00061 (diameter, n=4): unknown node(s): ['0', '1', '2', '3']
+- diameter/ga_easy/00071 (diameter, n=8): distance 0, diameter is 3
+- diameter/ga_easy/00078 (diameter, n=5): unknown node(s): ['Holyoke Massachusetts']
+- max_clique/ga_easy/00030 (max_clique, n=12): clique of size 3, maximum is 4

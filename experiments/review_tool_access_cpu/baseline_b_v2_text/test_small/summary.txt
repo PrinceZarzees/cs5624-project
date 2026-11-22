@@ -1,0 +1,28 @@
+harness: baseline_b_v2_text    model: qwen3-4b-q4    split: test_small
+problems: 25    errors: 0    duration: 659.5s    tokens: 55290
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components       5      26  100.0%     40.0%      0.0%
+test_small   cycle_detection            5      33  100.0%     60.0%     60.0%
+test_small   diameter                   5      32  100.0%      0.0%      0.0%
+test_small   max_clique                 5      26  100.0%     20.0%      0.0%
+test_small   shortest_path              5      21  100.0%     60.0%     60.0%
+test_small   ALL                       25      28  100.0%     36.0%     24.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50          25       28   100.0%     36.0%     24.0%
+
+First failures:
+- shortest_path/test_small/00002 (shortest_path, n=38): no edge between 100 and 183
+- shortest_path/test_small/00003 (shortest_path, n=26): path does not start/end at the given nodes
+- connected_components/test_small/00000 (connected_components, n=15): two answer nodes are in the same component (e.g. 106)
+- connected_components/test_small/00001 (connected_components, n=41): two answer nodes are in the same component (e.g. 145)
+- connected_components/test_small/00002 (connected_components, n=21): gave 3 components, graph has 7
+- connected_components/test_small/00003 (connected_components, n=27): gave 1 components, graph has 6
+- connected_components/test_small/00004 (connected_components, n=26): two answer nodes are in the same component (e.g. 114)
+- cycle_detection/test_small/00001 (cycle_detection, n=43): a cycle needs at least 3 nodes
+- cycle_detection/test_small/00002 (cycle_detection, n=6): path repeats a node
+- diameter/test_small/00000 (diameter, n=47): path repeats a node

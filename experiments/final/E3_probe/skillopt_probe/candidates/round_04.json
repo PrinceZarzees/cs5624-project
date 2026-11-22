@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "name": "baseline_b-candidate",
+  "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+  "rules": [
+    "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+    "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+    "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+    "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+    "Keep sandbox output short: print only the result, its length/size, and a small check.",
+    "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+    "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+    "Verify the correctness of cycles and paths by checking their lengths and endpoints.",
+    "Ensure that the diameter path is correctly identified by verifying both the distance and the path itself.",
+    "When using heuristics for maximum clique, validate that the returned nodes are indeed part of a clique.",
+    "Always validate the connectivity of the graph before performing operations like finding cycles or paths."
+  ],
+  "graph_view": "summary",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "notes": "Added rules to ensure correctness and robustness of cycle detection, path identification, and clique validation, which will be crucial for larger graphs."
+}

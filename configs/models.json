@@ -1,0 +1,52 @@
+{
+  "proposal_candidates": [
+    {
+      "family": "DeepSeek",
+      "model_named_in_proposal": "DeepSeek-V4.1-Flash",
+      "status": "candidate, not used for the first run"
+    },
+    {
+      "family": "GLM",
+      "model_named_in_proposal": "GLM (family)",
+      "status": "candidate, not used for the first run"
+    },
+    {
+      "family": "Qwen",
+      "model_named_in_proposal": "Qwen (family)",
+      "status": "selected for the first run"
+    }
+  ],
+  "starting_model": {
+    "id": "Qwen/Qwen3-4B-Instruct-2507",
+    "family": "Qwen",
+    "license": "Apache-2.0",
+    "parameters": 4022468096,
+    "precision": "bfloat16",
+    "approximate_weights_gb": 7.6,
+    "context_used": 8192,
+    "reason": "Smallest Apache-2.0 Qwen instruct model that is practical for a code/tool agent. It is below the proposal's 7B-14B debugging range, which makes it a cheap first target before escalating."
+  },
+  "fallbacks": [
+    {
+      "id": "Qwen/Qwen2.5-7B-Instruct",
+      "license": "Apache-2.0",
+      "reason": "Use if the 4B model cannot follow the tool protocol reliably.",
+      "cpu_fallback": {
+        "quantization": "Q4_K_M",
+        "gguf_repo": "bartowski/Qwen2.5-7B-Instruct-GGUF",
+        "gguf_file": "Qwen2.5-7B-Instruct-Q4_K_M.gguf",
+        "engine": "llama-cpp-python 0.3.37",
+        "observed_tokens_per_second": 12,
+        "note": "Runs on the 96-core normal_q CPU partition while B200 capacity is unavailable."
+      }
+    }
+  ],
+  "serving": {
+    "engine": "vllm 0.34.0",
+    "python": "3.12",
+    "hardware_used": "1x NVIDIA B200 (183 GB)",
+    "cuda_toolkit": "13.1.1",
+    "startup_seconds_observed": 72,
+    "notes": "FlashInfer JIT-compiles on first start, so nvcc, ninja and CUDA_HOME must be on PATH."
+  }
+}

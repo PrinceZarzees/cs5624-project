@@ -1,0 +1,28 @@
+harness: baseline_b_v2_text    model: qwen3-4b    split: test_small
+problems: 150    errors: 0    duration: 41.1s    tokens: 420389
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%     56.7%     23.3%
+test_small   cycle_detection           30      26  100.0%     53.3%     53.3%
+test_small   diameter                  30      27  100.0%     33.3%     13.3%
+test_small   max_clique                30      27  100.0%     30.0%     16.7%
+test_small   shortest_path             30      21  100.0%     73.3%     70.0%
+test_small   ALL                      150      26  100.0%     49.3%     35.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     49.3%     35.3%
+
+First failures:
+- shortest_path/test_small/00002 (shortest_path, n=38): no edge between 100 and 183
+- shortest_path/test_small/00006 (shortest_path, n=22): no edge between 126 and 134
+- shortest_path/test_small/00008 (shortest_path, n=23): path has 3 edges, shortest is 2
+- shortest_path/test_small/00009 (shortest_path, n=41): no edge between 17 and 333
+- shortest_path/test_small/00011 (shortest_path, n=16): no edge between 12 and 137
+- shortest_path/test_small/00015 (shortest_path, n=42): no edge between 301 and 350
+- shortest_path/test_small/00020 (shortest_path, n=43): no edge between 262 and 126
+- shortest_path/test_small/00023 (shortest_path, n=22): no edge between 44 and 102
+- shortest_path/test_small/00026 (shortest_path, n=9): no edge between 18 and 36
+- connected_components/test_small/00001 (connected_components, n=41): two answer nodes are in the same component (e.g. 300)

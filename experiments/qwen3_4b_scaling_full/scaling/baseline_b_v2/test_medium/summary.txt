@@ -1,0 +1,28 @@
+harness: baseline_b_v2    model: qwen3-4b    split: test_medium
+problems: 150    errors: 1    duration: 111.0s    tokens: 853278
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188  100.0%    100.0%    100.0%
+test_medium  cycle_detection           30     203  100.0%     93.3%     93.3%
+test_medium  diameter                  30     182   96.7%     93.3%     93.3%
+test_medium  max_clique                30     194  100.0%     86.7%     63.3%
+test_medium  shortest_path             30     189  100.0%    100.0%    100.0%
+test_medium  ALL                      150     191   99.3%     94.7%     90.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191    99.3%     94.7%     90.0%
+
+First failures:
+- cycle_detection/test_medium/00026 (cycle_detection, n=212): unknown node(s): ['1', '2']
+- cycle_detection/test_medium/00027 (cycle_detection, n=273): no edge from the last node back to the first
+- diameter/test_medium/00003 (diameter, n=261): no prediction
+- diameter/test_medium/00005 (diameter, n=272): empty answer
+- max_clique/test_medium/00008 (max_clique, n=127): empty answer
+- max_clique/test_medium/00009 (max_clique, n=272): unknown node(s): ['j']
+- max_clique/test_medium/00010 (max_clique, n=236): unknown node(s): ['j']
+- max_clique/test_medium/00011 (max_clique, n=111): empty answer
+- max_clique/test_medium/00016 (max_clique, n=115): clique of size 3, maximum is 8
+- max_clique/test_medium/00017 (max_clique, n=203): clique of size 5, maximum is 9

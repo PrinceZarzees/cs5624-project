@@ -68,8 +68,15 @@ def load_split(split: str, data_dir: str | Path | None = None,
 
 
 def to_graph(record: dict) -> nx.Graph:
-    """The record's graph as a networkx graph."""
+    """The record's first graph as a networkx graph."""
     return graph_from_json(record["graph"])
+
+
+def to_graphs(record: dict) -> list[nx.Graph]:
+    """All graphs in a record (one for normal tasks, two for GED/MCS)."""
+    if record.get("graphs"):
+        return [graph_from_json(g) for g in record["graphs"]]
+    return [to_graph(record)]
 
 
 def iter_by_task(records: Iterable[dict]) -> Iterator[tuple[str, list[dict]]]:

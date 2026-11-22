@@ -1,0 +1,20 @@
+\begin{tabular}{rrrp{7cm}}
+\toprule
+rule & accuracy & delta & text \\
+\midrule
+0 & 89.0\% & -4.0\% & Use the NetworkX `G` object directly; never infer edges or distances f \\
+1 & 88.0\% & -3.0\% & Prefer exact library routines: nx.shortest\_path, nx.connected\_componen \\
+2 & 88.0\% & -3.0\% & For maximum clique, run exact search only when the graph is small; on  \\
+3 & 86.0\% & -1.0\% & Check feasibility before answering: path endpoints and edges, one repr \\
+4 & 89.0\% & -4.0\% & Keep sandbox output short: print only the result, its length/size, and \\
+5 & 86.0\% & -1.0\% & If code times out or errors, change the algorithm instead of rerunning \\
+6 & 83.0\% & +2.0\% & Put only the final node list inside <answer></answer>; use [] for a ne \\
+7 & 86.0\% & -1.0\% & For connected components, print `list(nx.connected\_components(G))` and \\
+8 & 90.0\% & -5.0\% & For diameter, find a pair of nodes whose shortest-path distance equals \\
+9 & 90.0\% & -5.0\% & Always call print(...) on the value you need. The sandbox also echoes  \\
+10 & 89.0\% & -4.0\% & For maximum clique on small graphs, print `nx.max\_weight\_clique(G, wei \\
+11 & 89.0\% & -4.0\% & Once a successful run prints a feasible result, stop and give that res \\
+12 & 87.0\% & -2.0\% & Never filter, sort, or index nodes by numeric value; node ids are arbi \\
+13 & 88.0\% & -3.0\% & Materialize NetworkX generators with list(...) or dict(...) before ite \\
+\bottomrule
+\end{tabular}

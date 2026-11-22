@@ -1,0 +1,128 @@
+{
+  "task": "min_vertex_cover",
+  "condition": "given",
+  "k": 5,
+  "seed": 0,
+  "best_it": 3,
+  "best_val_acc": 0.4546,
+  "final_statement": "Given an undirected simple graph, print the nodes of a minimum vertex cover as a list in square brackets. Every edge must have at least one endpoint in the list. Any minimum cover is accepted.",
+  "val_curve": [
+    0.4546,
+    0.4546,
+    0.4546
+  ],
+  "statements": [
+    "Given an undirected simple graph, print the nodes of a minimum vertex cover as a list in square brackets. Every edge must have at least one endpoint in the list. Any minimum cover is accepted.",
+    "Given an undirected simple graph, print the nodes of a minimum vertex cover as a list in square brackets. Every edge must have at least one endpoint in the list. Any minimum cover is accepted.",
+    "Given an undirected simple graph, print the nodes of a minimum vertex cover as a list in square brackets. Every edge must have at least one endpoint in the list. Any minimum cover is accepted."
+  ],
+  "tokens": {
+    "prompt": 71978,
+    "completion": 5954
+  },
+  "test": {
+    "test_small": {
+      "n": 20,
+      "quality": 0.4903,
+      "feasible": 1.0,
+      "optimal": 0.0,
+      "verdicts": {
+        "FEAS": 20
+      },
+      "by_bucket": {
+        "small": {
+          "n": 16,
+          "quality": 0.4775,
+          "feasible": 1.0
+        },
+        "tiny": {
+          "n": 4,
+          "quality": 0.5417,
+          "feasible": 1.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 2,
+          "quality": 0.4411,
+          "feasible": 1.0
+        },
+        "components": {
+          "n": 2,
+          "quality": 0.4389,
+          "feasible": 1.0
+        },
+        "dense": {
+          "n": 2,
+          "quality": 0.5556,
+          "feasible": 1.0
+        },
+        "er": {
+          "n": 2,
+          "quality": 0.4661,
+          "feasible": 1.0
+        },
+        "grid": {
+          "n": 2,
+          "quality": 0.4521,
+          "feasible": 1.0
+        },
+        "path_like": {
+          "n": 2,
+          "quality": 0.455,
+          "feasible": 1.0
+        },
+        "powerlaw": {
+          "n": 2,
+          "quality": 0.4292,
+          "feasible": 1.0
+        },
+        "regular": {
+          "n": 2,
+          "quality": 0.6061,
+          "feasible": 1.0
+        },
+        "tree": {
+          "n": 2,
+          "quality": 0.4695,
+          "feasible": 1.0
+        },
+        "ws": {
+          "n": 2,
+          "quality": 0.59,
+          "feasible": 1.0
+        }
+      },
+      "by_density": {
+        "medium": {
+          "n": 10,
+          "quality": 0.5449,
+          "feasible": 1.0
+        },
+        "sparse": {
+          "n": 10,
+          "quality": 0.4358,
+          "feasible": 1.0
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 12,
+          "quality": 0.5146,
+          "feasible": 1.0
+        },
+        "true": {
+          "n": 8,
+          "quality": 0.4539,
+          "feasible": 1.0
+        }
+      },
+      "max_cpu_s": 0.0058,
+      "median_cpu_s": 0.005,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    }
+  }
+}

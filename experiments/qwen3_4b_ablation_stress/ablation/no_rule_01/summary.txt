@@ -1,0 +1,28 @@
+harness: baseline_b_v2-no-rule-1    model: qwen3-4b    split: test_stress
+problems: 50    errors: 1    duration: 37.2s    tokens: 447060
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_stress  connected_components      10    2000  100.0%    100.0%    100.0%
+test_stress  cycle_detection           10    2000  100.0%    100.0%     60.0%
+test_stress  diameter                  10    2000   50.0%     50.0%      0.0%
+test_stress  max_clique                10    2000  100.0%    100.0%     90.0%
+test_stress  shortest_path             10    2000   90.0%     80.0%     80.0%
+test_stress  ALL                       50    2000   88.0%     86.0%     66.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+1000+         50     2000    88.0%     86.0%     66.0%
+
+First failures:
+- shortest_path/test_stress/00000 (shortest_path, n=2000): no prediction
+- shortest_path/test_stress/00009 (shortest_path, n=2000): path does not start/end at the given nodes
+- cycle_detection/test_stress/00001 (cycle_detection, n=2000): said no cycle, but the graph has one
+- cycle_detection/test_stress/00004 (cycle_detection, n=2000): said no cycle, but the graph has one
+- cycle_detection/test_stress/00007 (cycle_detection, n=2000): said no cycle, but the graph has one
+- cycle_detection/test_stress/00008 (cycle_detection, n=2000): said no cycle, but the graph has one
+- diameter/test_stress/00000 (diameter, n=2000): no prediction
+- diameter/test_stress/00001 (diameter, n=2000): distance 6, diameter is 8
+- diameter/test_stress/00002 (diameter, n=2000): distance 6, diameter is 8
+- diameter/test_stress/00003 (diameter, n=2000): no prediction

@@ -1,0 +1,28 @@
+harness: baseline_a_tools    model: qwen3-4b    split: test_small
+problems: 150    errors: 0    duration: 97.4s    tokens: 966584
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%    100.0%    100.0%
+test_small   cycle_detection           30      26  100.0%     66.7%     66.7%
+test_small   diameter                  30      27  100.0%     96.7%     96.7%
+test_small   max_clique                30      27  100.0%     93.3%     93.3%
+test_small   shortest_path             30      21  100.0%    100.0%    100.0%
+test_small   ALL                      150      26  100.0%     91.3%     91.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     91.3%     91.3%
+
+First failures:
+- cycle_detection/test_small/00006 (cycle_detection, n=24): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_small/00011 (cycle_detection, n=23): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_small/00013 (cycle_detection, n=6): unknown node(s): ['1', '2']
+- cycle_detection/test_small/00017 (cycle_detection, n=14): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_small/00021 (cycle_detection, n=29): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_small/00025 (cycle_detection, n=17): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_small/00026 (cycle_detection, n=26): no edge from the last node back to the first
+- cycle_detection/test_small/00027 (cycle_detection, n=42): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_small/00028 (cycle_detection, n=37): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_small/00029 (cycle_detection, n=11): unknown node(s): ['a', 'b', 'c']

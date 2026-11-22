@@ -1,0 +1,6 @@
+E. run / stress -> HDA
+<action>run</action>:
+  verdict=AC cpu=0.002s output='12' stderr=''
+<action>stress</action>:
+  verdict=AC cpu=0.841s output='344' stderr=''
+  (generator output is fed to the program; up to 64 MiB)

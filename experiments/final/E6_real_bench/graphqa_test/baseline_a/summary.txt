@@ -1,0 +1,35 @@
+harness: baseline_a    model: qwen3-4b    split: graphqa_test
+problems: 600    errors: 0    duration: 175.7s    tokens: 2407054
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+graphqa_test connected_nodes           50      13  100.0%    100.0%    100.0%
+graphqa_test cycle_detection           50      13  100.0%     56.0%     52.0%
+graphqa_test disconnected_nodes        50      13  100.0%     98.0%     98.0%
+graphqa_test edge_count                50      13  100.0%    100.0%    100.0%
+graphqa_test edge_existence            50      13  100.0%    100.0%    100.0%
+graphqa_test maximum_flow              50      13  100.0%    100.0%     14.0%
+graphqa_test node_classification       50      11  100.0%    100.0%     90.0%
+graphqa_test node_count                50      13  100.0%    100.0%    100.0%
+graphqa_test node_degree               50      13  100.0%    100.0%    100.0%
+graphqa_test reachability              50      13  100.0%     78.0%     78.0%
+graphqa_test shortest_path             50      13  100.0%    100.0%    100.0%
+graphqa_test triangle_counting         50      13  100.0%    100.0%     80.0%
+graphqa_test ALL                      600      12  100.0%     94.3%     84.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         600       12   100.0%     94.3%     84.3%
+
+First failures:
+- cycle_detection/graphqa_test/00001 (cycle_detection, n=10): no edge between 1 and 2
+- cycle_detection/graphqa_test/00004 (cycle_detection, n=8): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/graphqa_test/00006 (cycle_detection, n=19): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/graphqa_test/00008 (cycle_detection, n=18): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/graphqa_test/00011 (cycle_detection, n=6): no edge between 1 and 2
+- cycle_detection/graphqa_test/00012 (cycle_detection, n=12): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/graphqa_test/00013 (cycle_detection, n=17): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/graphqa_test/00015 (cycle_detection, n=13): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/graphqa_test/00019 (cycle_detection, n=19): no edge between 0 and 1
+- cycle_detection/graphqa_test/00020 (cycle_detection, n=14): unknown node(s): ['a', 'b', 'c']

@@ -1,0 +1,351 @@
+{
+  "harness": "baseline_a_text",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_a_text",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "adjacency_list",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": false,
+    "notes": "No tools; adjacency list only."
+  },
+  "model": "qwen3-4b",
+  "split": "test_small",
+  "started_at": "2026-11-21T03:11:52.628171+00:00",
+  "finished_at": "2026-11-21T03:12:38.685761+00:00",
+  "duration_s": 46.057593054138124,
+  "n": 150,
+  "overall": {
+    "split": "test_small",
+    "task": "ALL",
+    "n": 150,
+    "parsed": 1.0,
+    "feasible": 0.56,
+    "accuracy": 0.43333333333333335,
+    "mean_nodes": 26.293333333333333
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 30,
+      "mean_nodes": 30.033333333333335,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.23333333333333334
+    },
+    {
+      "task": "cycle_detection",
+      "n": 30,
+      "mean_nodes": 26.0,
+      "parsed": 1.0,
+      "feasible": 0.7333333333333333,
+      "accuracy": 0.7333333333333333
+    },
+    {
+      "task": "diameter",
+      "n": 30,
+      "mean_nodes": 27.333333333333332,
+      "parsed": 1.0,
+      "feasible": 0.3333333333333333,
+      "accuracy": 0.16666666666666666
+    },
+    {
+      "task": "max_clique",
+      "n": 30,
+      "mean_nodes": 26.9,
+      "parsed": 1.0,
+      "feasible": 0.4,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "task": "shortest_path",
+      "n": 30,
+      "mean_nodes": 21.2,
+      "parsed": 1.0,
+      "feasible": 0.7333333333333333,
+      "accuracy": 0.7
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 150,
+      "mean_nodes": 26.293333333333333,
+      "parsed": 1.0,
+      "feasible": 0.56,
+      "accuracy": 0.43333333333333335
+    }
+  ],
+  "tokens": {
+    "prompt": 274910,
+    "completion": 121545,
+    "total": 396455,
+    "mean_total_per_problem": 2643.0333333333333
+  },
+  "tool_calls": 0,
+  "mean_agent_duration_s": 2.387591743605832,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "shortest_path/test_small/00003",
+      "task": "shortest_path",
+      "n_nodes": 26,
+      "parsed": true,
+      "feasible": false,
+      "note": "path does not start/end at the given nodes"
+    },
+    {
+      "id": "shortest_path/test_small/00004",
+      "task": "shortest_path",
+      "n_nodes": 24,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 163 and 110"
+    },
+    {
+      "id": "shortest_path/test_small/00009",
+      "task": "shortest_path",
+      "n_nodes": 41,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 127 and 271"
+    },
+    {
+      "id": "shortest_path/test_small/00013",
+      "task": "shortest_path",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 132 and 143"
+    },
+    {
+      "id": "shortest_path/test_small/00015",
+      "task": "shortest_path",
+      "n_nodes": 42,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 103 and 110"
+    },
+    {
+      "id": "shortest_path/test_small/00017",
+      "task": "shortest_path",
+      "n_nodes": 27,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 162 and 168"
+    },
+    {
+      "id": "shortest_path/test_small/00020",
+      "task": "shortest_path",
+      "n_nodes": 43,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 393 and 399"
+    },
+    {
+      "id": "shortest_path/test_small/00023",
+      "task": "shortest_path",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 161 and 102"
+    },
+    {
+      "id": "shortest_path/test_small/00024",
+      "task": "shortest_path",
+      "n_nodes": 33,
+      "parsed": true,
+      "feasible": true,
+      "note": "path has 5 edges, shortest is 4"
+    },
+    {
+      "id": "connected_components/test_small/00001",
+      "task": "connected_components",
+      "n_nodes": 41,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 1 components, graph has 9"
+    },
+    {
+      "id": "connected_components/test_small/00002",
+      "task": "connected_components",
+      "n_nodes": 21,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 4 components, graph has 7"
+    },
+    {
+      "id": "connected_components/test_small/00003",
+      "task": "connected_components",
+      "n_nodes": 27,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 209)"
+    },
+    {
+      "id": "connected_components/test_small/00004",
+      "task": "connected_components",
+      "n_nodes": 26,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 14)"
+    },
+    {
+      "id": "connected_components/test_small/00007",
+      "task": "connected_components",
+      "n_nodes": 41,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 100)"
+    },
+    {
+      "id": "connected_components/test_small/00008",
+      "task": "connected_components",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 2 components, graph has 5"
+    },
+    {
+      "id": "connected_components/test_small/00009",
+      "task": "connected_components",
+      "n_nodes": 44,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 147)"
+    },
+    {
+      "id": "connected_components/test_small/00010",
+      "task": "connected_components",
+      "n_nodes": 30,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 108)"
+    },
+    {
+      "id": "connected_components/test_small/00011",
+      "task": "connected_components",
+      "n_nodes": 44,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 3 components, graph has 7"
+    },
+    {
+      "id": "connected_components/test_small/00012",
+      "task": "connected_components",
+      "n_nodes": 40,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 100)"
+    },
+    {
+      "id": "connected_components/test_small/00013",
+      "task": "connected_components",
+      "n_nodes": 28,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 111)"
+    },
+    {
+      "id": "connected_components/test_small/00014",
+      "task": "connected_components",
+      "n_nodes": 42,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 264)"
+    },
+    {
+      "id": "connected_components/test_small/00015",
+      "task": "connected_components",
+      "n_nodes": 44,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 1 components, graph has 9"
+    },
+    {
+      "id": "connected_components/test_small/00016",
+      "task": "connected_components",
+      "n_nodes": 18,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 0 components, graph has 3"
+    },
+    {
+      "id": "connected_components/test_small/00019",
+      "task": "connected_components",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 2 components, graph has 4"
+    },
+    {
+      "id": "connected_components/test_small/00021",
+      "task": "connected_components",
+      "n_nodes": 34,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 22)"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_small",
+      "task": "connected_components",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.23333333333333334,
+      "mean_nodes": 30.033333333333335
+    },
+    {
+      "split": "test_small",
+      "task": "cycle_detection",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.7333333333333333,
+      "accuracy": 0.7333333333333333,
+      "mean_nodes": 26.0
+    },
+    {
+      "split": "test_small",
+      "task": "diameter",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.3333333333333333,
+      "accuracy": 0.16666666666666666,
+      "mean_nodes": 27.333333333333332
+    },
+    {
+      "split": "test_small",
+      "task": "max_clique",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.4,
+      "accuracy": 0.3333333333333333,
+      "mean_nodes": 26.9
+    },
+    {
+      "split": "test_small",
+      "task": "shortest_path",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.7333333333333333,
+      "accuracy": 0.7,
+      "mean_nodes": 21.2
+    },
+    {
+      "split": "test_small",
+      "task": "ALL",
+      "n": 150,
+      "parsed": 1.0,
+      "feasible": 0.56,
+      "accuracy": 0.43333333333333335,
+      "mean_nodes": 26.293333333333333
+    }
+  ]
+}

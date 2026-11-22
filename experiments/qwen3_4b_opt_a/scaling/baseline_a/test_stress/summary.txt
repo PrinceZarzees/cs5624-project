@@ -1,0 +1,22 @@
+harness: baseline_a    model: qwen3-4b    split: test_stress
+problems: 15    errors: 0    duration: 28.7s    tokens: 100612
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_stress  connected_components       3    2000  100.0%    100.0%    100.0%
+test_stress  cycle_detection            3    2000  100.0%    100.0%    100.0%
+test_stress  diameter                   3    2000   66.7%     66.7%      0.0%
+test_stress  max_clique                 3    2000  100.0%    100.0%    100.0%
+test_stress  shortest_path              3    2000   66.7%     66.7%     66.7%
+test_stress  ALL                       15    2000   86.7%     86.7%     73.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+1000+         15     2000    86.7%     86.7%     73.3%
+
+First failures:
+- shortest_path/test_stress/00000 (shortest_path, n=2000): no prediction
+- diameter/test_stress/00000 (diameter, n=2000): no prediction
+- diameter/test_stress/00001 (diameter, n=2000): distance 2, diameter is 8
+- diameter/test_stress/00002 (diameter, n=2000): distance 4, diameter is 8

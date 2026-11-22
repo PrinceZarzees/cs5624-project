@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "name": "baseline_a-candidate",
+  "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For cycle detection, use DFS or BFS to detect and reconstruct cycles. For diameter, compute shortest paths between all pairs only if necessary; otherwise, use two-breadth-first-search approach. For connected components, use connected components algorithm and pick one representative per component. Always output the final answer in the required format with correct node identifiers. Do not invent or use node labels like '1', '2', '3'\u2014use only the actual node labels from the graph.",
+  "rules": [
+    "Always use the actual node labels from the graph, not arbitrary integers like 1, 2, 3.",
+    "For cycle detection, perform DFS and reconstruct the cycle using backtracking; avoid assuming cycles exist without evidence.",
+    "For diameter, use two BFS steps (from a node to farthest, then from there to farthest) to avoid computing all-pairs shortest paths.",
+    "For connected components, use NetworkX's connected_components function and return one node per component using actual node labels.",
+    "Never generate node sequences like [1, 2, 3] without verifying they exist in the graph structure.",
+    "Always validate that the final answer uses only nodes present in the input graph.",
+    "If no cycle exists, return an empty list []; do not infer or guess.",
+    "If the graph is disconnected, ensure the representative list reflects the actual number of components."
+  ],
+  "graph_view": "edge_list",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "notes": "The failures occurred due to the model using arbitrary node labels and failing to verify graph structure. By enforcing use of actual node labels and requiring structural validation, the harness ensures correctness at scale. Using edge_list provides full connectivity information for reliable algorithmic reasoning, especially in larger graphs."
+}

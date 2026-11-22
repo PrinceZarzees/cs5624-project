@@ -1,0 +1,28 @@
+harness: baseline_a    model: qwen3-4b    split: test_stress
+problems: 50    errors: 0    duration: 67.2s    tokens: 421407
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_stress  connected_components      10    2000  100.0%    100.0%    100.0%
+test_stress  cycle_detection           10    2000  100.0%     80.0%     80.0%
+test_stress  diameter                  10    2000   50.0%     40.0%     20.0%
+test_stress  max_clique                10    2000  100.0%     90.0%     90.0%
+test_stress  shortest_path             10    2000  100.0%     50.0%     50.0%
+test_stress  ALL                       50    2000   90.0%     72.0%     68.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+1000+         50     2000    90.0%     72.0%     68.0%
+
+First failures:
+- shortest_path/test_stress/00000 (shortest_path, n=2000): no edge between 3627 and 14037
+- shortest_path/test_stress/00001 (shortest_path, n=2000): unknown node(s): ['17312']
+- shortest_path/test_stress/00007 (shortest_path, n=2000): no edge between 4987 and 17032
+- shortest_path/test_stress/00008 (shortest_path, n=2000): unknown node(s): ['18304']
+- shortest_path/test_stress/00009 (shortest_path, n=2000): no edge between 10959 and 19352
+- cycle_detection/test_stress/00004 (cycle_detection, n=2000): a cycle needs at least 3 nodes
+- cycle_detection/test_stress/00007 (cycle_detection, n=2000): unknown node(s): ['a', 'b', 'c']
+- diameter/test_stress/00000 (diameter, n=2000): no prediction
+- diameter/test_stress/00002 (diameter, n=2000): unknown node(s): ['1', '2', '3']
+- diameter/test_stress/00003 (diameter, n=2000): distance 118, diameter is 212

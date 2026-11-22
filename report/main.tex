@@ -1,0 +1,725 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\title{Harness Optimization for Graph Reasoning: Learn Small, Run Big}
+\author{Bikash Kumar Paul \and Abdullah Al Noman \and Samin Rahman Khan \and Md Zarzees Uddin Shah Chowdhury}
+\date{CS 5624, December 2026}
+
+\begin{document}
+\maketitle
+
+% Course policy: the prose below must be written by the authors. This file is a
+% skeleton that points to the generated tables and figures only.
+
+\begin{abstract}
+% TODO: human-written abstract.
+\end{abstract}
+
+\section{Introduction}
+% TODO: research question, contributions, motivation.
+
+\section{Related Work}
+% TODO: harness optimization, graph reasoning benchmarks, GraphArena, GraphQA.
+
+\section{Problem Setup}
+% TODO: tasks, splits, harness definition, answer protocol, metrics.
+Tasks implemented: shortest path, connected components, cycle detection,
+diameter, reachability, max clique, Hamiltonian path, common neighbors, MIS,
+MVC, GED, MCS, TSP, and the GraphQA scalar/classification/flow tasks.
+See \texttt{experiments/BENCHMARK\_COVERAGE.md} for the coverage matrix.
+
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\paragraph{Setup facts.}
+Actor: Qwen3-4B-Instruct-2507 (snapshot \texttt{cdbee75f}, BF16, vLLM 0.34.0),
+temperature 0, 8{,}192-token context unless stated otherwise. Synthetic
+splits: train 300, val 150, \texttt{test\_small} 150, \texttt{test\_medium}
+150, \texttt{test\_large} 100, \texttt{test\_stress} 50; node ranges 4--50,
+100--299, 501--997 and 2{,}000. The fresh held-out split
+\texttt{test\_small\_fresh} has 150 problems (seed 56240) and zero graph
+overlap with the six frozen splits. Real benchmarks: GraphArena easy and hard
+at 100 problems per task and GraphQA test at 50 per task, taken in adapter
+order; the original 20/task records are a subset. Harnesses: Baseline A
+(minimal protocol), Baseline B (expert rules) and Baseline B v2 (14 rules).
+Tool runs use a Python/NetworkX sandbox with a 30\,s timeout, a 2\,GB memory
+cap and an 8-step limit. The model must put its final answer in
+\texttt{<answer>...</answer>}; scoring checks feasibility and then the
+task-specific exact answer. Reported metrics are accuracy, parsed rate,
+feasible rate, tokens and wall time. Every synthetic cell for A/B/v2 has three
+repeats; values are mean $\pm$ population std.
+% <<< AI-DRAFT
+
+\section{Baselines and Harnesses}
+% TODO: Baseline A, Baseline B, Baseline B v2, H* selection.
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Harness & test\_small (150, k=3) & notes \\
+\midrule
+Baseline A & 89.3 $\pm$ 1.6\% & minimal protocol \\
+Baseline B & 94.4 $\pm$ 0.6\% & original expert rules \\
+Baseline B v2 (13 rules) & 93.3\% & pilot-tuned, single run \\
+Baseline B v2 (14 rules) & 95.8 $\pm$ 1.4\% & full scaling harness \\
+\bottomrule
+\end{tabular}
+\caption{Synthetic \texttt{test\_small} results, Qwen3-4B BF16 on one B200.
+Values with $\pm$ are mean and population std over three repeats; the 13-rule
+v2 value is the original single run and was not repeated.}
+\end{table}
+
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\paragraph{Harness definitions.}
+Baseline A is a generic instruction with no rules. Baseline B adds seven expert
+rules: use the NetworkX \texttt{G} object rather than node labels, prefer exact
+library routines, verify feasibility before answering, keep sandbox output
+short, change the code after a timeout, and put only the final node list in
+\texttt{<answer>}. Baseline B v2 appends seven rules: print
+\texttt{list(nx.connected\_components(G))} and return one representative per
+component; for diameter, return a witness pair at the measured diameter; always
+\texttt{print} the value; use \texttt{nx.max\_weight\_clique} on small graphs
+only; stop after a successful run; never sort or index nodes by numeric value;
+and materialize NetworkX generators before reusing them. All harnesses use the
+summary graph view, an 8-step limit, a 30\,s tool timeout and temperature 0.
+v2 was built from earlier \texttt{test\_small} failures, so its
+\texttt{test\_small} result is not held out; the fresh split in the
+final-results section is the clean estimate.
+% <<< AI-DRAFT
+
+
+% >>> AI-DRAFT (HDA-methodology, 2026-11-21): rewrite before submission
+\section{Harness Developing Agent}
+
+\subsection{Motivation}
+The Python/NetworkX harness leaves the algorithmic work to the library: when
+NetworkX is available the agent scores 96.4\% on small graphs and 92.0\% on the
+25-problem large subset, and without it the same harness drops to 35.8\% and
+0\% (Section~10). The Harness Developing Agent (HDA) removes the library. It
+receives small input/output examples for one graph task and must write one
+self-contained C++17 program that solves \emph{any} instance of that task. The
+program is developed on 4--50-node graphs and then run on held-out graphs up to
+100{,}000 nodes, so a correct but slow algorithm passes validation and fails at
+scale.
+
+\subsection{Agent input and output}
+The HDA sees the following parts on every iteration. Table~\ref{tab:hda-protocol}
+summarizes the protocol.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{2.8cm}p{9.6cm}}
+\toprule
+Part & Content \\
+\midrule
+System prompt & Role; C++17 and the standard library only (no Boost, no graph
+libraries, file I/O, threads or system calls); hidden graphs are up to 1000$\times$
+larger with permuted node IDs; an explicit ban on memorizing or hardcoding
+answers, node IDs, sizes or lookup tables; limits 1--5\,s CPU, 1\,GiB memory,
+8\,MiB stack; the input format; a graph-loading template; and the tool protocol. \\
+Problem statement & \emph{Given}: one paragraph from \texttt{hda/tasks.py}.
+\emph{Hidden}: no statement; the model must list at least three candidate
+problems, argue for and against each against every example, keep the simplest
+consistent one in \texttt{<statement>}, and may revise it later. \\
+Examples & $k=10$ new examples per iteration, drawn without replacement from the
+\texttt{examples} split (4--50 nodes, seen families). The prompt shows the
+current 10; the \texttt{test} tool runs every example seen so far. \\
+Iteration context & Iteration number, aggregate validation feedback for the last
+submission, the best program so far and its validation accuracy, and the
+current statement. \\
+Tools & One action per reply: \texttt{test} (compile the latest code and run all
+seen examples), \texttt{run} (custom input), \texttt{stress} (C++ generator for
+large inputs, up to 64\,MiB), \texttt{submit}. \\
+Output & One C++17 source file per iteration, plus the current
+\texttt{<statement>}. $H^*$ is the submission with the best validation accuracy. \\
+\bottomrule
+\end{tabular}
+\caption{HDA input, tools and output.}
+\label{tab:hda-protocol}
+\end{table}
+
+Every graph, example or test, uses the same input format:
+\begin{verbatim}
+n m directed weighted        # directed, weighted in {0,1}
+u v [w]                      # m lines, nodes 0..n-1, no self-loops
+k q1 ... qk                  # query arguments (k = 0 or 2)
+\end{verbatim}
+The header reveals whether the graph is directed or weighted and how many query
+nodes follow. This narrows the task family but does not identify the task
+(Section~\ref{sec:hda-ident}).
+
+\subsection{Tasks}
+Phase~1 uses ten polynomial-time tasks with exact, single-token answers
+(Table~\ref{tab:hda-tasks}). NP-hard tasks are deferred to phase~2.
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_tasks.tex}
+\caption{Phase-1 tasks. ``Query args'' is the number of nodes after the graph;
+\texttt{2} means $s$ and $t$.}
+\label{tab:hda-tasks}
+\end{table}
+
+\subsection{Data generator}
+Graphs come from a generator with four \emph{seen} families (Erd\H{o}s--R\'enyi,
+Barab\'asi--Albert, random trees, disjoint unions) and six \emph{unseen} families
+used only in test (Watts--Strogatz, grids with 10\% edges removed,
+caterpillar/path-like, dense ER, random regular, powerlaw-cluster). Average
+degree cycles through 1.2--3, 3--8 and 8--20. Tasks are shaped so answers are not
+degenerate: diameter and MST graphs are connected; cycle detection is balanced
+between forests and forests with 1--3 chords; bipartite is balanced between
+bipartite and one-odd-edge graphs; reachability queries are 50/50 reachable;
+shortest-path and max-flow queries are 85\% reachable; common-neighbor queries
+use a 2-hop pair 70\% of the time. Node IDs are randomly permuted and edge and
+endpoint order are shuffled. Ground truth is human-written C++ in
+\texttt{reference/*.cpp}, cross-checked against NetworkX on 600 random graphs.
+
+Table~\ref{tab:hda-splits} lists the split sizes, node ranges, families and CPU
+limits. Base seed 5625; each split uses its own seed offset, so no graph is
+shared. Validation (40 graphs) and all test graphs are hidden from the HDA.
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_splits.tex}
+\caption{HDA splits. \texttt{examples} is the pool from which $k=10$ examples
+per iteration are drawn.}
+\label{tab:hda-splits}
+\end{table}
+
+\subsection{Training loop}
+For one run (task $\times$ condition $\times$ seed):
+\begin{enumerate}
+\item For iteration $t=1,\dots,5$: give 10 new examples, the last validation
+feedback, the best program so far and the current statement.
+\item The HDA works for at most 8 tool steps, may revise \texttt{<statement>},
+then submits its latest program.
+\item A static policy check rejects violations with score 0; compilation errors
+are returned as feedback.
+\item Score the program on 40 hidden validation graphs (4--50 nodes, seen
+families). Re-run 5 of them with fresh node IDs; each relabeling failure reduces
+the iteration score proportionally.
+\item Feed back aggregate accuracy, verdict counts (AC/WA/TLE/RE/MLE), accuracy
+by size bucket and family, and the maximum CPU time.
+\end{enumerate}
+$H^*$ is the best-validation submission and is evaluated once on
+\texttt{test\_small}, \texttt{test\_medium}, \texttt{test\_large},
+\texttt{test\_xl} and \texttt{test\_stress}. The problem statement is logged at
+every step but is not scored during training.
+
+\subsection{Problem-statement conditions and identifiability}
+\label{sec:hda-ident}
+In the \emph{given} condition the statement is shown. In the \emph{hidden}
+condition the model must infer it and write it in \texttt{<statement>}; it may
+revise it in later steps and iterations. We measure identification in two ways:
+an LLM judge labels the final statement EQUIVALENT/PARTIAL/WRONG, and functional
+identification is test-small accuracy $\ge 95\%$.
+
+Table~\ref{tab:hda-ident} measures how often the true task is the only candidate
+consistent with $k$ random examples, among the 10 tasks and 37 distractors.
+With $k=10$ every task is identifiable in at least 86\% of draws, which supports
+$k=10$.
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_identifiability.tex}
+\caption{Probability that the true task is the unique survivor among 10 tasks
+and 37 distractors, and the main confusers at $k=3$ (400 trials).}
+\label{tab:hda-ident}
+\end{table}
+
+\subsection{Anti-memorization}
+Four layers apply. (i) The system prompt forbids memorizing or hardcoding
+answers, node IDs, edge lists, sizes, lookup tables or special cases. (ii) A
+static policy allows only standard headers, bans system calls, file I/O, threads,
+inline assembly and local includes, rejects literal arrays of 20+ numbers, more
+than 24 non-trivial numeric literals, and code containing two or more example
+answers verbatim. (iii) Validation and test graphs are fresh and hidden, node
+IDs are permuted, and 5 graphs per evaluation are re-run with new IDs and must
+give the same answer. (iv) The sandbox uses an empty working directory, stdin
+only, and CPU/memory/stack/output limits, so a program cannot read test files.
+
+\subsection{Evaluation and logging}
+Metrics are accuracy, verdict mix, the small--large gap
+(\texttt{test\_small} minus \texttt{test\_xl}), accuracy by family, density and
+size, identification, and cost (tokens, wall time, tool calls). Baselines are a
+one-shot HDA (1 iteration), the majority answer, the human C++ reference and the
+library-assisted Python/NetworkX v2. Every run writes \texttt{log.jsonl} with
+the config, examples, full prompts, raw replies and reasoning traces, current
+statements, code, tool outputs, submissions with per-graph answers and
+verdicts, iteration summaries, the judge label and test rows;
+\texttt{final.json} holds the validation curve, statements, judge label, tokens
+and test summaries. 
+\subsection{Results so far}
+The pipeline was installed and verified on ARC. All 18 unit tests pass, the
+data build takes 60\,s, and the human C++ reference scores 100\% on every task
+and split with a maximum CPU time of 0.45\,s, well below the 1--5\,s limits.
+The identifiability measurement reproduces Table~\ref{tab:hda-ident}.
+
+The given-statement grid was completed for all ten tasks after fixing the
+query contract: the C++ loader now exposes \texttt{query\_k} and the prompt
+states that the leading number is the number of arguments, not a type code.
+Each task used $k=5$, three iterations and the compiler loop. Nine tasks reach
+validation 1.000; diameter reaches 0.900. Eight tasks score 100\% on all five
+test splits, triangle counting scores 96.7\% on large, and diameter ranges from
+77.5\% to 83.3\%. Max flow is the clean small-to-large failure: 100\% through
+2{,}000 nodes and 30\% on the 10k--20k stress split despite 100\% validation
+(Table~\ref{tab:hda-given-all}, Figure~\ref{fig:hda-given-all}).
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{figures/hda/hda_diagram_full.pdf}
+\caption{HDA loop and the exact message structures A--E. Only the \texttt{cpp}
+block is compiled and scored; validation labels stay inside the evaluator.}
+\label{fig:hda-loop}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.78\linewidth]{figures/hda/fig_hda_given_all.pdf}
+\caption{Test accuracy by task and split for the given-condition runs.}
+\label{fig:hda-given-all}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_given_all.tex}
+\caption{Given-condition accuracy for all ten tasks (3 iterations, $k=5$).}
+\label{tab:hda-given-all}
+\end{table}
+
+% <<< AI-DRAFT
+
+\section{Small-Graph Optimization}
+% TODO: SkillOpt/GEPA loop, accepted/rejected edits, why no candidate improved.
+Two optimizer runs (8 rounds from v2, 10 rounds from A) rejected every
+candidate. The validation gate prevented regressions; v2 is frozen as
+$H^*_{\text{small}}$.
+
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\paragraph{Optimizer settings.}
+Four loops are compared: SkillOpt-style (system prompt and rules), GEPA-style
+(system prompt only, rules fixed), RRSI-lite (rule edits with a consistency
+gate) and Meta-Harness-lite (prompt, rules, graph view and tool preamble).
+EvoSkill-style adds a library of named skills. Each round evaluates the
+candidate on a training batch of 4 problems per task and accepts an edit only
+if accuracy on 10 validation problems per task improves (ties are accepted
+only when the prompt is shorter). The earlier pilots used the 4B actor as its
+own critic and accepted zero edits. A separate grid uses Qwen2.5-7B-Instruct
+BF16 as critic while the actor stays Qwen3-4B; its settings and outcome are
+reported in the final-results section.
+% <<< AI-DRAFT
+
+\section{Scaling Results}
+% TODO: full scaling curves and delta_gen.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/scaling_4b_accuracy_vs_size.png}
+\caption{Accuracy versus graph size for Baselines A/B/B v2.}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Harness & small & medium & large & stress \\
+\midrule
+Baseline A & 89.3 $\pm$ 1.6 & 86.2 $\pm$ 3.9 & 84.3 $\pm$ 2.4 & 66.0 $\pm$ 2.8 \\
+Baseline B & 94.4 $\pm$ 0.6 & 92.0 $\pm$ 1.1 & 90.7 $\pm$ 3.7 & 74.5 $\pm$ 8.4 \\
+Baseline B v2 & 95.8 $\pm$ 1.4 & 90.7 $\pm$ 0.9 & 85.3 $\pm$ 0.5 & 73.3 $\pm$ 0.9 \\
+\bottomrule
+\end{tabular}
+\caption{Full synthetic scaling accuracy (\%): mean and population std over
+three repeats. The same data appear with $n$ per split in the final-results
+section.}
+\end{table}
+
+\section{Rule Ablations}
+% TODO: interpret test\_large, test\_stress, and val ablations.
+See \texttt{experiments/qwen3\_4b\_ablation\_*/ablation/ablation\_summary.txt}
+and \texttt{report/tables/ablation\_*.csv}.
+
+\section{Real Benchmark Evaluation}
+% TODO: GraphArena/GraphQA results and error analysis.
+GraphArena at 100 problems/task: easy 72.9\% (Baseline A), 75.6\% (B),
+73.7\% (B v2); hard 59.1\%, 62.6\%, 60.9\%. GraphQA test at 50/task: 84.3\%,
+89.0\%, 89.2\%. On the original 20/task subset v2 scores 76.5/62.5/90.4\%,
+within 2 points of the earlier 74.5/61.0/88.3\%.
+See \texttt{E6\_real\_bench/}.
+
+\section{Discussion and Limitations}
+% TODO: synthetic vs real benchmarks, scale, model choice, sandbox assumptions,
+% test\_small tuning caveat, source-answer caveat for maximum flow and node
+% classification.
+
+\section{Conclusion}
+% TODO: human-written conclusion.
+
+\bibliographystyle{plain}
+% \bibliography{references}
+
+
+% >>> AI-DRAFT (E15, 2026-11-21): rewrite before submission
+\section{Final experimental results}
+This section is a factual integration of the final experiments. The full
+methods and tables are in \texttt{report/EXPERIMENTAL\_REPORT.md}; the authors
+should rewrite this prose.
+
+\paragraph{Tool access.}
+Python/NetworkX tool access changes the task substantially. Over three
+repeats at the original 8k context, Baseline B v2 scores
+96.4 $\pm$ 0.3\% with tools and 35.8 $\pm$ 0.6\% without them on
+\texttt{test\_small}; on \texttt{test\_medium} the two conditions are
+91.1 $\pm$ 1.9\% and 15.3 $\pm$ 0.5\%. On the 25-problem
+\texttt{test\_large} subset used by the original tool study, v2 scores
+92.0 $\pm$ 3.3\% with tools and 0.0\% without tools in all three repeats;
+the no-tools prompts exceed the 8k limit. Baseline A shows the same pattern
+(90.4 $\pm$ 0.8\% versus 39.6 $\pm$ 2.8\% on small).
+Table~\ref{tab:tool-access}
+and Figure~\ref{fig:tool-access} summarize this. The C/gcc backend without a
+graph library scores 12.0\% on 25 small problems (one pilot run).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_tool_access.pdf}
+\caption{Tool access versus no-tools accuracy.}
+\label{fig:tool-access}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_tool_access.tex}
+\caption{Accuracy by tool condition and graph split.}
+\label{tab:tool-access}
+\end{table}
+
+\paragraph{Held-out small-graph estimate.}
+A fresh small split (\texttt{test\_small\_fresh}, seed 56240, 30 problems per
+task, 150 total, zero graph overlap with the six frozen splits) was run three
+times per harness. Accuracy is Baseline A 88.4 $\pm$ 1.3\%, Baseline B
+93.8 $\pm$ 0.8\%, and Baseline B v2 95.8 $\pm$ 0.8\% (Table~\ref{tab:heldout}).
+The contaminated \texttt{test\_small} value for v2 was 94.0\%, so the held-out
+estimate is not lower. Per task, v2 improves cycle detection over B
+(95.6\% versus 82.2\%) and is lower on max clique (83.3\% versus 88.9\%).
+McNemar B versus v2 gives $p=1.00$, $0.34$, $0.30$ in the three repeats.
+
+\begin{table}[h]
+\centering
+\input{tables/tab_heldout_small.tex}
+\caption{Accuracy on the fresh held-out small split, 3 repeats.}
+\label{tab:heldout}
+\end{table}
+
+\paragraph{Scaling and ablation.}
+Table~\ref{tab:main-scaling} and Figure~\ref{fig:scaling} show the synthetic
+scaling results as mean $\pm$ std over three repeats. v2 is higher than B on
+small (95.8 $\pm$ 1.4 versus 94.4 $\pm$ 0.6), the two are within 1.5 points on
+medium and on the 2,000-node stress split, and B is higher on large
+(90.7 $\pm$ 3.7 versus 85.3 $\pm$ 0.5). The large difference is significant in
+repeat 2 (McNemar $p=0.006$) and not in repeats 1 and 3 ($p=1.00$, $0.18$).
+The small-minus-large gap is 10.4 $\pm$ 0.8 points for v2, 3.8 $\pm$ 2.2 for B,
+and 5.0 $\pm$ 1.7 for A. Rule ablations are in
+Table~\ref{tab:rule-ablation}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_scaling.pdf}
+\caption{Accuracy versus graph size.}
+\label{fig:scaling}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_main_scaling.tex}
+\caption{Full synthetic scaling accuracy.}
+\label{tab:main-scaling}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_rule_ablation.tex}
+\caption{Rule ablation on full \texttt{test\_large}.}
+\label{tab:rule-ablation}
+\end{table}
+
+\paragraph{Real benchmarks.}
+All three harnesses were run on the expanded benchmarks: GraphArena easy and
+hard at 100 problems per task (1{,}000 each) and GraphQA test at 50 per task
+(600). Baseline B is highest on both GraphArena splits (75.6\% versus 73.7\%
+for v2 on easy; 62.6\% versus 60.9\% on hard). On GraphQA, v2 and B are within
+0.2 points (89.2\% and 89.0\%). Baseline A is below both everywhere (72.9\%,
+59.1\%, 84.3\%). The 20/task ids contained in the new data reproduce the
+earlier v2 values within 2 points (76.5/62.5/90.4\% versus
+74.5/61.0/88.3\%), so the expansion did not change the ranking
+(Table~\ref{tab:real-bench}, Table~\ref{tab:real-bench-task},
+Figure~\ref{fig:real-bench}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_real_bench.pdf}
+\caption{Accuracy on the expanded real benchmarks, 100/task (GraphArena) and
+50/task (GraphQA).}
+\label{fig:real-bench}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_real_bench_overall.tex}
+\caption{Real benchmark accuracy on the expanded sets, with 95\% Wilson CIs.}
+\label{tab:real-bench}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_real_bench_per_task.tex}
+\caption{Per-task real benchmark accuracy; $n$ is problems per harness.}
+\label{tab:real-bench-task}
+\end{table}
+
+\paragraph{No-tools at 32k.}
+To separate ``no tools'' from ``the graph does not fit in 8k'', the two
+no-tools harnesses were rerun with a 32k context. Accuracy is 18.0\% (A) and
+16.7\% (v2) on \texttt{test\_medium}, and 11.0\% and 10.0\% on
+\texttt{test\_large}; the 8k values were 15.6/15.3\% and 0.0\%. On medium,
+141/150 prompts already fit in 8k and score 18.4\%, so the low medium accuracy
+is not a context artifact. On large, no prompt fits in 8k, 93/100 fit in 32k
+and score 11.8/10.8\%, and 7/100 exceed 32k (largest about 40k tokens) and
+score 0 (Table~\ref{tab:notools-32k}, Figure~\ref{fig:notools-32k}). Tools
+remain far ahead at 84--92\%.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_notools_longctx.pdf}
+\caption{No-tools accuracy at 8k and 32k context.}
+\label{fig:notools-32k}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_notools_longctx.tex}
+\caption{No-tools runs at 32k, split by prompt length.}
+\label{tab:notools-32k}
+\end{table}
+
+\paragraph{Characteristics.}
+Table~\ref{tab:characteristics} and Figures~\ref{fig:characteristics} and
+\ref{fig:density} break accuracy down by graph family, density and size for A,
+B and v2 on the 450 frozen scaling problems. A logistic regression
+(\texttt{correct} $\sim \log n$ + density + task + harness) gives an odds ratio
+of 0.63 per unit $\log n$ (95\% CI 0.55--0.72), 0.76 per 0.1 density
+(0.64--0.90), and 1.91 for v2 versus A (1.29--2.81). Family and task are
+perfectly nested in this generator (tree only occurs with cycle detection,
+mixed only with connected components), so their effects are not separately
+identified.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_characteristics.pdf}
+\caption{Accuracy by graph family for each harness.}
+\label{fig:characteristics}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_density.pdf}
+\caption{Accuracy by density bin for each harness.}
+\label{fig:density}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_characteristics.tex}
+\caption{Accuracy by graph family, all frozen scaling splits.}
+\label{tab:characteristics}
+\end{table}
+
+\paragraph{Optimization and proxies.}
+With Qwen2.5-7B-Instruct BF16 as critic and Baseline B as the start,
+SkillOpt-style accepted one edit (val 98\% $\rightarrow$ 100\%) and RRSI-lite
+accepted one (96\% $\rightarrow$ 98\%; a second run went 97\% $\rightarrow$
+99\%). GEPA-style and Meta-Harness-lite accepted none; GEPA's validation
+sample was already at 100\%. The earlier 4B-critic pilots accepted none. Every
+accepted edit is a generic verification rule, and none contains a numeric node
+id. The changed SkillOpt harness scores 98.7/94.0/94.0/76.0\% on
+fresh-small/medium/large/stress (one run each); the changed RRSI harness
+scores 96.0/96.0/94.0/74.0\%. Baseline B's three-repeat means are
+94.4/92.0/90.7/74.5\%. These are single runs, so the 2--4 point differences
+are within the observed repeat spread, including on large
+(Table~\ref{tab:optimizer-outputs}). Table~\ref{tab:optimizers} lists rounds,
+parse rate and accepted edits; Table~\ref{tab:costs} reports token/time
+cost and Figure~\ref{fig:optimizer-curves} shows the best validation accuracy
+versus cumulative tokens. Measured evaluation cost rises from
+2.8\,s and 4.7k tokens per problem on small graphs to 3.8\,s and 5.0k tokens
+on large graphs. A 10-round optimization run that used large graphs directly
+is therefore estimated at 3.52M tokens and 0.74 GPU-hours, 1.94$\times$ the
+average completed small-graph run (Table~\ref{tab:cost-counterfactual}); cost
+alone does not explain optimizing on small graphs.
+
+\paragraph{Proxies for large-graph accuracy.}
+On the same 15 rule-ablation candidates, the learned static proxy (static
+harness-text features, leave-one-out) reaches Spearman $-0.25$ (95\% CI
+$-0.73$ to $0.41$) against val accuracy and $0.29$ ($-0.36$ to $0.85$) against
+\texttt{test\_large}; with $n=15$ neither is distinguishable from zero, and
+top-3 recall is zero for both (Table~\ref{tab:proxy},
+Figure~\ref{fig:proxy}). On the earlier pool of 18 optimizer candidates the
+same proxy reached $0.553$ against val; that pool varies the prompt and rule
+list much more than one-rule ablations do. A cheap rollout with one problem
+per task reached $-0.17$ against val on the 18-candidate pool.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/fig_proxy.pdf}
+\caption{Learned static proxy versus val and \texttt{test\_large} accuracy on
+the same 15 candidates.}
+\label{fig:proxy}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_proxy.tex}
+\caption{Proxy ranking quality by proxy, target and candidate pool.}
+\label{tab:proxy}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{figures/fig_optimizer_curves.pdf}
+\caption{Best validation accuracy versus cumulative optimizer tokens.}
+\label{fig:optimizer-curves}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_costs.tex}
+\caption{Optimizer token, time and estimated dollar cost.}
+\label{tab:costs}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_optimizers.tex}
+\caption{Optimizer runs with the 7B critic, started from Baseline B.
+``acc.'' counts accepted edits.}
+\label{tab:optimizers}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_optimizer_outputs.tex}
+\caption{Evaluation of the changed harnesses on the four scaling splits
+(one run each), next to Baseline B's three-repeat means.}
+\label{tab:optimizer-outputs}
+\end{table}
+\paragraph{Overfitting probe.}
+Acceptance was also decided on a 10-problem training batch instead of
+validation. RRSI-lite accepted one edit: validation accuracy rose from 92.7\%
+to 98.7\% while \texttt{test\_large} fell from 95.0\% to 90.0\%, so the
+small--large gap grew from 2.3 to 8.7 points. SkillOpt-style accepted no edit
+because its 10-problem acceptance batch was already at 100\%. In the standard
+validation-gated run the RRSI output kept 94.0\% on \texttt{test\_large}
+(Table~\ref{tab:optimizers}). Table~\ref{tab:overfit} and
+Figure~\ref{fig:overfit} show the probe.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\linewidth]{figures/fig_overfit_probe.pdf}
+\caption{Validation versus \texttt{test\_large} accuracy for each probe
+checkpoint.}
+\label{fig:overfit}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_overfit.tex}
+\caption{Overfitting probe: acceptance on 10 training problems.}
+\label{tab:overfit}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_cost_counterfactual.tex}
+\caption{Estimated cost of 10 rounds of optimization on each graph size.}
+\label{tab:cost-counterfactual}
+\end{table}
+
+\paragraph{Router and decomposition.}
+On a controlled disconnected additive set, global v2 scores 25.0\%, the feature
+router 37.5\%, and per-component decomposition 50.0\%; max clique rises from 0\%
+to 100\% under decomposition. Figure~\ref{fig:router} and
+Table~\ref{tab:router} show the pilot.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.65\linewidth]{figures/fig_router.pdf}
+\caption{Router/decomposition accuracy on the disconnected additive set.}
+\label{fig:router}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\input{tables/tab_router.tex}
+\caption{Router modes on the disconnected additive set.}
+\label{tab:router}
+\end{table}
+\paragraph{Router at scale.}
+On the 120-problem disconnected set (sizes 400/1000/2000, 5/10/20 components),
+global v2 scores 30.8\% and the feature router 29.2\%. Both solve connected
+components (100\%) but return no correct MIS or MVC answer and only
+23.3/16.7\% on max clique: merging component answers is the bottleneck, not
+choosing a harness per graph. A learned router over cheap graph features
+predicts the most likely-correct library harness with 96.7\% five-fold CV
+accuracy against a 100\% oracle-any ceiling; its GPU run failed on a router
+interface bug, and the fixed module is unit-tested but not rerun. On a
+12-problem subset (one problem per task and size, 400/1000/2000 nodes),
+decomposition with exact component repair scores 100\% on all four tasks
+(Table~\ref{tab:router-decomp}); the full 120-problem decomposition and the
+learned-router rerun did not finish in the available GPU window
+(Table~\ref{tab:router120}, Figure~\ref{fig:router120}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig_router120.pdf}
+\caption{Router modes on the 120-problem disconnected set.}
+\label{fig:router120}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_router120.tex}
+\caption{Router modes on the 120-problem disconnected set.}
+\label{tab:router120}
+\end{table}
+\begin{table}[h]
+\centering
+\small
+\input{tables/tab_router_decomp.tex}
+\caption{Decomposition with exact component repair on 12 disconnected graphs
+(one per task and size).}
+\label{tab:router-decomp}
+\end{table}
+\paragraph{Not completed.}
+The language $\times$ library 2$\times$2, the full 40-candidate proxy study and
+the cross-model check are not included. Their code, splits and unit tests are
+in \texttt{experiments/final/} and \texttt{scripts/final/}, but the B200 queue
+was fully reserved for the rest of the run window; the jobs are queued as
+1549257, 1549258 and 1549291. The learned router is implemented and reaches
+96.7\% five-fold CV, but its run failed on an interface bug; decomposition on
+the 120-problem set exceeded the job time limit.
+% <<< AI-DRAFT
+
+\end{document}

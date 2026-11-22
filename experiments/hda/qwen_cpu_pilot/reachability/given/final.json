@@ -1,0 +1,20 @@
+{
+  "task": "reachability",
+  "condition": "given",
+  "k": 3,
+  "seed": 0,
+  "best_it": 0,
+  "best_val_acc": -1.0,
+  "final_statement": "Given a directed graph and two nodes s and t (query 2 s t), print YES if there is a directed path from s to t, otherwise NO. The goal is to determine reachability in a directed graph using efficient shortest-path or connectivity algorithms. Since the graph may be large (up to 100,000 nodes and edges), we must avoid recursion depth issues and ensure linear time complexity per query with optimized data structures.",
+  "val_curve": [
+    0.0
+  ],
+  "statements": [
+    "Given a directed graph and two nodes s and t (query 2 s t), print YES if there is a directed path from s to t, otherwise NO. The goal is to determine reachability in a directed graph using efficient shortest-path or connectivity algorithms. Since the graph may be large (up to 100,000 nodes and edges), we must avoid recursion depth issues and ensure linear time complexity per query with optimized data structures."
+  ],
+  "tokens": {
+    "prompt": 2486,
+    "completion": 103
+  },
+  "test": {}
+}

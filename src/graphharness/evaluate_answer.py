@@ -27,7 +27,7 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-from .data_loader import load_jsonl, save_jsonl, to_graph
+from .data_loader import load_jsonl, save_jsonl, to_graphs
 from .tasks import get_task
 
 _ANSWER_TAG = re.compile(r"<answer>(.*?)</answer>", re.IGNORECASE | re.DOTALL)
@@ -52,10 +52,16 @@ def _lookup_table(nodes) -> tuple[dict, dict]:
     lower = {}
     for k, v in exact.items():
         lower.setdefault(k.lower(), v)
+        lower.setdefault(k.strip(_STRIP).lower(), v)
     return exact, lower
 
 
 def _match(token: str, exact: dict, lower: dict):
+    raw = token.strip(" \t\n\r")
+    if raw in exact:
+        return exact[raw]
+    if raw.lower() in lower:
+        return lower[raw.lower()]
     t = token.strip(_STRIP)
     if t in exact:
         return exact[t]
@@ -106,13 +112,82 @@ def to_nodes(inner: str, graph_nodes) -> tuple[list, list[str]]:
     return nodes, unknown
 
 
+def _answer_text(response: str | None) -> str:
+    if response is None:
+        return ""
+    tagged = _ANSWER_TAG.findall(response)
+    return (tagged[-1] if tagged else response).strip()
+
+
+def _extract_number(text: str):
+    matches = re.findall(r"-?\d+(?:\.\d+)?", text)
+    if not matches:
+        return None
+    value = float(matches[-1])
+    return int(value) if value.is_integer() else value
+
+
+def _extract_boolean(text: str):
+    matches = re.findall(r"\b(yes|no|true|false)\b", text.lower())
+    if not matches:
+        return None
+    return matches[-1] in {"yes", "true"}
+
+
+def _extract_string(text: str) -> str | None:
+    lines = [line.strip().strip(_STRIP) for line in text.splitlines() if line.strip()]
+    if not lines:
+        return None
+    return lines[-1]
+
+
+def _extract_int_list(text: str):
+    matches = list(_BRACKET.findall(text))
+    if not matches:
+        return None
+    raw = matches[-1]
+    nums = re.findall(r"-?\d+", raw)
+    return [int(n) for n in nums] if nums else []
+
+
+def _extract_two_int_lists(text: str):
+    matches = list(_BRACKET.findall(text))
+    if len(matches) < 2:
+        return None
+    out = []
+    for raw in matches[-2:]:
+        nums = re.findall(r"-?\d+", raw)
+        out.append([int(n) for n in nums])
+    return out
+
+
+def _parse_scalar(kind: str, text: str):
+    if kind == "number":
+        return _extract_number(text)
+    if kind == "boolean":
+        return _extract_boolean(text)
+    if kind == "string":
+        return _extract_string(text)
+    if kind == "mapping":
+        value = _extract_int_list(text)
+        if value is not None:
+            return value
+        return _extract_number(text)
+    if kind == "two_lists":
+        return _extract_two_int_lists(text)
+    return None
+
+
 def score_response(record: dict, response: str | None) -> dict:
     """Score one response for one problem record."""
+    n_nodes = len(record["graph"]["nodes"]) if "graph" in record else (
+        len(record["graphs"][0]["nodes"]) if record.get("graphs") else 0
+    )
     out = {
         "id": record["id"],
         "task": record["task"],
         "split": record.get("split"),
-        "n_nodes": len(record["graph"]["nodes"]),
+        "n_nodes": n_nodes,
         "parsed": False,
         "feasible": False,
         "correct": False,
@@ -120,21 +195,32 @@ def score_response(record: dict, response: str | None) -> dict:
         "note": "",
         "answer_nodes": None,
     }
-    inner = extract_list(response)
-    if inner is None:
-        out["note"] = "no [ ... ] answer found" if response is not None else "no prediction"
-        return out
-    out["parsed"] = True
-
-    G = to_graph(record)
-    nodes, unknown = to_nodes(inner, G.nodes)
-    out["answer_nodes"] = nodes
-    if unknown:
-        out["note"] = f"unknown node(s): {unknown[:5]}"
-        return out
-
     task = get_task(record["task"])
-    check = task.check(G, record["params"], record["answer"], nodes)
+    graphs = to_graphs(record)
+    G = graphs[0] if len(graphs) == 1 else graphs
+    content = _answer_text(response)
+
+    if task.answer_kind == "nodes":
+        inner = extract_list(response)
+        if inner is None:
+            out["note"] = "no [ ... ] answer found" if response is not None else "no prediction"
+            return out
+        out["parsed"] = True
+        nodes, unknown = to_nodes(inner, graphs[0].nodes)
+        out["answer_nodes"] = nodes
+        if unknown:
+            out["note"] = f"unknown node(s): {unknown[:5]}"
+            return out
+        parsed = nodes
+    else:
+        parsed = _parse_scalar(task.answer_kind, content)
+        if parsed is None:
+            out["note"] = f"could not parse {task.answer_kind} answer" if response else "no prediction"
+            return out
+        out["parsed"] = True
+        out["answer_nodes"] = parsed
+
+    check = task.check(G, record["params"], record["answer"], parsed)
     out.update(feasible=check.feasible, correct=check.correct,
                value=check.value, note=check.note)
     return out

@@ -1,0 +1,33 @@
+harness: baseline_b    model: qwen3-4b    split: ga_easy
+problems: 1000    errors: 0    duration: 446.8s    tokens: 3935705
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+ga_easy      common_neighbors         100       9  100.0%    100.0%     98.0%
+ga_easy      connected_components     100       7  100.0%    100.0%    100.0%
+ga_easy      diameter                 100       7  100.0%     98.0%     98.0%
+ga_easy      graph_edit_distance      100       6   99.0%     33.0%     22.0%
+ga_easy      max_clique               100       7  100.0%     99.0%     99.0%
+ga_easy      max_common_subgraph      100       5   75.0%     71.0%     67.0%
+ga_easy      max_independent_set      100       6  100.0%     98.0%     86.0%
+ga_easy      min_vertex_cover         100       9  100.0%     87.0%     79.0%
+ga_easy      shortest_path            100      10  100.0%     95.0%     95.0%
+ga_easy      traveling_salesman       100       5  100.0%     68.0%     12.0%
+ga_easy      ALL                     1000       7   97.4%     84.9%     75.6%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50        1000        7    97.4%     84.9%     75.6%
+
+First failures:
+- shortest_path/ga_easy/00036 (shortest_path, n=5): empty answer
+- shortest_path/ga_easy/00045 (shortest_path, n=13): empty answer
+- shortest_path/ga_easy/00049 (shortest_path, n=11): unknown node(s): ['Chah Mir Hormozgan']
+- shortest_path/ga_easy/00061 (shortest_path, n=9): empty answer
+- shortest_path/ga_easy/00097 (shortest_path, n=11): empty answer
+- diameter/ga_easy/00021 (diameter, n=5): unknown node(s): ['1', '2', '4', '5']
+- diameter/ga_easy/00053 (diameter, n=4): unknown node(s): ['1', '2', '3', '4']
+- max_clique/ga_easy/00086 (max_clique, n=5): unknown node(s): ['1', '2', '3', '4', '5']
+- common_neighbors/ga_easy/00035 (common_neighbors, n=6): gave 0 common neighbors, graph has 3
+- common_neighbors/ga_easy/00070 (common_neighbors, n=11): gave 0 common neighbors, graph has 8

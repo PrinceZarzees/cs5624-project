@@ -1,0 +1,33 @@
+benchmark,task,n,A,B,B v2
+GA easy,common_neighbors,100,99.0%,98.0%,98.0%
+GA easy,connected_components,100,100.0%,100.0%,100.0%
+GA easy,diameter,100,95.0%,98.0%,92.0%
+GA easy,graph_edit_distance,100,19.0%,22.0%,26.0%
+GA easy,max_clique,100,91.0%,99.0%,92.0%
+GA easy,max_common_subgraph,100,54.0%,67.0%,54.0%
+GA easy,max_independent_set,100,88.0%,86.0%,83.0%
+GA easy,min_vertex_cover,100,81.0%,79.0%,80.0%
+GA easy,shortest_path,100,87.0%,95.0%,99.0%
+GA easy,traveling_salesman,100,15.0%,12.0%,13.0%
+GA hard,common_neighbors,100,98.0%,98.0%,97.0%
+GA hard,connected_components,100,100.0%,100.0%,100.0%
+GA hard,diameter,100,86.0%,96.0%,93.0%
+GA hard,graph_edit_distance,100,1.0%,2.0%,0.0%
+GA hard,max_clique,100,95.0%,82.0%,86.0%
+GA hard,max_common_subgraph,100,42.0%,52.0%,41.0%
+GA hard,max_independent_set,100,62.0%,45.0%,33.0%
+GA hard,min_vertex_cover,100,61.0%,55.0%,60.0%
+GA hard,shortest_path,100,46.0%,96.0%,99.0%
+GA hard,traveling_salesman,100,0.0%,0.0%,0.0%
+GraphQA,connected_nodes,50,100.0%,100.0%,100.0%
+GraphQA,cycle_detection,50,52.0%,88.0%,90.0%
+GraphQA,disconnected_nodes,50,98.0%,100.0%,100.0%
+GraphQA,edge_count,50,100.0%,100.0%,100.0%
+GraphQA,edge_existence,50,100.0%,100.0%,100.0%
+GraphQA,maximum_flow,50,14.0%,14.0%,14.0%
+GraphQA,node_classification,50,90.0%,84.0%,78.0%
+GraphQA,node_count,50,100.0%,100.0%,100.0%
+GraphQA,node_degree,50,100.0%,98.0%,100.0%
+GraphQA,reachability,50,78.0%,96.0%,98.0%
+GraphQA,shortest_path,50,100.0%,100.0%,98.0%
+GraphQA,triangle_counting,50,80.0%,88.0%,92.0%

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "name": "baseline_b_v2_c_lib",
+  "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+  "rules": [
+    "Use integer node ids and `load_graph()` from graph_io.h; the graph is in graph.txt.",
+    "Prefer graph_algos.h: ga_components, ga_has_cycle, ga_diameter, ga_max_clique, ga_max_independent_set, ga_min_vertex_cover.",
+    "For maximum clique, call ga_max_clique and verify that every returned pair is adjacent.",
+    "Check feasibility before answering: path endpoints and edges, one representative per component, cycle closure, or clique pairwise adjacency.",
+    "Keep program output short: print only the result, its length/size, and a small check.",
+    "If compilation or execution fails, change the program instead of rerunning it unchanged.",
+    "Put only the final node list inside <answer></answer>; use [] for a negative answer.",
+    "For connected components, call ga_components and print one node per component.",
+    "For diameter, call ga_diameter and print a witness pair; do not guess.",
+    "Always print the value you need with printf.",
+    "Include both \"graph_io.h\" and \"graph_algos.h\".",
+    "Once a successful run prints a feasible result, stop and give that result in <answer> tags.",
+    "Never sort or index nodes by numeric value when the ids are arbitrary; here ids are 0..n-1.",
+    "Free the graph with free_graph before exiting."
+  ],
+  "graph_view": "summary",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "c",
+  "tool_preamble": "",
+  "block_networkx": false,
+  "c_library": true,
+  "notes": "C backend with graph_algos library."
+}

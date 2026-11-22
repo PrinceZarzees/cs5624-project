@@ -1,0 +1,438 @@
+{
+  "harness": "baseline_a",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_a",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+  },
+  "model": "qwen3-4b",
+  "split": "ga_hard",
+  "started_at": "2026-11-21T16:19:16.554144+00:00",
+  "finished_at": "2026-11-21T16:33:55.399837+00:00",
+  "duration_s": 878.8456989671104,
+  "n": 1000,
+  "overall": {
+    "split": "ga_hard",
+    "task": "ALL",
+    "n": 1000,
+    "parsed": 0.972,
+    "feasible": 0.748,
+    "accuracy": 0.591,
+    "mean_nodes": 19.694
+  },
+  "by_task": [
+    {
+      "task": "common_neighbors",
+      "n": 100,
+      "mean_nodes": 30.52,
+      "parsed": 1.0,
+      "feasible": 0.99,
+      "accuracy": 0.98
+    },
+    {
+      "task": "connected_components",
+      "n": 100,
+      "mean_nodes": 19.3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "diameter",
+      "n": 100,
+      "mean_nodes": 19.58,
+      "parsed": 1.0,
+      "feasible": 0.87,
+      "accuracy": 0.86
+    },
+    {
+      "task": "graph_edit_distance",
+      "n": 100,
+      "mean_nodes": 12.36,
+      "parsed": 0.99,
+      "feasible": 0.26,
+      "accuracy": 0.01
+    },
+    {
+      "task": "max_clique",
+      "n": 100,
+      "mean_nodes": 19.37,
+      "parsed": 1.0,
+      "feasible": 0.97,
+      "accuracy": 0.95
+    },
+    {
+      "task": "max_common_subgraph",
+      "n": 100,
+      "mean_nodes": 12.96,
+      "parsed": 0.73,
+      "feasible": 0.64,
+      "accuracy": 0.42
+    },
+    {
+      "task": "max_independent_set",
+      "n": 100,
+      "mean_nodes": 18.9,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.62
+    },
+    {
+      "task": "min_vertex_cover",
+      "n": 100,
+      "mean_nodes": 19.28,
+      "parsed": 1.0,
+      "feasible": 0.78,
+      "accuracy": 0.61
+    },
+    {
+      "task": "shortest_path",
+      "n": 100,
+      "mean_nodes": 31.57,
+      "parsed": 1.0,
+      "feasible": 0.46,
+      "accuracy": 0.46
+    },
+    {
+      "task": "traveling_salesman",
+      "n": 100,
+      "mean_nodes": 13.1,
+      "parsed": 1.0,
+      "feasible": 0.55,
+      "accuracy": 0.0
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 1000,
+      "mean_nodes": 19.694,
+      "parsed": 0.972,
+      "feasible": 0.748,
+      "accuracy": 0.591
+    }
+  ],
+  "tokens": {
+    "prompt": 4068524,
+    "completion": 927188,
+    "total": 4995712,
+    "mean_total_per_problem": 4995.712
+  },
+  "tool_calls": 2155,
+  "mean_agent_duration_s": 6.800425887588878,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "shortest_path/ga_hard/00001",
+      "task": "shortest_path",
+      "n_nodes": 21,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00003",
+      "task": "shortest_path",
+      "n_nodes": 43,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00004",
+      "task": "shortest_path",
+      "n_nodes": 32,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00005",
+      "task": "shortest_path",
+      "n_nodes": 27,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00007",
+      "task": "shortest_path",
+      "n_nodes": 33,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00009",
+      "task": "shortest_path",
+      "n_nodes": 50,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00013",
+      "task": "shortest_path",
+      "n_nodes": 45,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00017",
+      "task": "shortest_path",
+      "n_nodes": 23,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00018",
+      "task": "shortest_path",
+      "n_nodes": 39,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00019",
+      "task": "shortest_path",
+      "n_nodes": 50,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00021",
+      "task": "shortest_path",
+      "n_nodes": 25,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00022",
+      "task": "shortest_path",
+      "n_nodes": 23,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00023",
+      "task": "shortest_path",
+      "n_nodes": 31,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00026",
+      "task": "shortest_path",
+      "n_nodes": 28,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00027",
+      "task": "shortest_path",
+      "n_nodes": 20,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00028",
+      "task": "shortest_path",
+      "n_nodes": 34,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00029",
+      "task": "shortest_path",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00031",
+      "task": "shortest_path",
+      "n_nodes": 43,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00033",
+      "task": "shortest_path",
+      "n_nodes": 24,
+      "parsed": true,
+      "feasible": false,
+      "note": "unknown node(s): ['Lugo Emilia-Romagna']"
+    },
+    {
+      "id": "shortest_path/ga_hard/00035",
+      "task": "shortest_path",
+      "n_nodes": 22,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00038",
+      "task": "shortest_path",
+      "n_nodes": 32,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00041",
+      "task": "shortest_path",
+      "n_nodes": 37,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00046",
+      "task": "shortest_path",
+      "n_nodes": 42,
+      "parsed": true,
+      "feasible": false,
+      "note": "empty answer"
+    },
+    {
+      "id": "shortest_path/ga_hard/00047",
+      "task": "shortest_path",
+      "n_nodes": 49,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between Actress and S\u00e3o Paulo (state)"
+    },
+    {
+      "id": "shortest_path/ga_hard/00048",
+      "task": "shortest_path",
+      "n_nodes": 38,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between Cathal Brugha and Charlie McGettigan"
+    }
+  ],
+  "rows": [
+    {
+      "split": "ga_hard",
+      "task": "common_neighbors",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.99,
+      "accuracy": 0.98,
+      "mean_nodes": 30.52
+    },
+    {
+      "split": "ga_hard",
+      "task": "connected_components",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 19.3
+    },
+    {
+      "split": "ga_hard",
+      "task": "diameter",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.87,
+      "accuracy": 0.86,
+      "mean_nodes": 19.58
+    },
+    {
+      "split": "ga_hard",
+      "task": "graph_edit_distance",
+      "n": 100,
+      "parsed": 0.99,
+      "feasible": 0.26,
+      "accuracy": 0.01,
+      "mean_nodes": 12.36
+    },
+    {
+      "split": "ga_hard",
+      "task": "max_clique",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.97,
+      "accuracy": 0.95,
+      "mean_nodes": 19.37
+    },
+    {
+      "split": "ga_hard",
+      "task": "max_common_subgraph",
+      "n": 100,
+      "parsed": 0.73,
+      "feasible": 0.64,
+      "accuracy": 0.42,
+      "mean_nodes": 12.96
+    },
+    {
+      "split": "ga_hard",
+      "task": "max_independent_set",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.96,
+      "accuracy": 0.62,
+      "mean_nodes": 18.9
+    },
+    {
+      "split": "ga_hard",
+      "task": "min_vertex_cover",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.78,
+      "accuracy": 0.61,
+      "mean_nodes": 19.28
+    },
+    {
+      "split": "ga_hard",
+      "task": "shortest_path",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.46,
+      "accuracy": 0.46,
+      "mean_nodes": 31.57
+    },
+    {
+      "split": "ga_hard",
+      "task": "traveling_salesman",
+      "n": 100,
+      "parsed": 1.0,
+      "feasible": 0.55,
+      "accuracy": 0.0,
+      "mean_nodes": 13.1
+    },
+    {
+      "split": "ga_hard",
+      "task": "ALL",
+      "n": 1000,
+      "parsed": 0.972,
+      "feasible": 0.748,
+      "accuracy": 0.591,
+      "mean_nodes": 19.694
+    }
+  ]
+}

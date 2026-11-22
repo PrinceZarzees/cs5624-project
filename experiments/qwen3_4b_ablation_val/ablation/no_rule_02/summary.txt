@@ -1,0 +1,28 @@
+harness: baseline_b_v2-no-rule-2    model: qwen3-4b    split: val
+problems: 150    errors: 0    duration: 113.5s    tokens: 1025399
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+val          connected_components      30      27  100.0%    100.0%    100.0%
+val          cycle_detection           30      27  100.0%    100.0%     93.3%
+val          diameter                  30      26  100.0%     90.0%     90.0%
+val          max_clique                30      29  100.0%     86.7%     83.3%
+val          shortest_path             30      23  100.0%    100.0%    100.0%
+val          ALL                      150      27  100.0%     95.3%     93.3%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       27   100.0%     95.3%     93.3%
+
+First failures:
+- cycle_detection/val/00004 (cycle_detection, n=32): said no cycle, but the graph has one
+- cycle_detection/val/00021 (cycle_detection, n=31): said no cycle, but the graph has one
+- diameter/val/00003 (diameter, n=26): unknown node(s): ['0', '1', '2', '4', '5']
+- diameter/val/00017 (diameter, n=41): unknown node(s): ['1', '2', '3']
+- diameter/val/00022 (diameter, n=45): unknown node(s): ['1', '2', '3']
+- max_clique/val/00003 (max_clique, n=9): empty answer
+- max_clique/val/00007 (max_clique, n=25): 31 and 77 are not connected, not a clique
+- max_clique/val/00013 (max_clique, n=25): empty answer
+- max_clique/val/00016 (max_clique, n=47): empty answer
+- max_clique/val/00024 (max_clique, n=15): clique of size 3, maximum is 4

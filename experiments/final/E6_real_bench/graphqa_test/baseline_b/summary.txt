@@ -1,0 +1,35 @@
+harness: baseline_b    model: qwen3-4b    split: graphqa_test
+problems: 600    errors: 0    duration: 78.4s    tokens: 1294802
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+graphqa_test connected_nodes           50      13  100.0%    100.0%    100.0%
+graphqa_test cycle_detection           50      13  100.0%     88.0%     88.0%
+graphqa_test disconnected_nodes        50      13  100.0%    100.0%    100.0%
+graphqa_test edge_count                50      13  100.0%    100.0%    100.0%
+graphqa_test edge_existence            50      13  100.0%    100.0%    100.0%
+graphqa_test maximum_flow              50      13   98.0%     98.0%     14.0%
+graphqa_test node_classification       50      11  100.0%    100.0%     84.0%
+graphqa_test node_count                50      13  100.0%    100.0%    100.0%
+graphqa_test node_degree               50      13  100.0%    100.0%     98.0%
+graphqa_test reachability              50      13  100.0%     96.0%     96.0%
+graphqa_test shortest_path             50      13  100.0%    100.0%    100.0%
+graphqa_test triangle_counting         50      13  100.0%    100.0%     88.0%
+graphqa_test ALL                      600      12   99.8%     98.5%     89.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         600       12    99.8%     98.5%     89.0%
+
+First failures:
+- cycle_detection/graphqa_test/00005 (cycle_detection, n=17): no edge between 2 and 3
+- cycle_detection/graphqa_test/00015 (cycle_detection, n=13): no edge between 1 and 2
+- cycle_detection/graphqa_test/00017 (cycle_detection, n=17): no edge from the last node back to the first
+- cycle_detection/graphqa_test/00018 (cycle_detection, n=14): no edge between 2 and 3
+- cycle_detection/graphqa_test/00019 (cycle_detection, n=19): no edge between 1 and 2
+- cycle_detection/graphqa_test/00033 (cycle_detection, n=13): no edge between 1 and 2
+- reachability/graphqa_test/00001 (reachability, n=10): empty answer
+- reachability/graphqa_test/00030 (reachability, n=10): empty answer
+- node_degree/graphqa_test/00026 (node_degree, n=13): answered 12, degree is 10
+- triangle_counting/graphqa_test/00008 (triangle_counting, n=18): answered 18, graph has 8 triangles

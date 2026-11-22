@@ -1,0 +1,24 @@
+harness                  split             n   nodes  accuracy     tokens sec/problem
+-------------------------------------------------------------------------------------
+baseline_a               test_small       15      25     93.3%       3400        2.39
+baseline_a               test_medium      15     197     86.7%       3772        2.46
+baseline_a               test_large       15     716     86.7%       3662        2.91
+baseline_a               test_stress      15    2000     73.3%       6707        5.51
+baseline_b               test_small       15      25     93.3%       3606        1.96
+baseline_b               test_medium      15     197     93.3%       4636        2.76
+baseline_b               test_large       15     716     80.0%       6030        3.82
+baseline_b               test_stress      15    2000     53.3%      11926        6.32
+baseline_b_v2            test_small       15      25     93.3%       6700        3.04
+baseline_b_v2            test_medium      15     197    100.0%       7517        3.88
+baseline_b_v2            test_large       15     716     73.3%       6520        3.38
+baseline_b_v2            test_stress      15    2000     80.0%       8491        4.82
+
+Generalization gap (test_small - test_large):
+- baseline_a: 93.3% - 86.7% = +6.7%
+- baseline_b: 93.3% - 80.0% = +13.3%
+- baseline_b_v2: 93.3% - 73.3% = +20.0%
+
+Accuracy by size for baseline_b_v2 / test_stress:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+1000+         15     2000    86.7%     86.7%     80.0%

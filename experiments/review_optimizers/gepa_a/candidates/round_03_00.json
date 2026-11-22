@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "name": "baseline_a-gepa-3-0",
+  "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always use the correct node identifiers from the graph. Do not invent or refer to nodes like 'a', 'b', 'c'. Verify your solution against the expected output format and ensure all answers use actual graph nodes. Final answers must be in a properly formatted list, with no syntax errors or placeholder nodes.",
+  "rules": [],
+  "graph_view": "summary",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+}

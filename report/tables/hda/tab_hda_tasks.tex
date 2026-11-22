@@ -1,0 +1,16 @@
+\begin{tabular}{llllp{6.2cm}}
+\toprule
+task & directed & weighted & query args & statement \\
+\midrule
+shortest\_path & no & yes & 2 (s,t) & Given an undirected graph with positive integer edge weights and two nodes s and t. The query line is `2 s t`: k=2 is the NUMBER of arguments (not a type code), then s and t. Print the total weight of a minimum-weight path from s to t, or -1 if t is unreachable from s. \\
+reachability & yes & no & 2 (s,t) & Given a directed graph and two nodes s and t. The query line is `2 s t`: k=2 is the NUMBER of arguments (not a type code), then s and t. Print YES if there is a directed path from s to t, otherwise NO. \\
+connected\_components & no & no & none & Given an undirected graph, print the number of connected components (an isolated node is its own component). \\
+cycle\_detection & no & no & none & Given an undirected simple graph, print YES if it contains at least one cycle, otherwise NO. \\
+diameter & no & no & none & Given a connected undirected unweighted graph, print its diameter: the largest shortest-path distance (in edges) between any two nodes. \\
+common\_neighbors & no & no & 2 (s,t) & Given an undirected graph and two nodes u and v. The query line is `2 u v`: k=2 is the NUMBER of arguments (not a type code), then u and v. Print the number of nodes adjacent to both u and v. \\
+triangle\_count & no & no & none & Given an undirected simple graph, print the number of triangles (unordered triples of mutually adjacent nodes). \\
+bipartite\_check & no & no & none & Given an undirected graph, print YES if its nodes can be split into two sets so that every edge joins the two sets (the graph is bipartite), otherwise NO. \\
+mst\_weight & no & yes & none & Given a connected undirected graph with positive integer edge weights, print the total weight of a minimum spanning tree. \\
+max\_flow & yes & yes & 2 (s,t) & Given a directed graph whose edge weights are capacities and two nodes s and t (query 2 s t), print the value of a maximum flow from s to t. \\
+\bottomrule
+\end{tabular}

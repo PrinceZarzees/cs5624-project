@@ -1,0 +1,17 @@
+harness: baseline_b_v2    model: qwen2.5-7b    split: test_small
+problems: 10    errors: 0    duration: 294.1s    tokens: 57532
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   diameter                   5      32   80.0%     80.0%     80.0%
+test_small   max_clique                 5      26   80.0%     80.0%     80.0%
+test_small   ALL                       10      29   80.0%     80.0%     80.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50          10       29    80.0%     80.0%     80.0%
+
+First failures:
+- diameter/test_small/00000 (diameter, n=47): no prediction
+- max_clique/test_small/00000 (max_clique, n=13): no prediction

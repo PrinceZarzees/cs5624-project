@@ -1,0 +1,24 @@
+harness: baseline_b_v2    model: qwen3-4b    split: test_small
+problems: 150    errors: 0    duration: 102.0s    tokens: 794917
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components      30      30  100.0%    100.0%    100.0%
+test_small   cycle_detection           30      26  100.0%    100.0%    100.0%
+test_small   diameter                  30      27  100.0%    100.0%    100.0%
+test_small   max_clique                30      27  100.0%     96.7%     80.0%
+test_small   shortest_path             30      21  100.0%    100.0%    100.0%
+test_small   ALL                      150      26  100.0%     99.3%     96.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50         150       26   100.0%     99.3%     96.0%
+
+First failures:
+- max_clique/test_small/00002 (max_clique, n=28): clique of size 2, maximum is 3
+- max_clique/test_small/00003 (max_clique, n=36): clique of size 3, maximum is 4
+- max_clique/test_small/00013 (max_clique, n=32): clique of size 2, maximum is 9
+- max_clique/test_small/00017 (max_clique, n=41): clique of size 3, maximum is 7
+- max_clique/test_small/00020 (max_clique, n=40): clique of size 5, maximum is 7
+- max_clique/test_small/00024 (max_clique, n=34): unknown node(s): ['neighbor']

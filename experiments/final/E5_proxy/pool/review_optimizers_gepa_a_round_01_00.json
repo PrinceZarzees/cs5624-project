@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "baseline_a-gepa-1-0",
+  "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. First, analyze the graph structure using appropriate graph algorithms. Always verify your solution against the problem requirements. Final output must be a valid JSON-like list of nodes in the required format, with no markdown, code blocks, or extra text. If no cycle exists, return an empty list []. If no path exists, return an empty list [].",
+  "rules": [],
+  "graph_view": "summary",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+}

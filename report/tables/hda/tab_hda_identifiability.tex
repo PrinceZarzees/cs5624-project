@@ -1,0 +1,16 @@
+\begin{tabular}{lrrrrrp{4.5cm}}
+\toprule
+task & candidates & k=1 & k=3 & k=5 & k=10 & top confusers at k=3 \\
+\midrule
+shortest\_path & 4 & 0.81 & 0.98 & 1.00 & 1.00 & edge\_weight, max\_edge\_on\_path \\
+reachability & 5 & 0.00 & 0.18 & 0.45 & 0.86 & strongly\_connected, edge\_exists, undirected\_connected \\
+connected\_components & 18 & 0.76 & 1.00 & 1.00 & 1.00 & radius\_lcc \\
+cycle\_detection & 18 & 0.01 & 0.41 & 0.67 & 0.93 & has\_triangle, is\_connected, is\_tree \\
+diameter & 18 & 0.78 & 1.00 & 1.00 & 1.00 & -- \\
+common\_neighbors & 7 & 0.60 & 0.97 & 1.00 & 1.00 & min\_degree\_uv, degree\_v, degree\_u \\
+triangle\_count & 18 & 0.43 & 0.90 & 0.97 & 1.00 & cycle\_rank, isolated\_nodes \\
+bipartite\_check & 18 & 0.23 & 0.74 & 0.92 & 1.00 & is\_connected, is\_tree, cycle\_detection \\
+mst\_weight & 6 & 0.58 & 0.93 & 0.98 & 1.00 & max\_spanning\_tree, total\_weight \\
+max\_flow & 7 & 0.16 & 0.54 & 0.77 & 0.98 & min\_out\_in, widest\_path, out\_capacity\_s \\
+\bottomrule
+\end{tabular}

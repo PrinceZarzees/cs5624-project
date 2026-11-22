@@ -1,0 +1,338 @@
+{
+  "start_harness": {
+    "version": 1,
+    "name": "baseline_a",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+  },
+  "best_harness": {
+    "version": 1,
+    "name": "baseline_a",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+  },
+  "config": {
+    "rounds": 10,
+    "train_per_task": 6,
+    "val_per_task": 8,
+    "max_steps": 8,
+    "workers": 8,
+    "seed": 5624,
+    "min_gain": 0.02,
+    "max_rules": 16,
+    "max_rule_chars": 500,
+    "max_prompt_chars": 4000,
+    "max_examples": 12,
+    "critic_temperature": 0.5
+  },
+  "initial_val_accuracy": 0.875,
+  "best_val_accuracy": 0.875,
+  "rounds": 10,
+  "total_tokens": 4006987,
+  "duration_s": 486.3635080992244,
+  "started_at": "2026-11-20T21:42:51.761587+00:00",
+  "finished_at": "2026-11-20T21:50:58.125055+00:00",
+  "history": [
+    {
+      "round": 0,
+      "accepted": true,
+      "role": "initial",
+      "val_accuracy": 0.875,
+      "best_val_accuracy": 0.875,
+      "harness_hash": "920960462ecf",
+      "tokens": 137042
+    },
+    {
+      "round": 1,
+      "train_accuracy": 0.8,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For connected components, ensure each node in the output belongs to a distinct component. For cycles, only return a cycle if one exists; otherwise return an empty list. For diameter, compute shortest paths between all pairs and verify the maximum distance with a valid path. Never invent or use unknown node identifiers. Use only nodes present in the graph. Final answer must be in the required format.\",\n  \"rules\": [\n    \"Always verify that each node in the output belongs to a distinct connected component.\",\n    \"Never use node identifiers that are not present in the graph (e.g., '1', '2', '3') \u2014 use only nodes from the graph's actual node set.\",\n    \"For cycle detection, only return a cycle if one exists; otherwise return an empty list.\",\n    \"For diameter, compute all-pairs shortest paths and confirm the longest path exists between two actual nodes in the graph.\",\n    \"When generating a path, ensure it uses only nodes that are in the graph and that the path is valid (i.e., edges exist between consecutive nodes).\",\n    \"Do not assume node labels or order \u2014 use the graph's actual structure and node labels as provided.\",\n    \"If a tool fails due to invalid input (e.g., unknown nodes), recompute using only valid nodes from the graph.\",\n    \"Always output a list of nodes in the required format; do not add explanations or extra text.\"\n  ],\n  \"graph_view\": \"edge_list\",\n  \"reason\": \"Failures occurred due to hallucinated node identifiers and lack of verification against actual graph structure. By enforcing node validity and structural verification, the harness ensures correctness even at scale. Using edge_list provides full structural access for validation in larger graphs.\"\n}",
+      "tokens": 392496,
+      "accepted": false,
+      "reason": "Failures occurred due to hallucinated node identifiers and lack of verification against actual graph structure. By enforcing node validity and structural verification, the harness ensures correctness even at scale. Using edge_list provides full structural access for validation in larger graphs.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For connected components, ensure each node in the output belongs to a distinct component. For cycles, only return a cycle if one exists; otherwise return an empty list. For diameter, compute shortest paths between all pairs and verify the maximum distance with a valid path. Never invent or use unknown node identifiers. Use only nodes present in the graph. Final answer must be in the required format.",
+        "rules": [
+          "Always verify that each node in the output belongs to a distinct connected component.",
+          "Never use node identifiers that are not present in the graph (e.g., '1', '2', '3') \u2014 use only nodes from the graph's actual node set.",
+          "For cycle detection, only return a cycle if one exists; otherwise return an empty list.",
+          "For diameter, compute all-pairs shortest paths and confirm the longest path exists between two actual nodes in the graph.",
+          "When generating a path, ensure it uses only nodes that are in the graph and that the path is valid (i.e., edges exist between consecutive nodes).",
+          "Do not assume node labels or order \u2014 use the graph's actual structure and node labels as provided.",
+          "If a tool fails due to invalid input (e.g., unknown nodes), recompute using only valid nodes from the graph.",
+          "Always output a list of nodes in the required format; do not add explanations or extra text."
+        ],
+        "graph_view": "edge_list",
+        "reason": "Failures occurred due to hallucinated node identifiers and lack of verification against actual graph structure. By enforcing node validity and structural verification, the harness ensures correctness even at scale. Using edge_list provides full structural access for validation in larger graphs."
+      },
+      "val_accuracy": 0.7,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "889797c7b58f",
+      "candidate_prompt_chars": 2499,
+      "total_tokens": 529538
+    },
+    {
+      "round": 2,
+      "train_accuracy": 0.8333333333333334,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox to analyze the graph structure. Always verify your solution by checking the graph's actual connectivity, cycles, or paths. Do not invent node sequences or use arbitrary node labels like [1, 2, 3]. Instead, derive paths and cycles from the actual graph structure. Final answers must be grounded in the graph's edges and node labels as provided.\",\n  \"rules\": [\n    \"Always use the actual node labels from the graph, not arbitrary integers like 1, 2, 3.\",\n    \"For cycle detection, perform a depth-first search to detect back edges and reconstruct the cycle using the actual node order.\",\n    \"For shortest paths or diameter, use NetworkX's shortest_path or all_pairs_shortest_path to ensure correctness.\",\n    \"For connected components, use connected_components or connected_components in NetworkX and extract one representative per component using actual node IDs.\",\n    \"Verify that any path or cycle you output actually exists in the graph by checking the edge list or adjacency structure.\",\n    \"If no cycle exists, return an empty list []; never return a fabricated path.\",\n    \"If no path exists between two nodes, return an empty list [] or state unconnected, but do not invent nodes.\",\n    \"Never output sequences of nodes that are not present in the graph's edge structure.\"\n  ],\n  \"graph_view\": \"edge_list\",\n  \"reason\": \"The model failed by inventing arbitrary node sequences like [1,2,3], ignoring the actual graph structure. By enforcing use of real node labels and requiring verification via graph edges, the solution becomes robust to scale and generalizes to larger graphs where node identities are more complex and patterns are less obvious.\"\n}",
+      "tokens": 377058,
+      "accepted": false,
+      "reason": "The model failed by inventing arbitrary node sequences like [1,2,3], ignoring the actual graph structure. By enforcing use of real node labels and requiring verification via graph edges, the solution becomes robust to scale and generalizes to larger graphs where node identities are more complex and patterns are less obvious.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox to analyze the graph structure. Always verify your solution by checking the graph's actual connectivity, cycles, or paths. Do not invent node sequences or use arbitrary node labels like [1, 2, 3]. Instead, derive paths and cycles from the actual graph structure. Final answers must be grounded in the graph's edges and node labels as provided.",
+        "rules": [
+          "Always use the actual node labels from the graph, not arbitrary integers like 1, 2, 3.",
+          "For cycle detection, perform a depth-first search to detect back edges and reconstruct the cycle using the actual node order.",
+          "For shortest paths or diameter, use NetworkX's shortest_path or all_pairs_shortest_path to ensure correctness.",
+          "For connected components, use connected_components or connected_components in NetworkX and extract one representative per component using actual node IDs.",
+          "Verify that any path or cycle you output actually exists in the graph by checking the edge list or adjacency structure.",
+          "If no cycle exists, return an empty list []; never return a fabricated path.",
+          "If no path exists between two nodes, return an empty list [] or state unconnected, but do not invent nodes.",
+          "Never output sequences of nodes that are not present in the graph's edge structure."
+        ],
+        "graph_view": "edge_list",
+        "reason": "The model failed by inventing arbitrary node sequences like [1,2,3], ignoring the actual graph structure. By enforcing use of real node labels and requiring verification via graph edges, the solution becomes robust to scale and generalizes to larger graphs where node identities are more complex and patterns are less obvious."
+      },
+      "val_accuracy": 0.6,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "d0eb69992081",
+      "candidate_prompt_chars": 2373,
+      "total_tokens": 906596
+    },
+    {
+      "round": 3,
+      "train_accuracy": 0.9333333333333333,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your solution by checking the graph structure directly. For cycle detection, use nx.find_cycle(G) or nx.is_directed_acyclic_graph(G) appropriately. For shortest paths, use nx.shortest_path(G, source, target). For connected components, use nx.connected_components(G) and extract one node per component. Always ensure your output matches the required format exactly, including empty lists when no solution exists. Do not invent nodes or paths.\",\n  \"rules\": [\n    \"Always use NetworkX built-in functions like nx.find_cycle(), nx.shortest_path(), or nx.connected_components() to solve graph problems.\",\n    \"For cycle detection, if no cycle exists, return an empty list []; never return a fabricated path.\",\n    \"For shortest paths, ensure the path starts with the source and ends with the target; if no path exists, return an empty list [].\",\n    \"For connected components, return exactly one node per component; use the built-in function to extract representatives.\",\n    \"Never define custom functions (e.g., has_cycle_dfs) unless you are certain they are correctly implemented and tested.\",\n    \"Always validate the result by checking the graph structure before outputting; do not rely on assumptions about node existence or connectivity.\",\n    \"If a function fails due to undefined names or errors, use the built-in NetworkX function instead.\",\n    \"Output must match the required format exactly: lists of nodes or empty lists, no extra text or explanations.\"\n  ],\n  \"graph_view\": \"edge_list\",\n  \"reason\": \"The failures occurred due to incorrect or undefined custom code, lack of verification, and reliance on untested functions. Using built-in NetworkX functions ensures correctness and robustness, especially at scale. The edge_list view provides full graph structure for accurate analysis and verification.\"\n}",
+      "tokens": 325611,
+      "accepted": false,
+      "reason": "The failures occurred due to incorrect or undefined custom code, lack of verification, and reliance on untested functions. Using built-in NetworkX functions ensures correctness and robustness, especially at scale. The edge_list view provides full graph structure for accurate analysis and verification.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your solution by checking the graph structure directly. For cycle detection, use nx.find_cycle(G) or nx.is_directed_acyclic_graph(G) appropriately. For shortest paths, use nx.shortest_path(G, source, target). For connected components, use nx.connected_components(G) and extract one node per component. Always ensure your output matches the required format exactly, including empty lists when no solution exists. Do not invent nodes or paths.",
+        "rules": [
+          "Always use NetworkX built-in functions like nx.find_cycle(), nx.shortest_path(), or nx.connected_components() to solve graph problems.",
+          "For cycle detection, if no cycle exists, return an empty list []; never return a fabricated path.",
+          "For shortest paths, ensure the path starts with the source and ends with the target; if no path exists, return an empty list [].",
+          "For connected components, return exactly one node per component; use the built-in function to extract representatives.",
+          "Never define custom functions (e.g., has_cycle_dfs) unless you are certain they are correctly implemented and tested.",
+          "Always validate the result by checking the graph structure before outputting; do not rely on assumptions about node existence or connectivity.",
+          "If a function fails due to undefined names or errors, use the built-in NetworkX function instead.",
+          "Output must match the required format exactly: lists of nodes or empty lists, no extra text or explanations."
+        ],
+        "graph_view": "edge_list",
+        "reason": "The failures occurred due to incorrect or undefined custom code, lack of verification, and reliance on untested functions. Using built-in NetworkX functions ensures correctness and robustness, especially at scale. The edge_list view provides full graph structure for accurate analysis and verification."
+      },
+      "val_accuracy": 0.625,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "9c0ae0ae7adf",
+      "candidate_prompt_chars": 2575,
+      "total_tokens": 1232207
+    },
+    {
+      "round": 4,
+      "train_accuracy": 0.9,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your approach with a simple sanity check before finalizing. For cycle detection, use `nx.find_cycle(G)` or check if the graph is acyclic using `nx.is_directed_acyclic_graph(G)` for directed graphs. For connected components, use `nx.connected_components(G)` and extract one node per component. Always ensure your output matches the required format exactly: a list of nodes or an empty list. Never invent node IDs or assume structure beyond the input.\",\n  \"rules\": [\n    \"Always use `nx.find_cycle(G)` to detect cycles; do not use `is_cycle` which does not exist.\",\n    \"For connected components, use `nx.connected_components(G)` and pick one node from each component.\",\n    \"Verify that your final answer matches the expected format: a list of nodes or an empty list.\",\n    \"If no cycle is found, return an empty list: [].\",\n    \"Do not assume node labels or indices; use only the graph structure provided.\",\n    \"When in doubt, run a simple sanity check: for cycles, check if the graph is acyclic; for components, ensure the number of components is consistent with the output.\",\n    \"Never output node indices like [0,1,2] without confirmation from the graph structure.\",\n    \"If a tool fails due to missing functions, use a fallback method (e.g., DFS for cycles or component detection).\"\n  ],\n  \"graph_view\": \"edge_list\",\n  \"reason\": \"Failures occurred due to incorrect function usage (e.g., `is_cycle`), lack of verification, and assuming node indices. Using edge list view ensures access to actual edges for algorithmic reasoning. Rules now enforce correct NetworkX functions, verification, and format adherence, which generalize to larger graphs.\"\n}",
+      "tokens": 318775,
+      "accepted": false,
+      "reason": "Failures occurred due to incorrect function usage (e.g., `is_cycle`), lack of verification, and assuming node indices. Using edge list view ensures access to actual edges for algorithmic reasoning. Rules now enforce correct NetworkX functions, verification, and format adherence, which generalize to larger graphs.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your approach with a simple sanity check before finalizing. For cycle detection, use `nx.find_cycle(G)` or check if the graph is acyclic using `nx.is_directed_acyclic_graph(G)` for directed graphs. For connected components, use `nx.connected_components(G)` and extract one node per component. Always ensure your output matches the required format exactly: a list of nodes or an empty list. Never invent node IDs or assume structure beyond the input.",
+        "rules": [
+          "Always use `nx.find_cycle(G)` to detect cycles; do not use `is_cycle` which does not exist.",
+          "For connected components, use `nx.connected_components(G)` and pick one node from each component.",
+          "Verify that your final answer matches the expected format: a list of nodes or an empty list.",
+          "If no cycle is found, return an empty list: [].",
+          "Do not assume node labels or indices; use only the graph structure provided.",
+          "When in doubt, run a simple sanity check: for cycles, check if the graph is acyclic; for components, ensure the number of components is consistent with the output.",
+          "Never output node indices like [0,1,2] without confirmation from the graph structure.",
+          "If a tool fails due to missing functions, use a fallback method (e.g., DFS for cycles or component detection)."
+        ],
+        "graph_view": "edge_list",
+        "reason": "Failures occurred due to incorrect function usage (e.g., `is_cycle`), lack of verification, and assuming node indices. Using edge list view ensures access to actual edges for algorithmic reasoning. Rules now enforce correct NetworkX functions, verification, and format adherence, which generalize to larger graphs."
+      },
+      "val_accuracy": 0.625,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "f76681e1a193",
+      "candidate_prompt_chars": 2403,
+      "total_tokens": 1550982
+    },
+    {
+      "round": 5,
+      "train_accuracy": 0.9333333333333333,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your solution by checking the graph structure directly. For cycle detection, use depth-first search to detect cycles and reconstruct the path. For connected components, use connected components algorithm and verify the number of components. Never guess or infer node identities. Always output the final answer in the required format.\",\n  \"rules\": [\n    \"Always use depth-first search (DFS) to detect cycles and reconstruct the cycle path if one exists.\",\n    \"For connected components, use NetworkX's connected_components function and verify the count matches expected size.\",\n    \"Never rely on heuristics or assumptions about node labels or connectivity; validate using explicit graph queries.\",\n    \"If a tool fails (e.g., raises an error), fall back to a simple traversal or component check without using complex functions.\",\n    \"When detecting a cycle, ensure the cycle is closed by verifying the last node connects back to the first.\",\n    \"Always output exactly as specified: a list of nodes in order, or an empty list if no cycle or component exists.\",\n    \"Do not use functions like find_cycle without first checking if a cycle exists via DFS or is_cycle.\",\n    \"If the graph is disconnected, explicitly compute the number of components and pick one node per component.\"\n  ],\n  \"graph_view\": \"edge_list\",\n  \"reason\": \"Failures occurred due to incorrect assumptions about node identities and lack of verification. Using edge_list allows direct inspection of connectivity. Adding explicit DFS-based cycle detection and component verification ensures correctness at scale, even on larger graphs.\"\n}",
+      "tokens": 358505,
+      "accepted": false,
+      "reason": "Failures occurred due to incorrect assumptions about node identities and lack of verification. Using edge_list allows direct inspection of connectivity. Adding explicit DFS-based cycle detection and component verification ensures correctness at scale, even on larger graphs.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your solution by checking the graph structure directly. For cycle detection, use depth-first search to detect cycles and reconstruct the path. For connected components, use connected components algorithm and verify the number of components. Never guess or infer node identities. Always output the final answer in the required format.",
+        "rules": [
+          "Always use depth-first search (DFS) to detect cycles and reconstruct the cycle path if one exists.",
+          "For connected components, use NetworkX's connected_components function and verify the count matches expected size.",
+          "Never rely on heuristics or assumptions about node labels or connectivity; validate using explicit graph queries.",
+          "If a tool fails (e.g., raises an error), fall back to a simple traversal or component check without using complex functions.",
+          "When detecting a cycle, ensure the cycle is closed by verifying the last node connects back to the first.",
+          "Always output exactly as specified: a list of nodes in order, or an empty list if no cycle or component exists.",
+          "Do not use functions like find_cycle without first checking if a cycle exists via DFS or is_cycle.",
+          "If the graph is disconnected, explicitly compute the number of components and pick one node per component."
+        ],
+        "graph_view": "edge_list",
+        "reason": "Failures occurred due to incorrect assumptions about node identities and lack of verification. Using edge_list allows direct inspection of connectivity. Adding explicit DFS-based cycle detection and component verification ensures correctness at scale, even on larger graphs."
+      },
+      "val_accuracy": 0.725,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "14d65f551a41",
+      "candidate_prompt_chars": 2395,
+      "total_tokens": 1909487
+    },
+    {
+      "round": 6,
+      "train_accuracy": 0.7666666666666667,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your solution against the problem requirements. Use the tools only when necessary, and ensure your final answer uses actual node identifiers from the graph. Never invent or use node labels like '1', '2', '3'.\",\n  \"rules\": [\n    \"Always use the graph's actual node labels from the input, not arbitrary numbers like 1, 2, 3.\",\n    \"For cycle detection, run a cycle-finding algorithm (e.g., DFS with recursion stack) and return a valid cycle if one exists; otherwise return an empty list.\",\n    \"For diameter, compute all-pairs shortest paths only if the graph is small enough to fit in memory; otherwise, use two BFS steps from random nodes to estimate the diameter.\",\n    \"For connected components, use NetworkX's connected_components function and return one representative node per component using actual node IDs.\",\n    \"Before finalizing, verify that the output matches the expected format and uses only nodes present in the graph.\",\n    \"If a tool fails due to memory or context length, simplify the approach (e.g., avoid full all-pairs shortest paths).\",\n    \"Never generate node sequences that do not follow actual edges in the graph.\",\n    \"If no cycle exists, return an empty list; if one exists, return a valid cycle in traversal order.\"\n  ],\n  \"graph_view\": \"adjacency_list\",\n  \"reason\": \"The failures stemmed from the model inventing arbitrary node labels and failing to use actual graph structure. By enforcing use of real node IDs and adding verification rules, the harness ensures correctness even at scale. Adjacency list provides clearer structural access for small-to-medium graphs and scales better than summary or edge list for reasoning.\"\n}",
+      "tokens": 552404,
+      "accepted": false,
+      "reason": "The failures stemmed from the model inventing arbitrary node labels and failing to use actual graph structure. By enforcing use of real node IDs and adding verification rules, the harness ensures correctness even at scale. Adjacency list provides clearer structural access for small-to-medium graphs and scales better than summary or edge list for reasoning.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Always verify your solution against the problem requirements. Use the tools only when necessary, and ensure your final answer uses actual node identifiers from the graph. Never invent or use node labels like '1', '2', '3'.",
+        "rules": [
+          "Always use the graph's actual node labels from the input, not arbitrary numbers like 1, 2, 3.",
+          "For cycle detection, run a cycle-finding algorithm (e.g., DFS with recursion stack) and return a valid cycle if one exists; otherwise return an empty list.",
+          "For diameter, compute all-pairs shortest paths only if the graph is small enough to fit in memory; otherwise, use two BFS steps from random nodes to estimate the diameter.",
+          "For connected components, use NetworkX's connected_components function and return one representative node per component using actual node IDs.",
+          "Before finalizing, verify that the output matches the expected format and uses only nodes present in the graph.",
+          "If a tool fails due to memory or context length, simplify the approach (e.g., avoid full all-pairs shortest paths).",
+          "Never generate node sequences that do not follow actual edges in the graph.",
+          "If no cycle exists, return an empty list; if one exists, return a valid cycle in traversal order."
+        ],
+        "graph_view": "adjacency_list",
+        "reason": "The failures stemmed from the model inventing arbitrary node labels and failing to use actual graph structure. By enforcing use of real node IDs and adding verification rules, the harness ensures correctness even at scale. Adjacency list provides clearer structural access for small-to-medium graphs and scales better than summary or edge list for reasoning."
+      },
+      "val_accuracy": 0.375,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "7a505e2969dc",
+      "candidate_prompt_chars": 2360,
+      "total_tokens": 2461891
+    },
+    {
+      "round": 7,
+      "train_accuracy": 0.9,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure by inspecting node and edge relationships. Do not invent node labels or use arbitrary sequences like [1, 2, 3]. Use only nodes present in the graph. If no cycle exists, return an empty list. For connected components, return exactly one node from each component, using only actual nodes from the graph. Final answer must be in the required format.\",\n  \"rules\": [\n    \"Always use actual node labels from the graph, never invent or assume node IDs like 1, 2, 3.\",\n    \"For cycle detection, use NetworkX's find_cycle function and verify the returned path exists in the graph edges.\",\n    \"For connected components, use connected_components or connected_component_subgraphs and extract one representative node per component.\",\n    \"If a tool fails or produces no output, re-check the graph structure before concluding.\",\n    \"Validate that all nodes in your answer are present in the graph and form valid edges.\",\n    \"When in doubt, run a simple connectivity or cycle check on a small subset of nodes before generalizing.\"\n  ],\n  \"graph_view\": \"adjacency_list\",\n  \"reason\": \"The model failed by inventing arbitrary node sequences like [1,2,3], which were not present in the graph. This error is especially dangerous at scale. By enforcing the use of actual graph nodes and requiring verification of edge existence, the solution becomes robust and transferable to larger graphs where node labels are more complex and less predictable.\"\n}",
+      "tokens": 431838,
+      "accepted": false,
+      "reason": "The model failed by inventing arbitrary node sequences like [1,2,3], which were not present in the graph. This error is especially dangerous at scale. By enforcing the use of actual graph nodes and requiring verification of edge existence, the solution becomes robust and transferable to larger graphs where node labels are more complex and less predictable.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure by inspecting node and edge relationships. Do not invent node labels or use arbitrary sequences like [1, 2, 3]. Use only nodes present in the graph. If no cycle exists, return an empty list. For connected components, return exactly one node from each component, using only actual nodes from the graph. Final answer must be in the required format.",
+        "rules": [
+          "Always use actual node labels from the graph, never invent or assume node IDs like 1, 2, 3.",
+          "For cycle detection, use NetworkX's find_cycle function and verify the returned path exists in the graph edges.",
+          "For connected components, use connected_components or connected_component_subgraphs and extract one representative node per component.",
+          "If a tool fails or produces no output, re-check the graph structure before concluding.",
+          "Validate that all nodes in your answer are present in the graph and form valid edges.",
+          "When in doubt, run a simple connectivity or cycle check on a small subset of nodes before generalizing."
+        ],
+        "graph_view": "adjacency_list",
+        "reason": "The model failed by inventing arbitrary node sequences like [1,2,3], which were not present in the graph. This error is especially dangerous at scale. By enforcing the use of actual graph nodes and requiring verification of edge existence, the solution becomes robust and transferable to larger graphs where node labels are more complex and less predictable."
+      },
+      "val_accuracy": 0.525,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "1497a08a0a5f",
+      "candidate_prompt_chars": 2175,
+      "total_tokens": 2893729
+    },
+    {
+      "round": 8,
+      "train_accuracy": 0.8333333333333334,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For cycle detection, use depth-first search to detect and reconstruct a cycle if one exists. For connected components, use connected component detection and extract one node per component. For diameter, compute shortest paths between all pairs only if necessary and verify the maximum distance. For maximum clique, use a greedy or iterative approach and validate that all pairs are connected. Always output the final answer in the required format, using only node identifiers from the graph. Do not invent or reference nodes not in the graph.\",\n  \"rules\": [\n    \"Always verify that any node list you output exists in the graph; do not use arbitrary or invented node IDs.\",\n    \"For cycle detection, use DFS to detect a cycle and reconstruct the path; if no cycle exists, return an empty list.\",\n    \"For connected components, use connected component detection and return one node per component; ensure the node list matches the expected count.\",\n    \"For diameter, compute shortest paths between all pairs only if needed and return a path achieving the maximum distance; avoid over-reliance on heuristics.\",\n    \"For maximum clique, use a greedy or iterative method and validate that every pair in the proposed clique is adjacent.\",\n    \"Never output a path or list that references nodes not present in the graph.\",\n    \"If the graph is disconnected, ensure your answer reflects the correct number of components.\",\n    \"Always use the graph's actual structure to validate your answer before finalizing.\"\n  ],\n  \"graph_view\": \"adjacency_list\",\n  \"reason\": \"The failures stemmed from model hallucinations (e.g., inventing nodes like '1', '2', '3') and insufficient verification of graph structure. By enforcing node existence checks and requiring explicit verification via graph structure, the harness ensures correctness even at scale. Using adjacency list view allows direct access to edges for validation, which is scalable and robust for large graphs.\"\n}",
+      "tokens": 383482,
+      "accepted": false,
+      "reason": "The failures stemmed from model hallucinations (e.g., inventing nodes like '1', '2', '3') and insufficient verification of graph structure. By enforcing node existence checks and requiring explicit verification via graph structure, the harness ensures correctness even at scale. Using adjacency list view allows direct access to edges for validation, which is scalable and robust for large graphs.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For cycle detection, use depth-first search to detect and reconstruct a cycle if one exists. For connected components, use connected component detection and extract one node per component. For diameter, compute shortest paths between all pairs only if necessary and verify the maximum distance. For maximum clique, use a greedy or iterative approach and validate that all pairs are connected. Always output the final answer in the required format, using only node identifiers from the graph. Do not invent or reference nodes not in the graph.",
+        "rules": [
+          "Always verify that any node list you output exists in the graph; do not use arbitrary or invented node IDs.",
+          "For cycle detection, use DFS to detect a cycle and reconstruct the path; if no cycle exists, return an empty list.",
+          "For connected components, use connected component detection and return one node per component; ensure the node list matches the expected count.",
+          "For diameter, compute shortest paths between all pairs only if needed and return a path achieving the maximum distance; avoid over-reliance on heuristics.",
+          "For maximum clique, use a greedy or iterative method and validate that every pair in the proposed clique is adjacent.",
+          "Never output a path or list that references nodes not present in the graph.",
+          "If the graph is disconnected, ensure your answer reflects the correct number of components.",
+          "Always use the graph's actual structure to validate your answer before finalizing."
+        ],
+        "graph_view": "adjacency_list",
+        "reason": "The failures stemmed from model hallucinations (e.g., inventing nodes like '1', '2', '3') and insufficient verification of graph structure. By enforcing node existence checks and requiring explicit verification via graph structure, the harness ensures correctness even at scale. Using adjacency list view allows direct access to edges for validation, which is scalable and robust for large graphs."
+      },
+      "val_accuracy": 0.425,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "41bedaa4939d",
+      "candidate_prompt_chars": 2653,
+      "total_tokens": 3277211
+    },
+    {
+      "round": 9,
+      "train_accuracy": 0.8333333333333334,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For cycle detection, use DFS or BFS to detect and reconstruct cycles. For diameter, compute shortest paths between all pairs only if necessary; otherwise, use two-breadth-first-search approach. For connected components, use connected components algorithm and pick one representative per component. Always output the final answer in the required format with correct node identifiers. Do not invent or use node labels like '1', '2', '3'\u2014use only the actual node labels from the graph.\",\n  \"rules\": [\n    \"Always use the actual node labels from the graph, not arbitrary integers like 1, 2, 3.\",\n    \"For cycle detection, perform DFS and reconstruct the cycle using backtracking; avoid assuming cycles exist without evidence.\",\n    \"For diameter, use two BFS steps (from a node to farthest, then from there to farthest) to avoid computing all-pairs shortest paths.\",\n    \"For connected components, use NetworkX's connected_components function and return one node per component using actual node labels.\",\n    \"Never generate node sequences like [1, 2, 3] without verifying they exist in the graph structure.\",\n    \"Always validate that the final answer uses only nodes present in the input graph.\",\n    \"If no cycle exists, return an empty list []; do not infer or guess.\",\n    \"If the graph is disconnected, ensure the representative list reflects the actual number of components.\"\n  ],\n  \"graph_view\": \"edge_list\",\n  \"reason\": \"The failures occurred due to the model using arbitrary node labels and failing to verify graph structure. By enforcing use of actual node labels and requiring structural validation, the harness ensures correctness at scale. Using edge_list provides full connectivity information for reliable algorithmic reasoning, especially in larger graphs.\"\n}",
+      "tokens": 404824,
+      "accepted": false,
+      "reason": "The failures occurred due to the model using arbitrary node labels and failing to verify graph structure. By enforcing use of actual node labels and requiring structural validation, the harness ensures correctness at scale. Using edge_list provides full connectivity information for reliable algorithmic reasoning, especially in larger graphs.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution against the graph structure. For cycle detection, use DFS or BFS to detect and reconstruct cycles. For diameter, compute shortest paths between all pairs only if necessary; otherwise, use two-breadth-first-search approach. For connected components, use connected components algorithm and pick one representative per component. Always output the final answer in the required format with correct node identifiers. Do not invent or use node labels like '1', '2', '3'\u2014use only the actual node labels from the graph.",
+        "rules": [
+          "Always use the actual node labels from the graph, not arbitrary integers like 1, 2, 3.",
+          "For cycle detection, perform DFS and reconstruct the cycle using backtracking; avoid assuming cycles exist without evidence.",
+          "For diameter, use two BFS steps (from a node to farthest, then from there to farthest) to avoid computing all-pairs shortest paths.",
+          "For connected components, use NetworkX's connected_components function and return one node per component using actual node labels.",
+          "Never generate node sequences like [1, 2, 3] without verifying they exist in the graph structure.",
+          "Always validate that the final answer uses only nodes present in the input graph.",
+          "If no cycle exists, return an empty list []; do not infer or guess.",
+          "If the graph is disconnected, ensure the representative list reflects the actual number of components."
+        ],
+        "graph_view": "edge_list",
+        "reason": "The failures occurred due to the model using arbitrary node labels and failing to verify graph structure. By enforcing use of actual node labels and requiring structural validation, the harness ensures correctness at scale. Using edge_list provides full connectivity information for reliable algorithmic reasoning, especially in larger graphs."
+      },
+      "val_accuracy": 0.7,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "d35eaaec590b",
+      "candidate_prompt_chars": 2528,
+      "total_tokens": 3682035
+    },
+    {
+      "round": 10,
+      "train_accuracy": 0.9333333333333333,
+      "critic_response": "{\n  \"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution by checking edge existence and path validity. For cycle detection, only return a cycle if one exists; otherwise return an empty list. For diameter or shortest paths, ensure the path is valid and connects two nodes at maximum distance. For connected components, return exactly one node per component. Never output code or intermediate steps. Final answer must be in a bracketed list format, e.g., [a, b, c].\",\n  \"rules\": [\n    \"Always verify that any path or cycle you return actually exists in the graph using edge checks.\",\n    \"For cycle detection, if no cycle exists, return an empty list []; do not infer or guess.\",\n    \"For diameter or longest shortest path, compute the distance between all pairs only if necessary, and return a valid path between two nodes achieving that distance.\",\n    \"For connected components, return exactly one node per component; avoid duplicates or missing components.\",\n    \"Never generate paths or cycles that skip or misrepresent edges; validate against the graph structure.\",\n    \"If a tool fails due to context length, simplify the prompt by removing redundant descriptions and focusing only on the task.\",\n    \"When in doubt, use a small subset of nodes to test connectivity or cycle existence before scaling.\",\n    \"Always output the final answer in the required format: a bracketed list of nodes.\"\n  ],\n  \"graph_view\": \"edge_list\",\n  \"reason\": \"The failures occurred due to missing verification of edge existence and over-reliance on tool outputs without validation. Using edge_list view enables direct edge checking. Rules emphasize verification and edge consistency, which are transferable to larger graphs where edge misrepresentation is more likely.\"\n}",
+      "tokens": 324952,
+      "accepted": false,
+      "reason": "The failures occurred due to missing verification of edge existence and over-reliance on tool outputs without validation. Using edge_list view enables direct edge checking. Rules emphasize verification and edge consistency, which are transferable to larger graphs where edge misrepresentation is more likely.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Use Python with NetworkX in the sandbox. Always verify your solution by checking edge existence and path validity. For cycle detection, only return a cycle if one exists; otherwise return an empty list. For diameter or shortest paths, ensure the path is valid and connects two nodes at maximum distance. For connected components, return exactly one node per component. Never output code or intermediate steps. Final answer must be in a bracketed list format, e.g., [a, b, c].",
+        "rules": [
+          "Always verify that any path or cycle you return actually exists in the graph using edge checks.",
+          "For cycle detection, if no cycle exists, return an empty list []; do not infer or guess.",
+          "For diameter or longest shortest path, compute the distance between all pairs only if necessary, and return a valid path between two nodes achieving that distance.",
+          "For connected components, return exactly one node per component; avoid duplicates or missing components.",
+          "Never generate paths or cycles that skip or misrepresent edges; validate against the graph structure.",
+          "If a tool fails due to context length, simplify the prompt by removing redundant descriptions and focusing only on the task.",
+          "When in doubt, use a small subset of nodes to test connectivity or cycle existence before scaling.",
+          "Always output the final answer in the required format: a bracketed list of nodes."
+        ],
+        "graph_view": "edge_list",
+        "reason": "The failures occurred due to missing verification of edge existence and over-reliance on tool outputs without validation. Using edge_list view enables direct edge checking. Rules emphasize verification and edge consistency, which are transferable to larger graphs where edge misrepresentation is more likely."
+      },
+      "val_accuracy": 0.725,
+      "best_val_accuracy": 0.875,
+      "candidate_hash": "d41eb5cb5576",
+      "candidate_prompt_chars": 2459,
+      "total_tokens": 4006987
+    }
+  ]
+}

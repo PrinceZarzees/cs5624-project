@@ -1,0 +1,353 @@
+{
+  "harness": "baseline_a_text",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_a_text",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "adjacency_list",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": false,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "No tools; adjacency list only."
+  },
+  "model": "qwen3-4b",
+  "split": "test_medium",
+  "started_at": "2026-11-21T16:00:15.573397+00:00",
+  "finished_at": "2026-11-21T16:01:18.310671+00:00",
+  "duration_s": 62.737275738996686,
+  "n": 150,
+  "overall": {
+    "split": "test_medium",
+    "task": "ALL",
+    "n": 150,
+    "parsed": 0.8866666666666667,
+    "feasible": 0.31333333333333335,
+    "accuracy": 0.15333333333333332,
+    "mean_nodes": 191.23333333333332
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 30,
+      "mean_nodes": 188.2,
+      "parsed": 0.9,
+      "feasible": 0.5666666666666667,
+      "accuracy": 0.03333333333333333
+    },
+    {
+      "task": "cycle_detection",
+      "n": 30,
+      "mean_nodes": 202.83333333333334,
+      "parsed": 1.0,
+      "feasible": 0.5,
+      "accuracy": 0.5
+    },
+    {
+      "task": "diameter",
+      "n": 30,
+      "mean_nodes": 182.06666666666666,
+      "parsed": 0.9,
+      "feasible": 0.1,
+      "accuracy": 0.0
+    },
+    {
+      "task": "max_clique",
+      "n": 30,
+      "mean_nodes": 194.16666666666666,
+      "parsed": 0.7666666666666667,
+      "feasible": 0.16666666666666666,
+      "accuracy": 0.03333333333333333
+    },
+    {
+      "task": "shortest_path",
+      "n": 30,
+      "mean_nodes": 188.9,
+      "parsed": 0.8666666666666667,
+      "feasible": 0.23333333333333334,
+      "accuracy": 0.2
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "100-300",
+      "n": 150,
+      "mean_nodes": 191.23333333333332,
+      "parsed": 0.8866666666666667,
+      "feasible": 0.31333333333333335,
+      "accuracy": 0.15333333333333332
+    }
+  ],
+  "tokens": {
+    "prompt": 1053480,
+    "completion": 125428,
+    "total": 1178908,
+    "mean_total_per_problem": 8863.96992481203
+  },
+  "tool_calls": 0,
+  "mean_agent_duration_s": 3.507872272232728,
+  "errors": 17,
+  "failures": [
+    {
+      "id": "shortest_path/test_medium/00000",
+      "task": "shortest_path",
+      "n_nodes": 130,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1252 and 443"
+    },
+    {
+      "id": "shortest_path/test_medium/00002",
+      "task": "shortest_path",
+      "n_nodes": 163,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1574 and 1418"
+    },
+    {
+      "id": "shortest_path/test_medium/00003",
+      "task": "shortest_path",
+      "n_nodes": 135,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 203 and 358"
+    },
+    {
+      "id": "shortest_path/test_medium/00004",
+      "task": "shortest_path",
+      "n_nodes": 141,
+      "parsed": true,
+      "feasible": false,
+      "note": "path does not start/end at the given nodes"
+    },
+    {
+      "id": "shortest_path/test_medium/00005",
+      "task": "shortest_path",
+      "n_nodes": 224,
+      "parsed": true,
+      "feasible": false,
+      "note": "path repeats a node"
+    },
+    {
+      "id": "shortest_path/test_medium/00006",
+      "task": "shortest_path",
+      "n_nodes": 107,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 280 and 495"
+    },
+    {
+      "id": "shortest_path/test_medium/00007",
+      "task": "shortest_path",
+      "n_nodes": 128,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 445 and 906"
+    },
+    {
+      "id": "shortest_path/test_medium/00008",
+      "task": "shortest_path",
+      "n_nodes": 127,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1129 and 1144"
+    },
+    {
+      "id": "shortest_path/test_medium/00009",
+      "task": "shortest_path",
+      "n_nodes": 141,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1350 and 450"
+    },
+    {
+      "id": "shortest_path/test_medium/00015",
+      "task": "shortest_path",
+      "n_nodes": 129,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 217 and 304"
+    },
+    {
+      "id": "shortest_path/test_medium/00016",
+      "task": "shortest_path",
+      "n_nodes": 268,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1773 and 317"
+    },
+    {
+      "id": "shortest_path/test_medium/00017",
+      "task": "shortest_path",
+      "n_nodes": 169,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 702 and 293"
+    },
+    {
+      "id": "shortest_path/test_medium/00018",
+      "task": "shortest_path",
+      "n_nodes": 218,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1818 and 2067"
+    },
+    {
+      "id": "shortest_path/test_medium/00019",
+      "task": "shortest_path",
+      "n_nodes": 259,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 178 and 1841"
+    },
+    {
+      "id": "shortest_path/test_medium/00020",
+      "task": "shortest_path",
+      "n_nodes": 299,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_medium/00021",
+      "task": "shortest_path",
+      "n_nodes": 209,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_medium/00022",
+      "task": "shortest_path",
+      "n_nodes": 146,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 697 and 1383"
+    },
+    {
+      "id": "shortest_path/test_medium/00023",
+      "task": "shortest_path",
+      "n_nodes": 276,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 2284 and 750"
+    },
+    {
+      "id": "shortest_path/test_medium/00024",
+      "task": "shortest_path",
+      "n_nodes": 189,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1072 and 63"
+    },
+    {
+      "id": "shortest_path/test_medium/00025",
+      "task": "shortest_path",
+      "n_nodes": 264,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_medium/00026",
+      "task": "shortest_path",
+      "n_nodes": 275,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    },
+    {
+      "id": "shortest_path/test_medium/00027",
+      "task": "shortest_path",
+      "n_nodes": 209,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 86 and 1369"
+    },
+    {
+      "id": "shortest_path/test_medium/00028",
+      "task": "shortest_path",
+      "n_nodes": 217,
+      "parsed": true,
+      "feasible": true,
+      "note": "path has 11 edges, shortest is 10"
+    },
+    {
+      "id": "shortest_path/test_medium/00029",
+      "task": "shortest_path",
+      "n_nodes": 149,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 1167 and 1376"
+    },
+    {
+      "id": "connected_components/test_medium/00000",
+      "task": "connected_components",
+      "n_nodes": 247,
+      "parsed": false,
+      "feasible": false,
+      "note": "no prediction"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_medium",
+      "task": "connected_components",
+      "n": 30,
+      "parsed": 0.9,
+      "feasible": 0.5666666666666667,
+      "accuracy": 0.03333333333333333,
+      "mean_nodes": 188.2
+    },
+    {
+      "split": "test_medium",
+      "task": "cycle_detection",
+      "n": 30,
+      "parsed": 1.0,
+      "feasible": 0.5,
+      "accuracy": 0.5,
+      "mean_nodes": 202.83333333333334
+    },
+    {
+      "split": "test_medium",
+      "task": "diameter",
+      "n": 30,
+      "parsed": 0.9,
+      "feasible": 0.1,
+      "accuracy": 0.0,
+      "mean_nodes": 182.06666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "max_clique",
+      "n": 30,
+      "parsed": 0.7666666666666667,
+      "feasible": 0.16666666666666666,
+      "accuracy": 0.03333333333333333,
+      "mean_nodes": 194.16666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "shortest_path",
+      "n": 30,
+      "parsed": 0.8666666666666667,
+      "feasible": 0.23333333333333334,
+      "accuracy": 0.2,
+      "mean_nodes": 188.9
+    },
+    {
+      "split": "test_medium",
+      "task": "ALL",
+      "n": 150,
+      "parsed": 0.8866666666666667,
+      "feasible": 0.31333333333333335,
+      "accuracy": 0.15333333333333332,
+      "mean_nodes": 191.23333333333332
+    }
+  ]
+}

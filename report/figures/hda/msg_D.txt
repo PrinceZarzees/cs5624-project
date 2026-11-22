@@ -1,0 +1,8 @@
+D. Submit gate -> HDA (same iteration, no score yet)
+Invalid submission: no complete ```cpp block found.
+The evaluator scores only the code, not the statement
+or prose. Write the full program in a ```cpp block.
+If the code does not compile:
+  Your submission does not compile and was not submitted.
+  Fix these errors and call test or submit again:
+  ...compiler diagnostics...

@@ -1,0 +1,14 @@
+\begin{tabular}{lllllrr}
+\toprule
+model & precision & hardware & harness & split & n & accuracy \\
+\midrule
+Qwen3-4B-Instruct-2507 & bfloat16 & 1x B200 & baseline\_a & test\_small & 150 & 87.3\% \\
+Qwen3-4B-Instruct-2507 & bfloat16 & 1x B200 & baseline\_b & test\_small & 150 & 90.0\% \\
+Qwen3-4B-Instruct-2507 & bfloat16 & 1x B200 & baseline\_b\_v2 (13 rules) & test\_small & 150 & 93.3\% \\
+Qwen3-4B-Instruct-2507 & bfloat16 & 1x B200 & baseline\_b\_v2 (14 rules) & test\_small & 150 & 94.0\% \\
+Qwen3-4B-Instruct-2507 & Q4\_K\_M & 96 CPU & baseline\_a & test\_small & 150 & 84.7\% \\
+Qwen3-4B-Instruct-2507 & Q4\_K\_M & 96 CPU & baseline\_b\_v2 (13 rules) & test\_small & 150 & 93.3\% \\
+Qwen2.5-7B-Instruct & Q4\_K\_M & 48 CPU & baseline\_b\_v2 (13 rules) & test\_small & 150 & 77.3\% \\
+Qwen2.5-7B-Instruct & Q4\_K\_M & 96 CPU & baseline\_b\_v2 (14 rules) & test\_small & 150 & 76.0\% \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,166 @@
+{
+  "harness": "baseline_b",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_b",
+    "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+    "rules": [
+      "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+      "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+      "For maximum clique, run exact search only when the graph is small; on large graphs use a heuristic and verify that every returned pair is adjacent.",
+      "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+      "Keep sandbox output short: print only the result, its length/size, and a small check.",
+      "If code times out or errors, change the algorithm instead of rerunning it unchanged.",
+      "Put only the final node list inside <answer></answer>; use [] for a negative answer."
+    ],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "notes": "Human expert harness with explicit graph-algorithm best practices."
+  },
+  "model": "qwen3-4b",
+  "split": "test_medium",
+  "started_at": "2026-11-20T21:52:51.916373+00:00",
+  "finished_at": "2026-11-20T21:53:01.070392+00:00",
+  "duration_s": 9.154023048002273,
+  "n": 15,
+  "overall": {
+    "split": "test_medium",
+    "task": "ALL",
+    "n": 15,
+    "parsed": 1.0,
+    "feasible": 1.0,
+    "accuracy": 0.9333333333333333,
+    "mean_nodes": 197.13333333333333
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 3,
+      "mean_nodes": 210.66666666666666,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "cycle_detection",
+      "n": 3,
+      "mean_nodes": 239.66666666666666,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "diameter",
+      "n": 3,
+      "mean_nodes": 173.66666666666666,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    },
+    {
+      "task": "max_clique",
+      "n": 3,
+      "mean_nodes": 187.0,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "task": "shortest_path",
+      "n": 3,
+      "mean_nodes": 174.66666666666666,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "100-300",
+      "n": 15,
+      "mean_nodes": 197.13333333333333,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.9333333333333333
+    }
+  ],
+  "tokens": {
+    "prompt": 61755,
+    "completion": 7789,
+    "total": 69544,
+    "mean_total_per_problem": 4636.266666666666
+  },
+  "tool_calls": 40,
+  "mean_agent_duration_s": 2.7618502606948216,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "max_clique/test_medium/00000",
+      "task": "max_clique",
+      "n_nodes": 269,
+      "parsed": true,
+      "feasible": true,
+      "note": "clique of size 2, maximum is 3"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_medium",
+      "task": "connected_components",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 210.66666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "cycle_detection",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 239.66666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "diameter",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 173.66666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "max_clique",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.6666666666666666,
+      "mean_nodes": 187.0
+    },
+    {
+      "split": "test_medium",
+      "task": "shortest_path",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 174.66666666666666
+    },
+    {
+      "split": "test_medium",
+      "task": "ALL",
+      "n": 15,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 0.9333333333333333,
+      "mean_nodes": 197.13333333333333
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "name": "baseline_b-candidate",
+  "system_prompt": "You are an expert graph algorithms engineer. You solve graph problems by writing and running code, never by guessing from a node's numeric label.",
+  "rules": [
+    "Use the NetworkX `G` object directly; never infer edges or distances from node ids.",
+    "Prefer exact library routines: nx.shortest_path, nx.connected_components, nx.find_cycle, nx.is_connected and nx.diameter.",
+    "Verify cycle detection by checking if the returned cycle is valid and covers the entire graph.",
+    "For connected components, ensure that the returned representatives are from distinct components and validate the solution.",
+    "Check feasibility before answering: path endpoints and edges, one representative per connected component, cycle closure, clique pairwise adjacency, or diameter distance.",
+    "If code times out or errors, change the algorithm or optimize the implementation rather than rerunning it unchanged."
+  ],
+  "graph_view": "summary",
+  "max_steps": 8,
+  "tool_timeout_s": 30.0,
+  "memory_mb": 2048,
+  "max_output_bytes": 16000,
+  "temperature": 0.0,
+  "allow_tools": true,
+  "tool_backend": "python",
+  "tool_preamble": "",
+  "notes": "Added rules for validating cycle detection and connected components to ensure correctness even when the graph size increases."
+}

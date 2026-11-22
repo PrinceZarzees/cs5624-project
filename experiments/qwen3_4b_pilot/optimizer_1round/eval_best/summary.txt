@@ -1,0 +1,26 @@
+harness: baseline_b    model: qwen3-4b    split: test_small
+problems: 25    errors: 0    duration: 7.4s    tokens: 102048
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components       5      26  100.0%     20.0%     20.0%
+test_small   cycle_detection            5      33  100.0%    100.0%    100.0%
+test_small   diameter                   5      32  100.0%    100.0%     20.0%
+test_small   max_clique                 5      26  100.0%    100.0%    100.0%
+test_small   shortest_path              5      21  100.0%    100.0%    100.0%
+test_small   ALL                       25      28  100.0%     84.0%     68.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50          25       28   100.0%     84.0%     68.0%
+
+First failures:
+- connected_components/test_small/00001 (connected_components, n=41): unknown node(s): ['0', '1', '2']
+- connected_components/test_small/00002 (connected_components, n=21): unknown node(s): ['0', '1', '2']
+- connected_components/test_small/00003 (connected_components, n=27): unknown node(s): ['0', '1']
+- connected_components/test_small/00004 (connected_components, n=26): unknown node(s): ['0', '1', '2']
+- diameter/test_small/00000 (diameter, n=47): distance 5, diameter is 8
+- diameter/test_small/00001 (diameter, n=17): distance 2, diameter is 4
+- diameter/test_small/00002 (diameter, n=37): distance 7, diameter is 16
+- diameter/test_small/00004 (diameter, n=25): distance 2, diameter is 4

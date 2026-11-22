@@ -1,0 +1,28 @@
+harness: baseline_b_v2    model: qwen2.5-7b    split: test_small
+problems: 25    errors: 0    duration: 220.2s    tokens: 34033
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components       5      26  100.0%      0.0%      0.0%
+test_small   cycle_detection            5      33  100.0%    100.0%    100.0%
+test_small   diameter                   5      32  100.0%      0.0%      0.0%
+test_small   max_clique                 5      26   60.0%      0.0%      0.0%
+test_small   shortest_path              5      21  100.0%      0.0%      0.0%
+test_small   ALL                       25      28   92.0%     20.0%     20.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50          25       28    92.0%     20.0%     20.0%
+
+First failures:
+- shortest_path/test_small/00000 (shortest_path, n=8): empty answer
+- shortest_path/test_small/00001 (shortest_path, n=7): unknown node(s): ['30']
+- shortest_path/test_small/00002 (shortest_path, n=38): no edge between 250 and 149
+- shortest_path/test_small/00003 (shortest_path, n=26): empty answer
+- shortest_path/test_small/00004 (shortest_path, n=24): empty answer
+- connected_components/test_small/00000 (connected_components, n=15): unknown node(s): ['1', '2', '3']
+- connected_components/test_small/00001 (connected_components, n=41): unknown node(s): ['1', '2', '3']
+- connected_components/test_small/00002 (connected_components, n=21): unknown node(s): ['0', '1', '2']
+- connected_components/test_small/00003 (connected_components, n=27): unknown node(s): ['1']
+- connected_components/test_small/00004 (connected_components, n=26): unknown node(s): ['1', '2', '3']

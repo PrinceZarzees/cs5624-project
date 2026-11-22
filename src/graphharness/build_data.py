@@ -21,7 +21,7 @@ from pathlib import Path
 
 from .data_loader import DEFAULT_DATA_DIR, save_jsonl
 from .generators import graph_to_json, make_graph_for_task
-from .tasks import TASKS, as_json_value, get_task
+from .tasks import SYNTHETIC_TASKS, as_json_value, get_task
 
 # Only tiny random graphs can realistically come out identical twice, so only
 # those are checked for duplicates across splits.
@@ -105,7 +105,7 @@ def main(argv=None):
 
     config = json.loads(Path(args.config).read_text())
     seed = config["seed"]
-    tasks = args.tasks or config.get("tasks") or sorted(TASKS)
+    tasks = args.tasks or config.get("tasks") or list(SYNTHETIC_TASKS)
     split_names = args.splits or list(config["splits"])
     out_dir = Path(args.out)
 

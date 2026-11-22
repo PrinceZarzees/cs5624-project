@@ -1,0 +1,8 @@
+split,nodes,n/task,fam.,limit (s)
+examples,4-50,120,seen,1
+val,4-50,40,seen,1
+test_small,4-50,40,all,1
+test_medium,100-300,30,all,2
+test_large,500-1000,30,all,2
+test_xl,2000-2000,20,all,3
+test_stress,10000-100000,10,all,5

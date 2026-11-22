@@ -1,0 +1,28 @@
+harness: baseline_a_text    model: qwen3-4b    split: test_medium
+problems: 150    errors: 0    duration: 136.7s    tokens: 1819970
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188  100.0%     53.3%      6.7%
+test_medium  cycle_detection           30     203  100.0%     50.0%     50.0%
+test_medium  diameter                  30     182  100.0%     16.7%      0.0%
+test_medium  max_clique                30     194  100.0%     13.3%      0.0%
+test_medium  shortest_path             30     189   93.3%     43.3%     33.3%
+test_medium  ALL                      150     191   98.7%     35.3%     18.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191    98.7%     35.3%     18.0%
+
+First failures:
+- shortest_path/test_medium/00000 (shortest_path, n=130): no edge between 1252 and 443
+- shortest_path/test_medium/00002 (shortest_path, n=163): no [ ... ] answer found
+- shortest_path/test_medium/00003 (shortest_path, n=135): path has 7 edges, shortest is 6
+- shortest_path/test_medium/00004 (shortest_path, n=141): path has 5 edges, shortest is 3
+- shortest_path/test_medium/00005 (shortest_path, n=224): no edge between 1542 and 1805
+- shortest_path/test_medium/00007 (shortest_path, n=128): no edge between 322 and 427
+- shortest_path/test_medium/00008 (shortest_path, n=127): no edge between 1201 and 310
+- shortest_path/test_medium/00009 (shortest_path, n=141): no edge between 1350 and 450
+- shortest_path/test_medium/00010 (shortest_path, n=122): path has 13 edges, shortest is 8
+- shortest_path/test_medium/00015 (shortest_path, n=129): no edge between 1009 and 1160

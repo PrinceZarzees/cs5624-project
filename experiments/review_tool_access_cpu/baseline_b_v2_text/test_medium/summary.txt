@@ -1,0 +1,26 @@
+harness: baseline_b_v2_text    model: qwen3-4b-q4    split: test_medium
+problems: 10    errors: 2    duration: 609.6s    tokens: 68487
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components       2     236    0.0%      0.0%      0.0%
+test_medium  cycle_detection            2     224  100.0%    100.0%    100.0%
+test_medium  diameter                   2     174  100.0%      0.0%      0.0%
+test_medium  max_clique                 2     229  100.0%      0.0%      0.0%
+test_medium  shortest_path              2     180  100.0%      0.0%      0.0%
+test_medium  ALL                       10     209   80.0%     20.0%     20.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300       10      209    80.0%     20.0%     20.0%
+
+First failures:
+- shortest_path/test_medium/00000 (shortest_path, n=130): no edge between 402 and 300
+- shortest_path/test_medium/00001 (shortest_path, n=231): no edge between 1075 and 1750
+- connected_components/test_medium/00000 (connected_components, n=247): no prediction
+- connected_components/test_medium/00001 (connected_components, n=226): no prediction
+- diameter/test_medium/00000 (diameter, n=204): path repeats a node
+- diameter/test_medium/00001 (diameter, n=143): no edge between 1361 and 8
+- max_clique/test_medium/00000 (max_clique, n=269): 1012 and 1429 are not connected, not a clique
+- max_clique/test_medium/00001 (max_clique, n=189): 1065 and 1050 are not connected, not a clique

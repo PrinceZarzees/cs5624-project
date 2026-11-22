@@ -1,0 +1,181 @@
+run: experiments/qwen3_4b_scaling_full/scaling/baseline_b_v2/test_large
+harness: baseline_b_v2    model: qwen3-4b    split: test_large
+problems: 100    accuracy: 85.0%    feasible: 98.0%    parsed: 100.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components     20  100.0%     3.0     2.0        0
+cycle_detection          20   95.0%     3.4     2.4        0
+diameter                 20   90.0%     5.5     4.5        0
+max_clique               20   40.0%     3.2     2.2        2
+shortest_path            20  100.0%     3.0     2.0        0
+
+cycle_detection failure notes:
+- 1x unknown node(s): ['(4098', '5806)', '(5806', '5085)', '(5085']
+
+diameter failure notes:
+- 1x distance 45, diameter is 71
+- 1x distance 5, diameter is 6
+
+max_clique failure notes:
+- 4x clique of size 3, maximum is 4
+- 2x clique of size 3, maximum is 7
+- 1x clique of size 4, maximum is 9
+- 1x clique of size 3, maximum is 9
+- 1x clique of size 1, maximum is 3
+- 1x unknown node(s): ['1', '2', '3']
+- 1x clique of size 3, maximum is 8
+- 1x clique of size 3, maximum is 6
+
+Failure excerpts:
+
+[cycle_detection/test_large/00006] n=701 note=unknown node(s): ['(4098', '5806)', '(5806', '5085)', '(5085']
+code:
+import networkx as nx
+
+print("Checking if the graph contains a cycle...")
+try:
+    cycle = list(nx.find_cycle(G))
+    if cycle:
+        print(f"Found a cycle: {cycle}")
+    else:
+        print("No cycle found.")
+except nx.NetworkXNoCycle:
+    print("No cycle found.")
+
+observation:
+stdout: Checking if the graph contains a cycle...
+Found a cycle: [(4098, 5806), (5806, 5085), (5085, 6578), (6578, 654), (654, 5662), (5662, 5340), (5340, 1437), (1437, 6844), (6844, 4820), (4820, 4988), (4988, 5765), (5765, 5834), (5834, 4568), (4568, 6925), (6925, 3872), (3872, 5702), (5702, 5164), (5164, 6597), (6597, 4972), (4972, 2216), (2216, 1756), (1756, 3260), (3260, 5900), (5900, 5332), (5332, 2366), (2366, 706), (706, 5778), (5778, 4794), (4794, 2330), (2330, 6354), (6354, 5442), (5442, 69), (69, 4279), (4279, 6519), (6519, 6316), (6316, 1254), (1254, 2433), (2433, 2747), (2747, 3663), (3663, 2103), (2103, 2955), (2955, 2087), (2087, 5411), (5411, 4510), (4510, 3754), (3754, 569), (569, 4098)]
+
+
+[diameter/test_large/00005] n=526 note=distance 45, diameter is 71
+code:
+import networkx as nx
+
+# Compute all pairs shortest path lengths (generator)
+distances = []
+for u, v_dist in nx.all_pairs_shortest_path_length(G):
+    for v in v_dist:
+        distances.append(v_dist[v])
+
+# Find the maximum distance
+diameter = max(distances)
+
+# Find a pair of nodes (u, v) with that distance
+max_pair = None
+for u, v_dist in nx.all_pairs_shortest_path_length(G):
+    for v in v_dist:
+        if v_dist[v] == diameter:
+            max_pair = (u, v)
+            break
+    if max_pair is not None:
+        break
+
+# Compute the shortest path between the pair with maximum distance
+if max_pair is not None:
+    u, v = max_pair
+    path = nx.shortest_path(G, source=u, target=v)
+    print(path)
+    print(f"Diameter: {diameter}")
+else:
+    # Fallback: use a simple path
+    path = list(G.nodes)[:2]
+    print(path)
+    print(f"Diameter: {diameter}")
+
+observation:
+stdout: [3737, 5081, 2378, 3335, 1091, 1974, 3726, 2982, 2963, 4767, 4742, 2820, 4977, 4924, 4093, 1564, 1108, 4657, 4907, 494, 1969, 4515, 3382, 2609, 3764, 3957, 3166, 2939, 516, 808, 1260, 324, 3795, 1374, 3289, 4188, 2717, 1595, 3956, 3878, 934, 1782, 1845, 3005, 2666, 5205, 4688, 3338, 2796, 844, 5192, 1604, 3748, 5111, 4396, 327, 2101, 2118, 3451, 1685, 1034, 4651, 3910, 1759, 3888, 1996, 4024, 264, 640, 1753, 3304, 547]
+Diameter: 71
+
+
+[diameter/test_large/00014] n=526 note=distance 5, diameter is 6
+code:
+import networkx as nx
+
+# Pick a source node (any node in the graph)
+source = next(iter(G.nodes()))
+
+# Compute shortest path distances from source
+distances = nx.shortest_path_length(G, source=source)
+
+# Find the node farthest from source
+farthest_node = max(distances, key=distances.get)
+max_distance = distances[farthest_node]
+
+# Get the shortest path from source to farthest_node
+path = nx.shortest_path(G, source=source, target=farthest_node)
+
+path
+
+observation:
+stdout: [1002, 2219, 2187, 515, 705, 1287]
+
+
+run: experiments/qwen3_4b_scaling_full/scaling/baseline_b_v2/test_stress
+harness: baseline_b_v2    model: qwen3-4b    split: test_stress
+problems: 50    accuracy: 74.0%    feasible: 80.0%    parsed: 84.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components     10  100.0%     3.0     2.0        0
+cycle_detection          10   90.0%     3.5     2.2        0
+diameter                 10   20.0%     6.3     3.9        0
+max_clique               10   80.0%     4.2     3.3        0
+shortest_path            10   80.0%     4.2     2.0        0
+
+cycle_detection failure notes:
+- 1x no edge from the last node back to the first
+
+diameter failure notes:
+- 5x no prediction
+- 1x distance 5, diameter is 8
+- 1x empty answer
+- 1x distance 92, diameter is 182
+
+max_clique failure notes:
+- 1x clique of size 2, maximum is 3
+- 1x no prediction
+
+shortest_path failure notes:
+- 2x no prediction
+
+Failure excerpts:
+
+[shortest_path/test_stress/00000] n=2000 note=no prediction
+code:
+import networkx as nx
+path = nx.shortest_path(G, source=3627, target=14037)
+print(path)
+
+observation:
+stdout: [3627, 7865, 3116, 4532, 7242, 1707, 18240, 2810, 16586, 12068, 8997, 3222, 10239, 4949, 18530, 16113, 7547, 12947, 19739, 13067, 8594, 12295, 11836, 46, 5540, 14430, 3087, 1365, 10650, 15732, 10286, 8188, 7377, 7684, 7059, 13654, 5429, 14989, 14016, 13535, 18867, 8667, 2599, 1733, 3625, 11722, 18072, 13485, 951, 15929, 8817, 467, 19384, 17976, 17316, 18658, 11245, 17139, 377, 3127, 2021, 12941, 13350, 10518, 12227, 14926, 4091, 8196, 8276, 4512, 2232, 17283, 2614, 14710, 8976, 2486, 10537, 19657, 13347, 19736, 6944, 18543, 16752, 1358, 3889, 7147, 5999, 18780, 3039, 9650, 1409, 18653, 17584, 2789, 19378, 2998, 15459, 13283, 9509, 12663, 4088, 3295, 7298, 19553, 16811, 4629, 17700, 4115, 5863, 19879, 829, 6826, 7731, 5415, 8547, 15396, 7479, 10640, 14573, 18116, 15086, 1512, 6001, 13745, 1
+
+[shortest_path/test_stress/00009] n=2000 note=no prediction
+code:
+import networkx as nx
+path = nx.shortest_path(G, source=10959, target=19352)
+print(path)
+
+observation:
+stdout: [10959, 13912, 133, 7798, 5559, 17630, 1808, 9013, 19047, 17103, 6416, 16051, 1668, 8628, 14954, 16476, 19088, 8005, 12840, 12521, 3826, 2344, 5884, 13682, 17249, 18609, 674, 17035, 385, 1181, 15374, 1830, 12356, 12150, 13741, 12559, 4220, 16043, 19601, 15435, 19897, 14491, 16258, 17854, 12773, 5392, 15860, 17546, 3838, 8954, 12342, 19640, 3415, 15774, 1693, 15727, 18169, 10719, 403, 7155, 5911, 1255, 9079, 17251, 4258, 987, 8856, 6059, 4359, 16681, 8723, 19531, 17512, 12339, 19604, 17141, 3119, 7026, 8363, 13697, 9940, 17657, 2203, 12546, 12988, 7675, 5489, 1002, 11858, 15843, 19728, 8888, 7727, 8532, 10888, 13729, 4997, 1423, 2611, 19921, 17508, 5970, 16332, 11914, 13316, 11754, 14188, 4236, 1516, 7907, 4592, 11184, 5224, 18038, 3507, 19545, 6518, 17527, 7262, 16536, 1773, 18525, 2278, 5
+
+[cycle_detection/test_stress/00007] n=2000 note=no edge from the last node back to the first
+code:
+import networkx as nx
+
+print("Checking if the graph contains a cycle...")
+try:
+    cycle = list(nx.find_cycle(G))
+    if cycle:
+        print(f"Found a cycle: {cycle}")
+        print(f"Cycle length: {len(cycle)}")
+    else:
+        print("No cycle found.")
+except nx.NetworkXNoCycle:
+    print("No cycle found.")
+except Exception as e:
+    print(f"Error finding cycle: {e}")
+
+observation:
+stdout: Checking if the graph contains a cycle...
+Found a cycle: [(16655, 15373), (15373, 7217), (7217, 12152), (12152, 10241), (10241, 9806), (9806, 15689), (15689, 18406), (18406, 2266), (2266, 874), (874, 17139), (17139, 19441), (19441, 4677), (4677, 6832), (6832, 6471), (6471, 13682), (13682, 871), (871, 2325), (2325, 12706), (12706, 12784), (12784, 1204), (1204, 4874), (4874, 19719), (19719, 6304), (6304, 5920), (5920, 15585), (15585, 7241), (7241, 13711), (13711, 17721), (17721, 8473), (8473, 15227), (15227, 16499), (16499, 2846), (2846, 4304), (4304, 8589), (8589, 16672), (16672, 2655), (2655, 14439), (14439, 15675), (15675, 7839), (7839, 10239), (10239, 10960), (10960, 16201), (16201, 10031), (10031, 9292), (9292, 5329), (5329, 17837), (17837, 5120), (5120, 13028), (13028, 3040), (3040, 10

@@ -1,0 +1,24 @@
+harness: baseline_b-candidate    model: qwen3-4b    split: test_medium
+problems: 150    errors: 0    duration: 63.3s    tokens: 555668
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188  100.0%    100.0%    100.0%
+test_medium  cycle_detection           30     203  100.0%     96.7%     93.3%
+test_medium  diameter                  30     182  100.0%    100.0%    100.0%
+test_medium  max_clique                30     194  100.0%     93.3%     86.7%
+test_medium  shortest_path             30     189  100.0%    100.0%    100.0%
+test_medium  ALL                      150     191  100.0%     98.0%     96.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191   100.0%     98.0%     96.0%
+
+First failures:
+- cycle_detection/test_medium/00016 (cycle_detection, n=285): path repeats a node
+- cycle_detection/test_medium/00025 (cycle_detection, n=280): said no cycle, but the graph has one
+- max_clique/test_medium/00000 (max_clique, n=269): empty answer
+- max_clique/test_medium/00015 (max_clique, n=116): unknown node(s): ['1', '2']
+- max_clique/test_medium/00018 (max_clique, n=147): clique of size 2, maximum is 4
+- max_clique/test_medium/00023 (max_clique, n=167): clique of size 2, maximum is 5

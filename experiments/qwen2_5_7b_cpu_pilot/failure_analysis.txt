@@ -1,0 +1,138 @@
+run: experiments/qwen2_5_7b_cpu_pilot/baseline_b_v2_25
+harness: baseline_b_v2    model: qwen2.5-7b    split: test_small
+problems: 25    accuracy: 68.0%    feasible: 80.0%    parsed: 84.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components      5   80.0%     3.2     2.2        0
+cycle_detection           5  100.0%     2.2     1.2        0
+diameter                  5   40.0%     5.4     4.8        0
+max_clique                5   20.0%     4.6     4.0        0
+shortest_path             5  100.0%     2.2     1.2        0
+
+connected_components failure notes:
+- 1x gave 0 components, graph has 9
+
+diameter failure notes:
+- 2x no prediction
+- 1x distance 3, diameter is 4
+
+max_clique failure notes:
+- 2x no prediction
+- 1x unknown node(s): ['3', '5']
+- 1x clique of size 3, maximum is 10
+
+Failure excerpts:
+
+[connected_components/test_small/00001] n=41 note=gave 0 components, graph has 9
+code:
+import networkx as nx
+
+components = list(nx.connected_components(G))
+result = [min(component) for component in components if min(component) <= 40 and max(component) <= 40]
+print(result)
+
+observation:
+stdout: []
+
+
+[diameter/test_small/00000] n=47 note=no prediction
+code:
+import networkx as nx
+
+# Find the diameter of the graph and a pair of nodes that achieve it
+diameter = nx.diameter(G)
+paths = dict(nx.all_pairs_shortest_path_length(G))
+nodes_at_diameter_distance = [node for node, distance in paths.items() if max(distance.values()) == diameter]
+
+# Get one pair of nodes with the maximum distance
+source, target = min((nodes_at_diameter_distance[i], nodes_at_diameter_distance[j]) for i in range(len(nodes_at_diameter_distance)) for j in range(i+1, len(nodes_at_diameter_distance)) if max(paths[nodes_at_diameter_distance[i]].values()) == diameter and max(paths[nodes_at_diameter_distance[j]].values()) == diameter)
+
+# Get the shortest path between these nodes
+shortest_path = nx.shortest_path(G, source=source, target=target)
+print(shortest_path)
+
+observation:
+stdout: [340, 240, 33, 122, 127, 455, 176, 232, 360]
+
+
+[diameter/test_small/00003] n=36 note=no prediction
+code:
+import networkx as nx
+
+# Find the diameter of the graph and a pair of nodes that achieve it
+diameter = nx.diameter(G)
+paths = dict(nx.all_pairs_shortest_path_length(G))
+
+# Filter out nodes outside the range 1 to 36 and find the maximum path length
+max_distance = 0
+node1, node2 = None, None
+for u in G.nodes():
+    if 1 <= u <= 36:
+        for v in G.nodes():
+            if 1 <= v <= 36:
+                distance = paths[u][v]
+                if distance > max_distance:
+                    max_distance = distance
+                    node1, node2 = u, v
+
+# Print the diameter and a shortest path between the two nodes
+print(f"Diameter: {max_distance}")
+path = nx.shortest_path(G, source=node1, target=node2)
+print(path)
+
+observation:
+stdout: Diameter: 4
+[13, 58, 33, 134, 35]
+
+
+run: experiments/qwen2_5_7b_cpu_pilot/baseline_b_v2_newrules
+harness: baseline_b_v2    model: qwen2.5-7b    split: test_small
+problems: 10    accuracy: 80.0%    feasible: 80.0%    parsed: 80.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+diameter                  5   80.0%     4.4     3.6        0
+max_clique                5   80.0%     3.6     2.8        0
+
+diameter failure notes:
+- 1x no prediction
+
+max_clique failure notes:
+- 1x no prediction
+
+Failure excerpts:
+
+[diameter/test_small/00000] n=47 note=no prediction
+code:
+import networkx as nx
+
+# Find the diameter and a pair of nodes that achieve it
+diameter = nx.diameter(G)
+paths = dict(nx.all_pairs_shortest_path_length(G))
+nodes_at_diameter_distance = [node for node, distance in paths.items() if max(distance.values()) == diameter]
+
+# Get one such node and its farthest neighbor
+source = nodes_at_diameter_distance[0]
+target = max(paths[source], key=paths[source].get)
+
+# Print the shortest path between these two nodes
+shortest_path = list(nx.shortest_path(G, source, target))
+print(shortest_path)
+
+observation:
+stdout: [340, 240, 33, 122, 127, 455, 176, 232, 360]
+
+
+[max_clique/test_small/00000] n=13 note=no prediction
+code:
+max_clique
+
+observation:
+stderr: Traceback (most recent call last):
+  File "/localscratch-nvme/1534890/gh-sandbox-pgm9spj7/step.py", line 29, in <module>
+    _gh_value = eval(compile(_gh_last, "user_code.py", "eval"), globals())
+  File "user_code.py", line 1, in <module>
+    max_clique
+NameError: name 'max_clique' is not defined
+

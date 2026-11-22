@@ -1,0 +1,429 @@
+{
+  "n_candidates": 18,
+  "n_usable": 18,
+  "spearman_proxy": -0.2166198711317519,
+  "spearman_prompt_length": 0.2897484388921215,
+  "spearman_rule_count": 0.342394990994404,
+  "pairwise_proxy": 0.417910447761194,
+  "top3_recall": false,
+  "best_actual": {
+    "id": "qwen3_4b/round_05",
+    "val_accuracy": 0.75,
+    "proxy": 98
+  },
+  "top3": [
+    {
+      "id": "qwen3_4b_opt_a/round_02",
+      "val_accuracy": 0.6,
+      "proxy": 100
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_03",
+      "val_accuracy": 0.625,
+      "proxy": 100
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_04",
+      "val_accuracy": 0.625,
+      "proxy": 100
+    }
+  ],
+  "candidates": [
+    {
+      "id": "qwen3_4b_opt_a/round_01",
+      "val_accuracy": 0.7,
+      "proxy": 98,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 98,
+        "reason": "The harness enforces strict node validity, structural verification, and correct algorithmic use (e.g., cycle detection, diameter computation) without shortcuts. It is general across graph types and effectively uses the sandbox with clear validation rules. Scalability is limited by the need for all-pairs shortest paths in diameter calculation, which may become expensive on large graphs, but the system avoids hallucinations and maintains correctness."
+      },
+      "prompt_chars": 2673,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_02",
+      "val_accuracy": 0.6,
+      "proxy": 100,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 5,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 100,
+        "reason": "The harness strictly enforces use of actual node labels, requires verification through graph structure, and employs standard NetworkX algorithms with clear, machine-checkable output. It avoids shortcuts, scales well to large graphs, and is general across tasks without domain-specific assumptions."
+      },
+      "prompt_chars": 2547,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_03",
+      "val_accuracy": 0.625,
+      "proxy": 100,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 5,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 100,
+        "reason": "The harness uses only built-in, reliable NetworkX functions, enforces strict verification, avoids shortcuts or assumptions, and maintains a general, scalable design suitable for diverse graph reasoning tasks with clear output formatting."
+      },
+      "prompt_chars": 2749,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_04",
+      "val_accuracy": 0.625,
+      "proxy": 100,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 5,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 100,
+        "reason": "The harness correctly recommends appropriate graph algorithms (cycle detection and component analysis), enforces verification steps, avoids shortcuts like node indexing or memorization, uses tools effectively with fallbacks, and maintains a general, scalable design that works across diverse graph structures without context blowup."
+      },
+      "prompt_chars": 2577,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_05",
+      "val_accuracy": 0.725,
+      "proxy": 100,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 5,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 100,
+        "reason": "The harness employs robust, verified graph algorithms (DFS for cycles and components), avoids shortcuts like node ID assumptions, uses explicit verification steps, maintains scalability via standard NetworkX functions, and provides a clear, machine-checkable output format. It is general across tasks and graphs without domain-specific constraints."
+      },
+      "prompt_chars": 2569,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_06",
+      "val_accuracy": 0.375,
+      "proxy": 100,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 5,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 100,
+        "reason": "The harness is robust, correctly recommends appropriate graph algorithms, enforces use of actual node labels, includes verification steps, scales well with memory and step limits, avoids shortcuts, uses tools effectively, and is general across tasks without domain-specific assumptions."
+      },
+      "prompt_chars": 2534,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 0
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_07",
+      "val_accuracy": 0.525,
+      "proxy": 100,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 5,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 100,
+        "reason": "The harness is robust, general, and strictly enforces the use of actual graph nodes with proper verification. It uses appropriate algorithms (find_cycle, connected_components), avoids shortcuts, ensures machine-checkable output, and scales well without context blowup."
+      },
+      "prompt_chars": 2349,
+      "rule_count": 6,
+      "numeric_node_pattern": false,
+      "edge_list_view": 0
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_08",
+      "val_accuracy": 0.425,
+      "proxy": 96,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 96,
+        "reason": "The harness is highly sound and general, with strong algorithmic guidance, explicit verification steps, and no reliance on numeric IDs or shortcuts. It scales reasonably well due to its use of standard graph algorithms and adjacency list view, though full all-pairs shortest path computation for diameter may become expensive in very large graphs, slightly limiting scalability."
+      },
+      "prompt_chars": 2827,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 0
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_09",
+      "val_accuracy": 0.7,
+      "proxy": 100,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 5,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 100,
+        "reason": "The harness clearly specifies correct graph algorithms, enforces structural verification, avoids shortcuts with actual node labels, uses tools effectively, and is general across tasks without domain-specific assumptions."
+      },
+      "prompt_chars": 2702,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_10",
+      "val_accuracy": 0.725,
+      "proxy": 98,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 98,
+        "reason": "The harness demonstrates strong algorithmic soundness and verification practices, with clear rules for edge validation and path/cycle correctness. It avoids shortcuts by relying on graph structure rather than node IDs or memorization. The output protocol is strictly machine-checkable, and tool use is effective within constraints. Scalability is slightly limited by the rule to test with small subsets, which may hinder full scalability in large graphs, but overall performance remains robust."
+      },
+      "prompt_chars": 2633,
+      "rule_count": 8,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b/round_01",
+      "val_accuracy": 0.725,
+      "proxy": 96,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 96,
+        "reason": "The harness uses sound, verified graph algorithms with explicit verification steps and avoids shortcuts like numeric node indexing. It handles scalability well for medium-sized graphs but may struggle with very large graphs due to heuristic reliance in maximum clique detection. All components are general, machine-checkable, and follow best practices for correctness and safety."
+      },
+      "prompt_chars": 2757,
+      "rule_count": 10,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b/round_02",
+      "val_accuracy": 0.675,
+      "proxy": 95,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 95,
+        "reason": "The harness uses sound, verified graph algorithms with explicit feasibility checks and avoids numeric shortcuts. It scales well for medium graphs but may struggle with very large graphs due to reliance on exact routines like maximum clique that can be computationally expensive. All outputs are machine-checkable and general across graph problems."
+      },
+      "prompt_chars": 3115,
+      "rule_count": 13,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b/round_03",
+      "val_accuracy": 0.45,
+      "proxy": 98,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 98,
+        "reason": "The harness uses well-established, correct algorithms with strong verification steps and avoids numeric shortcuts. It is general across graph types and effectively leverages the sandbox with clear output formatting. Scalability is limited by the exact clique validation (which becomes expensive on large graphs), but otherwise it is robust and transferable."
+      },
+      "prompt_chars": 2860,
+      "rule_count": 11,
+      "numeric_node_pattern": false,
+      "edge_list_view": 0
+    },
+    {
+      "id": "qwen3_4b/round_04",
+      "val_accuracy": 0.725,
+      "proxy": 98,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 98,
+        "reason": "The harness uses sound, standard graph algorithms with explicit verification and fallbacks. It avoids numeric shortcuts, scales reasonably well for medium graphs, and maintains a general, reusable design across problems."
+      },
+      "prompt_chars": 3053,
+      "rule_count": 12,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b/round_05",
+      "val_accuracy": 0.75,
+      "proxy": 98,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 98,
+        "reason": "The harness uses sound, verified graph algorithms with explicit checks and fallbacks. It avoids numeric shortcuts, ensures correctness through verification steps, and maintains general applicability across problems. Scalability is limited by reliance on exact routines like all-pairs shortest paths (O(n\u00b3)), which may struggle on large graphs despite the rules. Otherwise, it excels in safety, clarity, and robustness."
+      },
+      "prompt_chars": 3223,
+      "rule_count": 12,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b/round_06",
+      "val_accuracy": 0.625,
+      "proxy": 98,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 98,
+        "reason": "The harness uses sound graph algorithms, enforces explicit verification of paths and cycles, avoids numeric shortcuts, and maintains a clear output format. While clique handling on large graphs relies on a heuristic (limiting scalability), the overall design is robust, general, and correctly implements edge-based reasoning without assumptions about node IDs or labels."
+      },
+      "prompt_chars": 3242,
+      "rule_count": 12,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b/round_07",
+      "val_accuracy": 0.7,
+      "proxy": 98,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 98,
+        "reason": "The harness demonstrates strong algorithmic grounding, rigorous verification, and avoids numeric shortcuts. It handles scalability well for medium graphs but may struggle with very large graphs due to the explicit pairwise validation in clique detection, which could become computationally expensive. All components are general and tool-aware, with clear output formatting."
+      },
+      "prompt_chars": 3162,
+      "rule_count": 12,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    },
+    {
+      "id": "qwen3_4b/round_08",
+      "val_accuracy": 0.675,
+      "proxy": 96,
+      "rubric": {
+        "scores": {
+          "algorithmic_soundness": 5,
+          "verification": 5,
+          "scalability": 4,
+          "no_shortcuts": 5,
+          "output_protocol": 5,
+          "tool_use": 5,
+          "generality": 5
+        },
+        "overall": 96,
+        "reason": "The harness demonstrates strong algorithmic soundness, rigorous verification, and avoids shortcuts by relying on node labels only through arbitrary IDs. It uses appropriate NetworkX routines with fallbacks for robustness, ensures scalability via standard algorithms (though clique detection on large graphs may still face limits), and maintains a clear output protocol. The only minor scalability concern is that maximum clique on large graphs relies on heuristic validation which could become slow; however, the rules emphasize verification and fallbacks, making it reliable across most practical graph sizes."
+      },
+      "prompt_chars": 2736,
+      "rule_count": 10,
+      "numeric_node_pattern": false,
+      "edge_list_view": 1
+    }
+  ]
+}

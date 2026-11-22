@@ -1,0 +1,27 @@
+harness: baseline_b_v2    model: qwen2.5-7b    split: test_small
+problems: 10    errors: 0    duration: 84.0s    tokens: 8351
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_small   connected_components       2      28  100.0%      0.0%      0.0%
+test_small   cycle_detection            2      39  100.0%     50.0%     50.0%
+test_small   diameter                   2      32  100.0%      0.0%      0.0%
+test_small   max_clique                 2      16  100.0%      0.0%      0.0%
+test_small   shortest_path              2       8  100.0%      0.0%      0.0%
+test_small   ALL                       10      24  100.0%     10.0%     10.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50          10       24   100.0%     10.0%     10.0%
+
+First failures:
+- shortest_path/test_small/00000 (shortest_path, n=8): unknown node(s): ['34']
+- shortest_path/test_small/00001 (shortest_path, n=7): unknown node(s): ['30']
+- connected_components/test_small/00000 (connected_components, n=15): unknown node(s): ['0', '3']
+- connected_components/test_small/00001 (connected_components, n=41): unknown node(s): ['0', '1', '2', '3', '4']
+- cycle_detection/test_small/00000 (cycle_detection, n=35): unknown node(s): ['2', '3']
+- diameter/test_small/00000 (diameter, n=47): unknown node(s): ['node34', 'node12', 'node45', 'node23']
+- diameter/test_small/00001 (diameter, n=17): unknown node(s): ['2', '3', '4', '5', '6']
+- max_clique/test_small/00000 (max_clique, n=13): unknown node(s): ['3', '5']
+- max_clique/test_small/00001 (max_clique, n=19): unknown node(s): ['3', '5', '6', '7', '8']

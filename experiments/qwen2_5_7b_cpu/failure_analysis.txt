@@ -1,0 +1,94 @@
+run: experiments/qwen2_5_7b_cpu/baseline_b_v2/test_small
+harness: baseline_b_v2    model: qwen2.5-7b    split: test_small
+problems: 150    accuracy: 77.3%    feasible: 88.0%    parsed: 100.0%
+
+task                      n     acc   steps   tools  timeout
+------------------------------------------------------------------
+connected_components     30   80.0%     4.0     3.0        0
+cycle_detection          30   66.7%     2.6     1.6        0
+diameter                 30   60.0%     4.6     3.6        0
+max_clique               30   93.3%     3.6     2.6        0
+shortest_path            30   86.7%     3.0     2.0        0
+
+connected_components failure notes:
+- 1x unknown node(s): ['0', '1', '2', '3', '4']
+- 1x unknown node(s): ['3', '5', '6', '7', '8']
+- 1x gave 1 components, graph has 2
+- 1x gave 5 components, graph has 9
+- 1x gave 1 components, graph has 5
+- 1x gave 1 components, graph has 3
+
+cycle_detection failure notes:
+- 9x said no cycle, but the graph has one
+- 1x unknown node(s): ['a', 'b', 'c', 'd']
+
+diameter failure notes:
+- 1x no edge between 85 and 316
+- 1x unknown node(s): ['1', '23']
+- 1x distance 3, diameter is 4
+- 1x unknown node(s): ['29']
+- 1x unknown node(s): ['1', '20']
+- 1x distance 2, diameter is 7
+- 1x unknown node(s): ['34', '27', '39', '36', '30']
+- 1x unknown node(s): ['0', '1', '2', '3']
+
+max_clique failure notes:
+- 1x unknown node(s): ['3', '4', '5', '6', '7']
+- 1x unknown node(s): ['25', '30', '31', '32']
+
+shortest_path failure notes:
+- 1x unknown node(s): ['56', '27']
+- 1x unknown node(s): ['401', '402']
+- 1x unknown node(s): ['270', '275', '280', '285', '290']
+- 1x unknown node(s): ['203', '204', '196']
+
+Failure excerpts:
+
+[shortest_path/test_small/00008] n=23 note=unknown node(s): ['56', '27']
+code:
+[143, 56, 27, 34]
+
+observation:
+stdout: [143, 56, 27, 34]
+
+
+[shortest_path/test_small/00020] n=43 note=unknown node(s): ['401', '402']
+code:
+[393, 401, 402, 399]
+
+observation:
+stdout: [393, 401, 402, 399]
+
+
+[shortest_path/test_small/00024] n=33 note=unknown node(s): ['270', '275', '280', '285', '290']
+code:
+[264, 270, 275, 280, 285, 290, 295, 300, 305, 310, 315, 320, 325, 330, 335, 340, 345, 350, 355, 360, 365, 370, 375, 380, 385, 390, 395, 132]
+
+observation:
+stdout: [264, 270, 275, 280, 285, 290, 295, 300, 305, 310, 315, 320, 325, 330, 335, 340, 345, 350, 355, 360, 365, 370, 375, 380, 385, 390, 395, 132]
+
+
+[shortest_path/test_small/00027] n=21 note=unknown node(s): ['203', '204', '196']
+code:
+[187, 203, 204, 196, 175]
+
+observation:
+stdout: [187, 203, 204, 196, 175]
+
+
+[connected_components/test_small/00004] n=26 note=unknown node(s): ['0', '1', '2', '3', '4']
+code:
+components = list(nx.connected_components(G))
+result = [min(component) for component in components]
+print(result)
+
+observation:
+stderr: Traceback (most recent call last):
+  File "/projects/psgroup/saminrk/cs5624-project/experiments/qwen2_5_7b_cpu/sandbox/gh-sandbox-gt4h7a_0/step.py", line 27, in <module>
+    exec(compile(_gh_tree, "user_code.py", "exec"), globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "user_code.py", line 1, in <module>
+    components = list(nx.connected_components(G))
+                      ^^
+NameError: name 'nx' is not defined
+

@@ -1,0 +1,129 @@
+{
+  "task": "max_independent_set",
+  "condition": "given",
+  "k": 5,
+  "seed": 0,
+  "best_it": 3,
+  "best_val_acc": 0.9649,
+  "final_statement": "Given an undirected simple graph, print the nodes of a maximum independent set as a list in square brackets. No two printed nodes may be adjacent. Any maximum set is accepted.",
+  "val_curve": [
+    0.6643,
+    0.9649,
+    0.9649
+  ],
+  "statements": [
+    "Given an undirected simple graph, print the nodes of a maximum independent set as a list in square brackets. No two printed nodes may be adjacent. Any maximum set is accepted.",
+    "Given an undirected simple graph, print the nodes of a maximum independent set as a list in square brackets. No two printed nodes may be adjacent. Any maximum set is accepted.",
+    "Given an undirected simple graph, print the nodes of a maximum independent set as a list in square brackets. No two printed nodes may be adjacent. Any maximum set is accepted."
+  ],
+  "tokens": {
+    "prompt": 97196,
+    "completion": 8675
+  },
+  "test": {
+    "test_small": {
+      "n": 20,
+      "quality": 0.9711,
+      "feasible": 1.0,
+      "optimal": 0.7,
+      "verdicts": {
+        "AC": 14,
+        "FEAS": 6
+      },
+      "by_bucket": {
+        "small": {
+          "n": 16,
+          "quality": 0.9717,
+          "feasible": 1.0
+        },
+        "tiny": {
+          "n": 4,
+          "quality": 0.9688,
+          "feasible": 1.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "components": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "dense": {
+          "n": 2,
+          "quality": 0.9375,
+          "feasible": 1.0
+        },
+        "er": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "grid": {
+          "n": 2,
+          "quality": 0.8958,
+          "feasible": 1.0
+        },
+        "path_like": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "powerlaw": {
+          "n": 2,
+          "quality": 0.9722,
+          "feasible": 1.0
+        },
+        "regular": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "tree": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "ws": {
+          "n": 2,
+          "quality": 0.9055,
+          "feasible": 1.0
+        }
+      },
+      "by_density": {
+        "medium": {
+          "n": 10,
+          "quality": 0.9748,
+          "feasible": 1.0
+        },
+        "sparse": {
+          "n": 10,
+          "quality": 0.9674,
+          "feasible": 1.0
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 12,
+          "quality": 0.9518,
+          "feasible": 1.0
+        },
+        "true": {
+          "n": 8,
+          "quality": 1.0,
+          "feasible": 1.0
+        }
+      },
+      "max_cpu_s": 0.0064,
+      "median_cpu_s": 0.00485,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    }
+  }
+}

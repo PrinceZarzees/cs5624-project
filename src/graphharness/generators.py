@@ -106,8 +106,12 @@ def make_graph_for_task(task: str, n: int, rng: random.Random) -> tuple[nx.Graph
     family = rng.choice(FAMILIES)
     info: dict = {"family": family}
 
-    if task in ("shortest_path", "diameter"):
+    if task in ("shortest_path", "diameter", "common_neighbors"):
         G = ensure_connected(base_graph(n, family, rng), rng)
+        if task == "common_neighbors" and n >= 3:
+            u, v, w = rng.sample(sorted(G.nodes), 3)
+            G.add_edge(u, w)
+            G.add_edge(v, w)
 
     elif task == "connected_components":
         n_comps = rng.randint(1, max(1, min(12, n // 3)))
@@ -137,6 +141,24 @@ def make_graph_for_task(task: str, n: int, rng: random.Random) -> tuple[nx.Graph
             plant_clique(G, k, rng)
             info["planted_clique"] = k
 
+    elif task in ("max_independent_set", "min_vertex_cover"):
+        G = ensure_connected(base_graph(n, family, rng), rng)
+
+    elif task == "hamiltonian_path":
+        if n <= 2 or rng.random() < 0.5:
+            G = nx.path_graph(n) if n > 0 else nx.Graph()
+            if n > 2 and n <= 100:
+                for _ in range(rng.randint(0, 3)):
+                    a, b = rng.sample(range(n), 2)
+                    if not G.has_edge(a, b):
+                        G.add_edge(a, b)
+            info = {"family": "path", "has_hamiltonian_path": True}
+        else:
+            # Two disconnected path components: no Hamiltonian path.
+            cut = rng.randint(1, n - 1)
+            G = nx.disjoint_union(nx.path_graph(cut), nx.path_graph(n - cut))
+            info = {"family": "disconnected", "has_hamiltonian_path": False}
+
     else:
         G = base_graph(n, family, rng)
 
@@ -144,18 +166,33 @@ def make_graph_for_task(task: str, n: int, rng: random.Random) -> tuple[nx.Graph
 
 
 def graph_to_json(G: nx.Graph, rng: random.Random | None = None) -> dict:
-    """Store a graph as plain lists. Edge order is shuffled if rng is given."""
+    """Store a graph as plain lists. Edge order is shuffled if rng is given.
+
+    Optional node/edge attributes are stored in side lists so old records stay
+    compatible and arbitrary labels/weights survive JSON.
+    """
     edges = [[u, v] for u, v in G.edges]
     if rng is not None:
         rng.shuffle(edges)
         for e in edges:
             if rng.random() < 0.5:
                 e.reverse()
-    return {"directed": False, "nodes": sorted(G.nodes, key=str), "edges": edges}
+    out = {"directed": G.is_directed(), "nodes": sorted(G.nodes, key=str), "edges": edges}
+    node_attrs = [[v, dict(d)] for v, d in G.nodes(data=True) if d]
+    edge_attrs = [[u, v, dict(d)] for u, v, d in G.edges(data=True) if d]
+    if node_attrs:
+        out["node_attrs"] = node_attrs
+    if edge_attrs:
+        out["edge_attrs"] = edge_attrs
+    return out
 
 
 def graph_from_json(g: dict) -> nx.Graph:
     G = nx.DiGraph() if g.get("directed") else nx.Graph()
     G.add_nodes_from(g["nodes"])
     G.add_edges_from(tuple(e) for e in g["edges"])
+    for node, attrs in g.get("node_attrs", []):
+        G.nodes[node].update(attrs)
+    for u, v, attrs in g.get("edge_attrs", []):
+        G.edges[u, v].update(attrs)
     return G

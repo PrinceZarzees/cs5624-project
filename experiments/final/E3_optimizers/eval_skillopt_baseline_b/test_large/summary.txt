@@ -1,0 +1,24 @@
+harness: baseline_b-candidate    model: qwen3-4b    split: test_large
+problems: 100    errors: 0    duration: 39.5s    tokens: 443848
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_large   connected_components      20     663  100.0%    100.0%    100.0%
+test_large   cycle_detection           20     722  100.0%     95.0%     95.0%
+test_large   diameter                  20     712  100.0%    100.0%    100.0%
+test_large   max_clique                20     830  100.0%     90.0%     75.0%
+test_large   shortest_path             20     780  100.0%    100.0%    100.0%
+test_large   ALL                      100     741  100.0%     97.0%     94.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+500-1000     100      741   100.0%     97.0%     94.0%
+
+First failures:
+- cycle_detection/test_large/00017 (cycle_detection, n=886): unknown node(s): ['(5323', '1813)', '(1813', '3303)', '(3303']
+- max_clique/test_large/00000 (max_clique, n=929): clique of size 3, maximum is 7
+- max_clique/test_large/00001 (max_clique, n=965): clique of size 3, maximum is 9
+- max_clique/test_large/00003 (max_clique, n=663): clique of size 2, maximum is 9
+- max_clique/test_large/00009 (max_clique, n=757): unknown node(s): ['0', '1']
+- max_clique/test_large/00014 (max_clique, n=931): unknown node(s): ['1', '2']

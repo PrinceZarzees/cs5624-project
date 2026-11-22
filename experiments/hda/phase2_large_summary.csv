@@ -1,0 +1,4 @@
+task,val_quality,test_small_quality,test_small_feasible,test_medium_quality,test_medium_feasible,test_large_quality,test_large_feasible,test_xl_quality,test_xl_feasible,test_stress_quality,test_stress_feasible
+max_clique,0.557,0.9521,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+max_independent_set,0.1443,0.7127,1.0,0.774,1.0,0.7501,1.0,0.1526,0.4,0.0455,1.0
+min_vertex_cover,0.1475,0.0868,0.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

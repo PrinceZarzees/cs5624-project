@@ -1,0 +1,4 @@
+task,val_curve,best_val,test_quality,feasible,optimal,verdicts,tokens_prompt,tokens_completion
+max_clique,"[0.9442, 0.7554, 0.9442]",0.9442,0.9308,1.0,0.7,"{""FEAS"": 6, ""AC"": 14}",69332,6073
+max_independent_set,"[0.6643, 0.9649, 0.9649]",0.9649,0.9711,1.0,0.7,"{""AC"": 14, ""FEAS"": 6}",97196,8675
+min_vertex_cover,"[0.4546, 0.4546, 0.4546]",0.4546,0.4903,1.0,0.0,"{""FEAS"": 20}",71978,5954

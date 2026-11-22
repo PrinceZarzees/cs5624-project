@@ -1,0 +1,4 @@
+harness,fresh small,medium,large,stress,small-large (pp)
+Baseline B (3 repeats),94.4%,92.0%,90.7%,74.5%,+3.8
+RRSI-lite output,96.0%,96.0%,94.0%,74.0%,+2.0
+SkillOpt-style output,98.7%,94.0%,94.0%,76.0%,+4.7

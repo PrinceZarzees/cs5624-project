@@ -1,0 +1,114 @@
+{
+  "n": 18,
+  "spearman_loo": 0.5534403634953833,
+  "pairwise_loo": 0.7014925373134329,
+  "top3": [
+    {
+      "id": "qwen3_4b/round_07",
+      "val_accuracy": 0.7,
+      "loo": -0.05553533708458711
+    },
+    {
+      "id": "qwen3_4b/round_04",
+      "val_accuracy": 0.725,
+      "loo": -0.0711305754058928
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_02",
+      "val_accuracy": 0.6,
+      "loo": -0.08475095697656368
+    }
+  ],
+  "rows": [
+    {
+      "id": "qwen3_4b_opt_a/round_01",
+      "val_accuracy": 0.7,
+      "loo": -0.11756135056274376
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_02",
+      "val_accuracy": 0.6,
+      "loo": -0.08475095697656368
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_03",
+      "val_accuracy": 0.625,
+      "loo": -0.28072951626812126
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_04",
+      "val_accuracy": 0.625,
+      "loo": -0.10118166329617041
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_05",
+      "val_accuracy": 0.725,
+      "loo": -0.1308709888663497
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_06",
+      "val_accuracy": 0.375,
+      "loo": -0.6736404759183952
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_07",
+      "val_accuracy": 0.525,
+      "loo": -0.6446784606585633
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_08",
+      "val_accuracy": 0.425,
+      "loo": -0.9217696449590147
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_09",
+      "val_accuracy": 0.7,
+      "loo": -0.1263393313093681
+    },
+    {
+      "id": "qwen3_4b_opt_a/round_10",
+      "val_accuracy": 0.725,
+      "loo": -0.09118712455157194
+    },
+    {
+      "id": "qwen3_4b/round_01",
+      "val_accuracy": 0.725,
+      "loo": -0.16390766089075817
+    },
+    {
+      "id": "qwen3_4b/round_02",
+      "val_accuracy": 0.675,
+      "loo": -0.6727128736971761
+    },
+    {
+      "id": "qwen3_4b/round_03",
+      "val_accuracy": 0.45,
+      "loo": -0.8822880619760466
+    },
+    {
+      "id": "qwen3_4b/round_04",
+      "val_accuracy": 0.725,
+      "loo": -0.0711305754058928
+    },
+    {
+      "id": "qwen3_4b/round_05",
+      "val_accuracy": 0.75,
+      "loo": -0.10509373469607053
+    },
+    {
+      "id": "qwen3_4b/round_06",
+      "val_accuracy": 0.625,
+      "loo": -0.0915320506809743
+    },
+    {
+      "id": "qwen3_4b/round_07",
+      "val_accuracy": 0.7,
+      "loo": -0.05553533708458711
+    },
+    {
+      "id": "qwen3_4b/round_08",
+      "val_accuracy": 0.675,
+      "loo": -0.17487040749799854
+    }
+  ]
+}

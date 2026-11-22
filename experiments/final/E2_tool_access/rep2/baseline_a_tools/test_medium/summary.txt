@@ -1,0 +1,28 @@
+harness: baseline_a_tools    model: qwen3-4b    split: test_medium
+problems: 150    errors: 1    duration: 112.4s    tokens: 1014930
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188  100.0%    100.0%    100.0%
+test_medium  cycle_detection           30     203  100.0%     76.7%     56.7%
+test_medium  diameter                  30     182   96.7%     96.7%     96.7%
+test_medium  max_clique                30     194  100.0%     90.0%     83.3%
+test_medium  shortest_path             30     189  100.0%     96.7%     96.7%
+test_medium  ALL                      150     191   99.3%     92.0%     86.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191    99.3%     92.0%     86.7%
+
+First failures:
+- shortest_path/test_medium/00020 (shortest_path, n=299): empty answer
+- cycle_detection/test_medium/00003 (cycle_detection, n=156): said no cycle, but the graph has one
+- cycle_detection/test_medium/00005 (cycle_detection, n=137): said no cycle, but the graph has one
+- cycle_detection/test_medium/00007 (cycle_detection, n=210): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00011 (cycle_detection, n=146): said no cycle, but the graph has one
+- cycle_detection/test_medium/00012 (cycle_detection, n=203): said no cycle, but the graph has one
+- cycle_detection/test_medium/00013 (cycle_detection, n=140): unknown node(s): ['a', 'b', 'a']
+- cycle_detection/test_medium/00014 (cycle_detection, n=270): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00016 (cycle_detection, n=285): unknown node(s): ['a', 'b', 'c']
+- cycle_detection/test_medium/00018 (cycle_detection, n=239): unknown node(s): ['a', 'b', 'c']

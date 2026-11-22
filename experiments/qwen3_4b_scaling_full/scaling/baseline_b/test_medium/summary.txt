@@ -1,0 +1,28 @@
+harness: baseline_b    model: qwen3-4b    split: test_medium
+problems: 150    errors: 0    duration: 72.1s    tokens: 540762
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_medium  connected_components      30     188  100.0%     96.7%     96.7%
+test_medium  cycle_detection           30     203  100.0%     86.7%     76.7%
+test_medium  diameter                  30     182  100.0%    100.0%    100.0%
+test_medium  max_clique                30     194  100.0%     93.3%     80.0%
+test_medium  shortest_path             30     189  100.0%    100.0%    100.0%
+test_medium  ALL                      150     191  100.0%     95.3%     90.7%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+100-300      150      191   100.0%     95.3%     90.7%
+
+First failures:
+- connected_components/test_medium/00009 (connected_components, n=100): two answer nodes are in the same component (e.g. 10)
+- cycle_detection/test_medium/00002 (cycle_detection, n=270): said no cycle, but the graph has one
+- cycle_detection/test_medium/00003 (cycle_detection, n=156): said no cycle, but the graph has one
+- cycle_detection/test_medium/00011 (cycle_detection, n=146): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00012 (cycle_detection, n=203): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00016 (cycle_detection, n=285): said no cycle, but the graph has one
+- cycle_detection/test_medium/00025 (cycle_detection, n=280): unknown node(s): ['1', '2', '3']
+- cycle_detection/test_medium/00028 (cycle_detection, n=182): unknown node(s): ['1', '2', '3']
+- max_clique/test_medium/00002 (max_clique, n=103): empty answer
+- max_clique/test_medium/00004 (max_clique, n=205): clique of size 3, maximum is 4

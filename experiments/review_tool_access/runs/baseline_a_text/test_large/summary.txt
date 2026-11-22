@@ -1,0 +1,28 @@
+harness: baseline_a_text    model: qwen3-4b    split: test_large
+problems: 25    errors: 25    duration: 0.7s    tokens: 0
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+test_large   connected_components       5     616    0.0%      0.0%      0.0%
+test_large   cycle_detection            5     728    0.0%      0.0%      0.0%
+test_large   diameter                   5     669    0.0%      0.0%      0.0%
+test_large   max_clique                 5     863    0.0%      0.0%      0.0%
+test_large   shortest_path              5     790    0.0%      0.0%      0.0%
+test_large   ALL                       25     733    0.0%      0.0%      0.0%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+500-1000      25      733     0.0%      0.0%      0.0%
+
+First failures:
+- shortest_path/test_large/00000 (shortest_path, n=702): no prediction
+- shortest_path/test_large/00001 (shortest_path, n=739): no prediction
+- shortest_path/test_large/00002 (shortest_path, n=698): no prediction
+- shortest_path/test_large/00003 (shortest_path, n=824): no prediction
+- shortest_path/test_large/00004 (shortest_path, n=986): no prediction
+- connected_components/test_large/00000 (connected_components, n=751): no prediction
+- connected_components/test_large/00001 (connected_components, n=576): no prediction
+- connected_components/test_large/00002 (connected_components, n=507): no prediction
+- connected_components/test_large/00003 (connected_components, n=522): no prediction
+- connected_components/test_large/00004 (connected_components, n=725): no prediction

@@ -1,0 +1,33 @@
+harness: baseline_b    model: qwen3-4b    split: ga_hard
+problems: 1000    errors: 0    duration: 583.5s    tokens: 4292334
+
+split        task                       n   nodes  parsed  feasible  accuracy
+-----------------------------------------------------------------------------
+ga_hard      common_neighbors         100      31  100.0%    100.0%     98.0%
+ga_hard      connected_components     100      19  100.0%    100.0%    100.0%
+ga_hard      diameter                 100      20  100.0%     96.0%     96.0%
+ga_hard      graph_edit_distance      100      12  100.0%     18.0%      2.0%
+ga_hard      max_clique               100      19  100.0%     90.0%     82.0%
+ga_hard      max_common_subgraph      100      13   75.0%     69.0%     52.0%
+ga_hard      max_independent_set      100      19  100.0%     98.0%     45.0%
+ga_hard      min_vertex_cover         100      19  100.0%     78.0%     55.0%
+ga_hard      shortest_path            100      32  100.0%     96.0%     96.0%
+ga_hard      traveling_salesman       100      13  100.0%     90.0%      0.0%
+ga_hard      ALL                     1000      20   97.5%     83.5%     62.6%
+
+Accuracy by graph size:
+size bin       n    nodes   parsed  feasible  accuracy
+------------------------------------------------------
+4-50        1000       20    97.5%     83.5%     62.6%
+
+First failures:
+- shortest_path/ga_hard/00010 (shortest_path, n=20): empty answer
+- shortest_path/ga_hard/00029 (shortest_path, n=22): empty answer
+- shortest_path/ga_hard/00033 (shortest_path, n=24): unknown node(s): ['Lugo Emilia-Romagna']
+- shortest_path/ga_hard/00037 (shortest_path, n=27): empty answer
+- diameter/ga_hard/00009 (diameter, n=18): unknown node(s): ['Brookline Massachusetts']
+- diameter/ga_hard/00072 (diameter, n=15): empty answer
+- diameter/ga_hard/00077 (diameter, n=18): unknown node(s): ['Berkeley California', 'Pasadena California']
+- diameter/ga_hard/00081 (diameter, n=16): unknown node(s): ['Seattle Sounders (1994–208)']
+- max_clique/ga_hard/00000 (max_clique, n=22): unknown node(s): ['neighbor']
+- max_clique/ga_hard/00016 (max_clique, n=15): clique of size 4, maximum is 6

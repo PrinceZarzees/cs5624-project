@@ -4,3 +4,4 @@ gdown>=5
 numpy
 pandas
 matplotlib
+rdkit

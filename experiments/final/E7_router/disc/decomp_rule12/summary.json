@@ -1,0 +1,50 @@
+{
+  "rows": [
+    {
+      "split": "disconnected120",
+      "task": "connected_components",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 1133.3333333333333
+    },
+    {
+      "split": "disconnected120",
+      "task": "max_clique",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 1133.3333333333333
+    },
+    {
+      "split": "disconnected120",
+      "task": "max_independent_set",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 1133.3333333333333
+    },
+    {
+      "split": "disconnected120",
+      "task": "min_vertex_cover",
+      "n": 3,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 1133.3333333333333
+    },
+    {
+      "split": "disconnected120",
+      "task": "ALL",
+      "n": 12,
+      "parsed": 1.0,
+      "feasible": 1.0,
+      "accuracy": 1.0,
+      "mean_nodes": 1133.3333333333333
+    }
+  ],
+  "mode": "decomposed"
+}

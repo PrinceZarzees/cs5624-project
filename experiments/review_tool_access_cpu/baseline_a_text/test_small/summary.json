@@ -1,0 +1,295 @@
+{
+  "harness": "baseline_a_text",
+  "harness_config": {
+    "version": 1,
+    "name": "baseline_a_text",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "adjacency_list",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": false,
+    "notes": "No tools; adjacency list only."
+  },
+  "model": "qwen3-4b-q4",
+  "split": "test_small",
+  "started_at": "2026-11-21T03:24:56.848901+00:00",
+  "finished_at": "2026-11-21T03:36:17.951455+00:00",
+  "duration_s": 681.1025609513745,
+  "n": 25,
+  "overall": {
+    "split": "test_small",
+    "task": "ALL",
+    "n": 25,
+    "parsed": 1.0,
+    "feasible": 0.36,
+    "accuracy": 0.28,
+    "mean_nodes": 27.6
+  },
+  "by_task": [
+    {
+      "task": "connected_components",
+      "n": 5,
+      "mean_nodes": 26.0,
+      "parsed": 1.0,
+      "feasible": 0.4,
+      "accuracy": 0.0
+    },
+    {
+      "task": "cycle_detection",
+      "n": 5,
+      "mean_nodes": 32.8,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.6
+    },
+    {
+      "task": "diameter",
+      "n": 5,
+      "mean_nodes": 32.4,
+      "parsed": 1.0,
+      "feasible": 0.0,
+      "accuracy": 0.0
+    },
+    {
+      "task": "max_clique",
+      "n": 5,
+      "mean_nodes": 26.2,
+      "parsed": 1.0,
+      "feasible": 0.2,
+      "accuracy": 0.2
+    },
+    {
+      "task": "shortest_path",
+      "n": 5,
+      "mean_nodes": 20.6,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.6
+    }
+  ],
+  "by_size": [
+    {
+      "size_bin": "4-50",
+      "n": 25,
+      "mean_nodes": 27.6,
+      "parsed": 1.0,
+      "feasible": 0.36,
+      "accuracy": 0.28
+    }
+  ],
+  "tokens": {
+    "prompt": 41591,
+    "completion": 13880,
+    "total": 55471,
+    "mean_total_per_problem": 2218.84
+  },
+  "tool_calls": 0,
+  "mean_agent_duration_s": 27.23875839330256,
+  "errors": 0,
+  "failures": [
+    {
+      "id": "shortest_path/test_small/00002",
+      "task": "shortest_path",
+      "n_nodes": 38,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 114 and 178"
+    },
+    {
+      "id": "shortest_path/test_small/00003",
+      "task": "shortest_path",
+      "n_nodes": 26,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 28 and 74"
+    },
+    {
+      "id": "connected_components/test_small/00000",
+      "task": "connected_components",
+      "n_nodes": 15,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 135)"
+    },
+    {
+      "id": "connected_components/test_small/00001",
+      "task": "connected_components",
+      "n_nodes": 41,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 139)"
+    },
+    {
+      "id": "connected_components/test_small/00002",
+      "task": "connected_components",
+      "n_nodes": 21,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 5 components, graph has 7"
+    },
+    {
+      "id": "connected_components/test_small/00003",
+      "task": "connected_components",
+      "n_nodes": 27,
+      "parsed": true,
+      "feasible": true,
+      "note": "gave 4 components, graph has 6"
+    },
+    {
+      "id": "connected_components/test_small/00004",
+      "task": "connected_components",
+      "n_nodes": 26,
+      "parsed": true,
+      "feasible": false,
+      "note": "two answer nodes are in the same component (e.g. 14)"
+    },
+    {
+      "id": "cycle_detection/test_small/00001",
+      "task": "cycle_detection",
+      "n_nodes": 43,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge from the last node back to the first"
+    },
+    {
+      "id": "cycle_detection/test_small/00002",
+      "task": "cycle_detection",
+      "n_nodes": 6,
+      "parsed": true,
+      "feasible": false,
+      "note": "path repeats a node"
+    },
+    {
+      "id": "diameter/test_small/00000",
+      "task": "diameter",
+      "n_nodes": 47,
+      "parsed": true,
+      "feasible": false,
+      "note": "path repeats a node"
+    },
+    {
+      "id": "diameter/test_small/00001",
+      "task": "diameter",
+      "n_nodes": 17,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 152 and 165"
+    },
+    {
+      "id": "diameter/test_small/00002",
+      "task": "diameter",
+      "n_nodes": 37,
+      "parsed": true,
+      "feasible": false,
+      "note": "no edge between 19 and 249"
+    },
+    {
+      "id": "diameter/test_small/00003",
+      "task": "diameter",
+      "n_nodes": 36,
+      "parsed": true,
+      "feasible": false,
+      "note": "path has 6 edges but its end nodes are only 3 apart"
+    },
+    {
+      "id": "diameter/test_small/00004",
+      "task": "diameter",
+      "n_nodes": 25,
+      "parsed": true,
+      "feasible": false,
+      "note": "path has 8 edges but its end nodes are only 3 apart"
+    },
+    {
+      "id": "max_clique/test_small/00000",
+      "task": "max_clique",
+      "n_nodes": 13,
+      "parsed": true,
+      "feasible": false,
+      "note": "126 and 24 are not connected, not a clique"
+    },
+    {
+      "id": "max_clique/test_small/00001",
+      "task": "max_clique",
+      "n_nodes": 19,
+      "parsed": true,
+      "feasible": false,
+      "note": "10 and 13 are not connected, not a clique"
+    },
+    {
+      "id": "max_clique/test_small/00002",
+      "task": "max_clique",
+      "n_nodes": 28,
+      "parsed": true,
+      "feasible": false,
+      "note": "72 and 9 are not connected, not a clique"
+    },
+    {
+      "id": "max_clique/test_small/00003",
+      "task": "max_clique",
+      "n_nodes": 36,
+      "parsed": true,
+      "feasible": false,
+      "note": "107 and 248 are not connected, not a clique"
+    }
+  ],
+  "rows": [
+    {
+      "split": "test_small",
+      "task": "connected_components",
+      "n": 5,
+      "parsed": 1.0,
+      "feasible": 0.4,
+      "accuracy": 0.0,
+      "mean_nodes": 26.0
+    },
+    {
+      "split": "test_small",
+      "task": "cycle_detection",
+      "n": 5,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.6,
+      "mean_nodes": 32.8
+    },
+    {
+      "split": "test_small",
+      "task": "diameter",
+      "n": 5,
+      "parsed": 1.0,
+      "feasible": 0.0,
+      "accuracy": 0.0,
+      "mean_nodes": 32.4
+    },
+    {
+      "split": "test_small",
+      "task": "max_clique",
+      "n": 5,
+      "parsed": 1.0,
+      "feasible": 0.2,
+      "accuracy": 0.2,
+      "mean_nodes": 26.2
+    },
+    {
+      "split": "test_small",
+      "task": "shortest_path",
+      "n": 5,
+      "parsed": 1.0,
+      "feasible": 0.6,
+      "accuracy": 0.6,
+      "mean_nodes": 20.6
+    },
+    {
+      "split": "test_small",
+      "task": "ALL",
+      "n": 25,
+      "parsed": 1.0,
+      "feasible": 0.36,
+      "accuracy": 0.28,
+      "mean_nodes": 27.6
+    }
+  ]
+}

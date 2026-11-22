@@ -56,3 +56,40 @@ experiments/results/
 # Additional generated data
 data/*.csv
 data/grapharena/
+
+# Downloaded/converted benchmark data (regenerate with the adapters)
+data/grapharena_raw/
+data/grapharena_smoke/
+data/grapharena_eval/
+data/graphqa_raw/
+data/graphqa_smoke/
+data/graphqa_eval/
+
+# Large generated experiment artifacts (keep summaries/plots/checkpoints)
+experiments/**/trajectories/
+experiments/**/predictions.jsonl
+experiments/**/scores.jsonl
+experiments/**/cache.sqlite
+experiments/**/sandbox/
+experiments/**/*.sqlite
+experiments/**/*.zip
+
+# Final experiment generated data
+data_final/
+data/grapharena_eval100/
+data/graphqa_eval50/
+
+# final split manifest is small and should be tracked
+!data/manifest_final.json
+experiments/final/logs/
+experiments/**/*.sqlite-*
+experiments/final/**/sandbox*/
+data_proxy_large/
+data_proxy_medium/
+hda_pipeline/data/
+experiments/hda/**/log.jsonl
+experiments/hda/**/it*/
+experiments/hda/**/sandbox*/
+hda_pipeline.tgz
+experiments/hda/**/final/solution
+experiments/hda/**/build/

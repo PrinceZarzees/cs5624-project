@@ -1,0 +1,112 @@
+{
+  "start_harness": {
+    "version": 1,
+    "name": "baseline_a",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+  },
+  "best_harness": {
+    "version": 1,
+    "name": "baseline_a",
+    "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. You may use Python with NetworkX in the sandbox. Use the tools when they help, then give the final answer in the required format.",
+    "rules": [],
+    "graph_view": "summary",
+    "max_steps": 8,
+    "tool_timeout_s": 30.0,
+    "memory_mb": 2048,
+    "max_output_bytes": 16000,
+    "temperature": 0.0,
+    "allow_tools": true,
+    "tool_backend": "python",
+    "tool_preamble": "",
+    "notes": "Minimal zero-shot harness: protocol plus raw tools, no strategy."
+  },
+  "config": {
+    "rounds": 3,
+    "train_per_task": 4,
+    "val_per_task": 4,
+    "max_steps": null,
+    "seed": 5624,
+    "critic_temperature": 0.7,
+    "max_preamble_chars": 3000
+  },
+  "initial_val_accuracy": 0.9,
+  "best_val_accuracy": 0.9,
+  "total_tokens": 867052,
+  "duration_s": 425.7938478040014,
+  "started_at": "2026-11-21T04:31:47.784577+00:00",
+  "history": [
+    {
+      "round": 0,
+      "role": "initial",
+      "val_accuracy": 0.9,
+      "best_val_accuracy": 0.9,
+      "tokens": 115523
+    },
+    {
+      "round": 1,
+      "train_accuracy": 0.85,
+      "critic_response": "{\"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Do not include any code blocks or tags in your final answer. Use the tools when they help, then give the final answer in the required format. Always output only the answer as a list of nodes or empty list, with no extra text or syntax like <answer> or code blocks.\", \"rules\": [\"For cycle_detection: use DFS to detect cycles and reconstruct the cycle path if found.\", \"For diameter: compute shortest paths between all pairs using BFS from each node and track the maximum distance and corresponding path.\", \"For max_clique: use greedy approach by starting from high-degree nodes and build cliques iteratively.\", \"For connected_components: use BFS/DFS to find all components and return one representative node from each.\"], \"graph_view\": \"adjacency_list\", \"tool_backend\": \"python\", \"tool_preamble\": \"import networkx as nx\\nfrom collections import deque\\n\\ndef bfs_shortest_path(graph, start, end):\\n    if start == end:\\n        return [start]\\n    visited = set()\\n    queue = deque([(start, [start])])\\n    visited.add(start)\\n    while queue:\\n        node, path = queue.popleft()\\n        for neighbor in graph.get(node, []):\\n            if neighbor not in visited:\\n                new_path = path + [neighbor]\\n                if neighbor == end:\\n                    return new_path\\n                visited.add(neighbor)\\n                queue.append((neighbor, new_path))\\n    return []\", \"reason\": \"The failures occurred because the model incorrectly wrapped answers in <answer> tags, which caused syntax errors during parsing. This was especially common in tasks requiring list outputs. By removing any code tags or syntax wrappers in the system prompt and enforcing direct output formatting, we eliminate parsing errors. Using adjacency_list view provides better access to node neighbors for algorithms like DFS and BFS. The rules now specify clear algorithmic strategies that scale to larger graphs (100-2000 nodes) and avoid heuristic overreach. The tool preamble includes reusable BFS for pathfinding, which is critical for diameter and cycle detection.\"}",
+      "accepted": false,
+      "reason": "The failures occurred because the model incorrectly wrapped answers in <answer> tags, which caused syntax errors during parsing. This was especially common in tasks requiring list outputs. By removing any code tags or syntax wrappers in the system prompt and enforcing direct output formatting, we eliminate parsing errors. Using adjacency_list view provides better access to node neighbors for algorithms like DFS and BFS. The rules now specify clear algorithmic strategies that scale to larger graphs (100-2000 nodes) and avoid heuristic overreach. The tool preamble includes reusable BFS for pathfinding, which is critical for diameter and cycle detection.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Do not include any code blocks or tags in your final answer. Use the tools when they help, then give the final answer in the required format. Always output only the answer as a list of nodes or empty list, with no extra text or syntax like <answer> or code blocks.",
+        "rules": [
+          "For cycle_detection: use DFS to detect cycles and reconstruct the cycle path if found.",
+          "For diameter: compute shortest paths between all pairs using BFS from each node and track the maximum distance and corresponding path.",
+          "For max_clique: use greedy approach by starting from high-degree nodes and build cliques iteratively.",
+          "For connected_components: use BFS/DFS to find all components and return one representative node from each."
+        ],
+        "graph_view": "adjacency_list",
+        "tool_backend": "python",
+        "tool_preamble": "import networkx as nx\nfrom collections import deque\n\ndef bfs_shortest_path(graph, start, end):\n    if start == end:\n        return [start]\n    visited = set()\n    queue = deque([(start, [start])])\n    visited.add(start)\n    while queue:\n        node, path = queue.popleft()\n        for neighbor in graph.get(node, []):\n            if neighbor not in visited:\n                new_path = path + [neighbor]\n                if neighbor == end:\n                    return new_path\n                visited.add(neighbor)\n                queue.append((neighbor, new_path))\n    return []",
+        "reason": "The failures occurred because the model incorrectly wrapped answers in <answer> tags, which caused syntax errors during parsing. This was especially common in tasks requiring list outputs. By removing any code tags or syntax wrappers in the system prompt and enforcing direct output formatting, we eliminate parsing errors. Using adjacency_list view provides better access to node neighbors for algorithms like DFS and BFS. The rules now specify clear algorithmic strategies that scale to larger graphs (100-2000 nodes) and avoid heuristic overreach. The tool preamble includes reusable BFS for pathfinding, which is critical for diameter and cycle detection."
+      },
+      "val_accuracy": 0.25,
+      "best_val_accuracy": 0.9,
+      "tokens": 368646
+    },
+    {
+      "round": 2,
+      "train_accuracy": 0.85,
+      "critic_response": "{\"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Do not invent node names or use placeholder values like 'a', 'b', 'c'. Always use the actual node labels from the graph. Use Python with NetworkX in the sandbox. First, analyze the graph structure using the provided tools. Then, generate the correct output in the required format. For cycle detection, find a cycle using depth-first search or cycle detection algorithms and return the nodes in order. For connected components, return one representative node from each component. For diameter, compute the shortest path between the two nodes with maximum distance.\", \"rules\": [\"For cycle detection: use DFS to detect cycles and return the nodes in the order they are visited when a cycle is found.\", \"For connected components: use connected components algorithm (e.g., BFS/DFS) to identify components and return one node from each.\", \"For diameter: compute all-pairs shortest paths and find the pair with maximum distance; return the shortest path between them.\"], \"graph_view\": \"edge_list\", \"tool_backend\": \"python\", \"tool_preamble\": \"import networkx as nx\\n\\ndef find_cycle(G):\\n    visited = set()\\n    parent = {}\\n    for node in G.nodes():\\n        if node not in visited:\\n            if dfs_cycle(G, node, visited, parent):\\n                return True, get_cycle_path(parent, node)\\n    return False, []\\n\\ndef dfs_cycle(G, node, visited, parent):\\n    visited.add(node)\\n    for neighbor in G.neighbors(node):\\n        if neighbor not in visited:\\n            parent[neighbor] = node\\n            if dfs_cycle(G, neighbor, visited, parent):\\n                return True\\n        elif neighbor != parent[node]:\\n            # Found a back edge, cycle detected\\n            cycle = []\\n            curr = node\\n            while curr != neighbor:\\n                cycle.append(curr)\\n                curr = parent[curr]\\n            cycle.append(neighbor)\\n            return True\\n    return False\\n\\ndef get_cycle_path(parent, start):\\n    cycle = []\\n    curr = start\\n    while True:\\n        cycle.append(curr)\\n        if curr == start:\\n            break\\n        curr = parent[curr]\\n    return cycle\", \"reason\": \"The previous harness failed because the model used placeholder node names ('a', 'b', 'c') instead of actual nodes from the graph. This error occurred due to a lack of explicit rules enforcing the use of real node labels. By switching to edge_list view, we enable full access to node and edge information. Adding explicit rules for cycle detection, connected components, and diameter using DFS/BFS ensures correct reasoning. The tool preamble includes a safe cycle detection function that avoids syntax errors and uses actual node labels. This approach is scalable to larger graphs (100-2000 nodes) because it relies on standard graph algorithms that work regardless of graph size.\"}",
+      "accepted": false,
+      "reason": "The previous harness failed because the model used placeholder node names ('a', 'b', 'c') instead of actual nodes from the graph. This error occurred due to a lack of explicit rules enforcing the use of real node labels. By switching to edge_list view, we enable full access to node and edge information. Adding explicit rules for cycle detection, connected components, and diameter using DFS/BFS ensures correct reasoning. The tool preamble includes a safe cycle detection function that avoids syntax errors and uses actual node labels. This approach is scalable to larger graphs (100-2000 nodes) because it relies on standard graph algorithms that work regardless of graph size.",
+      "proposal": {
+        "system_prompt": "You are a graph reasoning assistant. Solve the problem accurately. Do not invent node names or use placeholder values like 'a', 'b', 'c'. Always use the actual node labels from the graph. Use Python with NetworkX in the sandbox. First, analyze the graph structure using the provided tools. Then, generate the correct output in the required format. For cycle detection, find a cycle using depth-first search or cycle detection algorithms and return the nodes in order. For connected components, return one representative node from each component. For diameter, compute the shortest path between the two nodes with maximum distance.",
+        "rules": [
+          "For cycle detection: use DFS to detect cycles and return the nodes in the order they are visited when a cycle is found.",
+          "For connected components: use connected components algorithm (e.g., BFS/DFS) to identify components and return one node from each.",
+          "For diameter: compute all-pairs shortest paths and find the pair with maximum distance; return the shortest path between them."
+        ],
+        "graph_view": "edge_list",
+        "tool_backend": "python",
+        "tool_preamble": "import networkx as nx\n\ndef find_cycle(G):\n    visited = set()\n    parent = {}\n    for node in G.nodes():\n        if node not in visited:\n            if dfs_cycle(G, node, visited, parent):\n                return True, get_cycle_path(parent, node)\n    return False, []\n\ndef dfs_cycle(G, node, visited, parent):\n    visited.add(node)\n    for neighbor in G.neighbors(node):\n        if neighbor not in visited:\n            parent[neighbor] = node\n            if dfs_cycle(G, neighbor, visited, parent):\n                return True\n        elif neighbor != parent[node]:\n            # Found a back edge, cycle detected\n            cycle = []\n            curr = node\n            while curr != neighbor:\n                cycle.append(curr)\n                curr = parent[curr]\n            cycle.append(neighbor)\n            return True\n    return False\n\ndef get_cycle_path(parent, start):\n    cycle = []\n    curr = start\n    while True:\n        cycle.append(curr)\n        if curr == start:\n            break\n        curr = parent[curr]\n    return cycle",
+        "reason": "The previous harness failed because the model used placeholder node names ('a', 'b', 'c') instead of actual nodes from the graph. This error occurred due to a lack of explicit rules enforcing the use of real node labels. By switching to edge_list view, we enable full access to node and edge information. Adding explicit rules for cycle detection, connected components, and diameter using DFS/BFS ensures correct reasoning. The tool preamble includes a safe cycle detection function that avoids syntax errors and uses actual node labels. This approach is scalable to larger graphs (100-2000 nodes) because it relies on standard graph algorithms that work regardless of graph size."
+      },
+      "val_accuracy": 0.45,
+      "best_val_accuracy": 0.9,
+      "tokens": 709106
+    },
+    {
+      "round": 3,
+      "train_accuracy": 0.9,
+      "critic_response": "{\"system_prompt\": \"You are a graph reasoning assistant. Solve the problem accurately. Do not use <answer> tags in your final response. Instead, output the answer directly in the required format. Use Python with NetworkX in the sandbox. Implement a clear, correct algorithm for each task based on the problem description.\", \"rules\": [\"For cycle detection: use DFS to detect back edges and reconstruct the cycle from the path.\", \"For connected components: use BFS or DFS to find all components and return one node per component.\", \"For diameter: perform BFS from each node to find the farthest node, then run BFS from that node to find the longest path and return the path as a list of nodes.\"], \"graph_view\": \"edge_list\", \"tool_backend\": \"python\", \"tool_preamble\": \"import networkx as nx\\n\\ndef find_cycle_dfs(graph, start_node):\\n    visited = set()\\n    parent = {}\\n    path = []\\n    \\n    def dfs(node):\\n        visited.add(node)\\n        for neighbor in graph[node]:\\n            if neighbor not in visited:\\n                parent[neighbor] = node\\n                dfs(neighbor)\\n            elif neighbor != parent.get(node, None):\\n                # Found a back edge, reconstruct cycle\\n                cycle = []\\n                curr = node\\n                while curr != neighbor:\\n                    cycle.append(curr)\\n                    curr = parent[curr]\\n                cycle.append(neighbor)\\n                return cycle\\n    \\n    for node in graph:\\n        if node not in visited:\\n            cycle = dfs(node)\\n            if cycle:\\n                return cycle\\n    return []\\n\\n\\ndef find_components(graph):\\n    visited = set()\\n    components = []\\n    \\n    for node in graph:\\n        if node not in visited:\\n            component = []\\n            stack = [node]\\n            while stack:\\n                curr = stack.pop()\\n                if curr not in visited:\\n                    visited.add(curr)\\n                    component.append(curr)\\n                    for neighbor in graph[curr]:\\n                        if neighbor not in visited:\\n                            stack.append(neighbor)\\n            components.append(component)\\n    \\n    # Return one node from each component\\n    return [component[0] for component in components]\\n\\n\\ndef find_diameter_path(graph):\\n    n = len(graph)\\n    if n <= 1:\\n        return []\\n    \\n    # BFS from each node to find the farthest node\\n    farthest_nodes = []\\n    for start in graph:\\n        dist = {start: 0}\\n        queue = [start]\\n        farthest = start\\n        while queue:\\n            node = queue.pop(0)\\n            for neighbor in graph[node]:\\n                if neighbor not in dist:\\n                    dist[neighbor] = dist[node] + 1\\n                    queue.append(neighbor)\\n                    if dist[neighbor] > dist[farthest]:\\n                        farthest = neighbor\\n        farthest_nodes.append((start, farthest, dist))\\n    \\n    # Find the farthest node from the farthest node\\n    max_dist = 0\\n    best_path = []\\n    for start, end, dist in farthest_nodes:\\n        if dist[end] > max_dist:\\n            max_dist = dist[end]\\n            best_path = find_shortest_path(graph, start, end)\\n    \\n    return best_path\\n\\ndef find_shortest_path(graph, start, end):\\n    if start == end:\\n        return [start]\\n    \\",
+      "accepted": false,
+      "reason": "could not parse proposal",
+      "best_val_accuracy": 0.9,
+      "tokens": 867052
+    }
+  ],
+  "optimizer": "meta_harness"
+}

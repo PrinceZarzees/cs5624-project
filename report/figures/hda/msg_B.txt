@@ -1,0 +1,11 @@
+B. Compiler / test -> HDA
+<action>compile</action>:
+  Compilation failed:
+  solution.cpp:74:20: error: expected primary-expression
+  before 'bool'
+     74 | vector<bool> visited(g.n, false);
+  (model edits and replies again)
+<action>test</action>:
+  Example 1: AC got='12' expected='12'
+  Example 2: WA got='0' expected='16'
+  Example 3: TLE got='' expected='7'

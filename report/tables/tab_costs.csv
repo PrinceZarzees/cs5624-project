@@ -1,0 +1,14 @@
+optimizer,start,tokens (M),wall s,GPU-h,USD tokens,USD GPU-h
+SkillOpt,baseline_a,4.01,486,0.14,USD 2.80,USD 0.54
+SkillOpt,baseline_b_v2,3.53,383,0.11,USD 2.47,USD 0.43
+GEPA,baseline_a,1.19,597,0.17,USD 0.83,USD 0.66
+RRSI-lite,baseline_a,0.51,426,0.12,USD 0.36,USD 0.47
+RRSI-lite,baseline_b_v2,0.81,405,0.11,USD 0.57,USD 0.45
+Meta-Harness-lite,baseline_a,0.87,426,0.12,USD 0.61,USD 0.47
+GEPA,baseline_b,0.64,262,0.07,USD 0.45,USD 0.29
+Meta-Harness-lite,baseline_b,1.27,649,0.18,USD 0.89,USD 0.72
+RRSI-lite,baseline_b,1.09,916,0.25,USD 0.76,USD 1.02
+RRSI-lite,baseline_b_run1,1.76,1305,0.36,USD 1.23,USD 1.45
+SkillOpt,baseline_b,2.41,1413,0.39,USD 1.69,USD 1.57
+EvoSkill-style,baseline_b,7.25,0,0.00,USD 5.08,USD 0.00
+EvoSkill-style,baseline_b_mixed,5.87,0,0.00,USD 4.11,USD 0.00

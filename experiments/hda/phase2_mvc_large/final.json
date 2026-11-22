@@ -1,0 +1,423 @@
+{
+  "task": "min_vertex_cover",
+  "condition": "given",
+  "k": 5,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 0.1475,
+  "final_statement": "Given an undirected simple graph, print the nodes of a minimum vertex cover as a list in square brackets. Every edge must have at least one endpoint in the list. Any minimum cover is accepted.",
+  "val_curve": [
+    0.1475
+  ],
+  "statements": [
+    "Given an undirected simple graph, print the nodes of a minimum vertex cover as a list in square brackets. Every edge must have at least one endpoint in the list. Any minimum cover is accepted."
+  ],
+  "tokens": {
+    "prompt": 36217,
+    "completion": 3457
+  },
+  "test": {
+    "test_small": {
+      "n": 20,
+      "quality": 0.0868,
+      "feasible": 0.1,
+      "optimal": 0.05,
+      "verdicts": {
+        "WA": 18,
+        "FEAS": 1,
+        "AC": 1
+      },
+      "by_bucket": {
+        "small": {
+          "n": 16,
+          "quality": 0.0461,
+          "feasible": 0.0625
+        },
+        "tiny": {
+          "n": 4,
+          "quality": 0.25,
+          "feasible": 0.25
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "components": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "dense": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "er": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "grid": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "path_like": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "powerlaw": {
+          "n": 2,
+          "quality": 0.3684,
+          "feasible": 0.5
+        },
+        "regular": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "tree": {
+          "n": 2,
+          "quality": 0.5,
+          "feasible": 0.5
+        },
+        "ws": {
+          "n": 2,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_density": {
+        "medium": {
+          "n": 10,
+          "quality": 0.1,
+          "feasible": 0.1
+        },
+        "sparse": {
+          "n": 10,
+          "quality": 0.0737,
+          "feasible": 0.1
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 12,
+          "quality": 0.0614,
+          "feasible": 0.0833
+        },
+        "true": {
+          "n": 8,
+          "quality": 0.125,
+          "feasible": 0.125
+        }
+      },
+      "max_cpu_s": 0.008,
+      "median_cpu_s": 0.0049499999999999995,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    },
+    "test_medium": {
+      "n": 10,
+      "quality": 0.0,
+      "feasible": 0.0,
+      "optimal": 0.0,
+      "verdicts": {
+        "WA": 10
+      },
+      "by_bucket": {
+        "medium": {
+          "n": 10,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "components": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "dense": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "er": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "grid": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "path_like": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "powerlaw": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "regular": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "tree": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "ws": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_density": {
+        "sparse": {
+          "n": 10,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 6,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "true": {
+          "n": 4,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "max_cpu_s": 0.0066,
+      "median_cpu_s": 0.00515,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    },
+    "test_large": {
+      "n": 8,
+      "quality": 0.0,
+      "feasible": 0.0,
+      "optimal": 0.0,
+      "verdicts": {
+        "WA": 8
+      },
+      "by_bucket": {
+        "large": {
+          "n": 8,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "components": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "dense": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "er": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "grid": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "path_like": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "tree": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "ws": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_density": {
+        "sparse": {
+          "n": 8,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 4,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "true": {
+          "n": 4,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "max_cpu_s": 0.016,
+      "median_cpu_s": 0.00595,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    },
+    "test_xl": {
+      "n": 5,
+      "quality": 0.0,
+      "feasible": 0.0,
+      "optimal": 0.0,
+      "verdicts": {
+        "WA": 5
+      },
+      "by_bucket": {
+        "xl": {
+          "n": 5,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "components": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "er": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "tree": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "ws": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_density": {
+        "sparse": {
+          "n": 5,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "true": {
+          "n": 4,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "max_cpu_s": 0.0073,
+      "median_cpu_s": 0.0071,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    },
+    "test_stress": {
+      "n": 3,
+      "quality": 0.0,
+      "feasible": 0.0,
+      "optimal": 0.0,
+      "verdicts": {
+        "WA": 3
+      },
+      "by_bucket": {
+        "stress": {
+          "n": 3,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "er": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        },
+        "tree": {
+          "n": 1,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_density": {
+        "sparse": {
+          "n": 3,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "by_seen_family": {
+        "true": {
+          "n": 3,
+          "quality": 0.0,
+          "feasible": 0.0
+        }
+      },
+      "max_cpu_s": 0.0852,
+      "median_cpu_s": 0.0706,
+      "invariance": {
+        "tried": 3,
+        "failed": 0
+      }
+    }
+  }
+}
