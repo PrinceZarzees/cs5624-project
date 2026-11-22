@@ -260,27 +260,39 @@ data build takes 60\,s, and the human C++ reference scores 100\% on every task
 and split with a maximum CPU time of 0.45\,s, well below the 1--5\,s limits.
 The identifiability measurement reproduces Table~\ref{tab:hda-ident}.
 
-Because gpt-oss-120b is not on disk and the B200 queue was reserved, the only
-model run so far is a reduced Qwen3-4B pilot: Q4 CPU, $k=3$, one iteration,
-four tool steps, 2048 maximum tokens (Table~\ref{tab:hda-pilot}). It is a
-diagnostic, not the intended $k=10$ BF16 grid. MST reaches 100\% validation and
-test accuracy; bipartite reaches 44\% validation and 52.5\% test; common
-neighbors reaches 11\% and 20\%; the other six tasks score 0. Most of the zero
-submissions fail to compile because the model omits the provided C++ loader,
-and cycle detection exceeded the 8k CPU context. In a hidden-condition smoke
-run, the model spent every step debating candidate statements and submitted no
-code. These results indicate that the 4B model is too weak for the HDA role;
-the BF16 $k=10$ grid and smoke run are queued but had not started when this
-draft was written.
+The given-statement grid was completed for all ten tasks after fixing the
+query contract: the C++ loader now exposes \texttt{query\_k} and the prompt
+states that the leading number is the number of arguments, not a type code.
+Each task used $k=5$, three iterations and the compiler loop. Nine tasks reach
+validation 1.000; diameter reaches 0.900. Eight tasks score 100\% on all five
+test splits, triangle counting scores 96.7\% on large, and diameter ranges from
+77.5\% to 83.3\%. Max flow is the clean small-to-large failure: 100\% through
+2{,}000 nodes and 30\% on the 10k--20k stress split despite 100\% validation
+(Table~\ref{tab:hda-given-all}, Figure~\ref{fig:hda-given-all}).
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{figures/hda/hda_diagram_full.pdf}
+\caption{HDA loop and the exact message structures A--E. Only the \texttt{cpp}
+block is compiled and scored; validation labels stay inside the evaluator.}
+\label{fig:hda-loop}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.78\linewidth]{figures/hda/fig_hda_given_all.pdf}
+\caption{Test accuracy by task and split for the given-condition runs.}
+\label{fig:hda-given-all}
+\end{figure}
 
 \begin{table}[h]
 \centering
 \small
-\input{tables/hda/tab_hda_pilot.tex}
-\caption{Reduced Qwen3-4B pilot (Q4 CPU, $k=3$, one iteration). ``--'' means
-the submission did not compile, so no test was run.}
-\label{tab:hda-pilot}
+\input{tables/hda/tab_hda_given_all.tex}
+\caption{Given-condition accuracy for all ten tasks (3 iterations, $k=5$).}
+\label{tab:hda-given-all}
 \end{table}
+
 % <<< AI-DRAFT
 
 \section{Small-Graph Optimization}

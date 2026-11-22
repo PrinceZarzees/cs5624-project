@@ -88,3 +88,9 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 | File | Change |
 |---|---|
 | `report/hda_report.tex` / `.pdf` | new 8-page report covering only the HDA runs: methods in detail, H0 verification, human reference, identifiability, Qwen3-4B Q4 pilot, hidden smoke, limitations and reproduction |
+
+## 2026-11-22 HDA course-report integration
+
+| Location | Change | Source |
+|---|---|---|
+| main.tex HDA section | added combined loop/message diagram, all-task given results table and heatmap; replaced pilot text with corrected 10-task results | experiments/hda/all_given_fixed_3it, report/hda_report.tex |
