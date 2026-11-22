@@ -1,0 +1,11 @@
+task,best_it,val,test_small,test_medium,test_large,test_xl,test_stress,prompt_tokens,completion_tokens
+bipartite_check,3,1.0,1.0,1.0,1.0,1.0,1.0,43003,3064
+common_neighbors,3,1.0,1.0,1.0,1.0,1.0,1.0,60730,4424
+connected_components,3,1.0,1.0,1.0,1.0,1.0,1.0,51135,3348
+cycle_detection,3,1.0,1.0,1.0,1.0,1.0,1.0,46315,5138
+diameter,2,0.9,0.775,0.8,0.8333,0.7,0.8,42291,4299
+max_flow,3,1.0,1.0,1.0,1.0,1.0,0.3,62506,4248
+mst_weight,3,1.0,1.0,1.0,1.0,1.0,1.0,56537,4621
+reachability,3,1.0,1.0,1.0,1.0,1.0,1.0,65202,6386
+shortest_path,3,1.0,1.0,1.0,1.0,1.0,1.0,60337,3738
+triangle_count,3,1.0,1.0,1.0,0.9667,1.0,1.0,44946,3689

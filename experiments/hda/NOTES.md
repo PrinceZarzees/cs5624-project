@@ -20,3 +20,11 @@
 - Qwen3-4B Q4 CPU pilot: most submissions fail to compile (the model omits the
   loader template), so best validation accuracy is 0. This is a model-strength
   result, not a pipeline failure. The BF16 k=10 GPU grid is queued as 1550735.
+
+## Given-condition 10-task run (corrected query contract, 3 iterations)
+
+Nine tasks reach validation 1.0; diameter 0.9. Test splits: eight tasks 100%
+on all sizes; triangle 96.7% large; diameter 77.5-83.3%; max flow 100% up to
+2000 nodes but 30% on the 10k-20k stress split (small-to-large failure).
+Results: experiments/hda/all_given_fixed_3it/, table
+report/tables/hda/tab_hda_given_all.csv.

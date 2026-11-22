@@ -406,6 +406,31 @@ family breakdowns, max CPU, relabeling and policy results) and never the
 validation answers. The compiler/\texttt{test} tool runs only the training
 examples, whose expected outputs are part of the prompt by design.
 
+\subsection{Given-condition results for all ten tasks}
+After the query-contract fix, all ten tasks were run with the given statement,
+$k=5$, three iterations and the compiler loop. Nine tasks reach validation
+1.000; diameter reaches 0.900. On the test splits, eight tasks score 100\% on
+all five sizes, triangle counting scores 96.7\% on large, and diameter ranges
+from 77.5\% to 83.3\%. The exception is max flow: it scores 100\% on small,
+medium, large and 2{,}000-node graphs but only 30\% on the 10k--20k stress
+split --- a clean small-to-large failure despite perfect validation
+(Table~\ref{tab:given-all}, Figure~\ref{fig:given-all}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{figures/hda/fig_hda_given_all.pdf}
+\caption{Test accuracy by task and split for the given-condition runs.}
+\label{fig:given-all}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\input{tables/hda/tab_hda_given_all.tex}
+\caption{Given-condition accuracy for all ten tasks (3 iterations).}
+\label{tab:given-all}
+\end{table}
+
 \subsection{Queued but not run}
 
 \begin{itemize}[leftmargin=1.4em]
