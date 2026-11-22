@@ -37,3 +37,14 @@ def test_stress_tool(tmp_path):
     run(cfg, ScriptedClient(replies))
     tools = [json.loads(l) for l in open(tmp_path / "s" / "log.jsonl") if '"tool"' in l]
     assert tools[0]["result"]["output"].strip() == "1" and tools[0]["gen_bytes"] > 100000
+
+def test_hidden_prompt_omits_statement(tmp_path):
+    from hda.tasks import TASKS
+    replies = ["<statement>a path metric</statement>\n<action>submit</action>"]
+    cfg = RunConfig(task="shortest_path", condition="hidden", k=2, n_iter=1, steps=1,
+                    data=str(ROOT / "data/pilot"), out=str(tmp_path / "h"), test_splits=[])
+    run(cfg, ScriptedClient(replies))
+    prompts = [json.loads(l) for l in open(tmp_path / "h" / "log.jsonl") if '"prompt"' in l]
+    blob = prompts[0]["system"] + prompts[0]["user"]
+    assert TASKS["shortest_path"].statement not in blob
+    assert "HIDDEN" in prompts[0]["user"]

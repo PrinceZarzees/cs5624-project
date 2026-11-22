@@ -26,12 +26,14 @@ IO_NOTE = ("Print exactly one line. YES/NO answers are upper case; numeric answe
 
 TASKS: dict[str, Task] = {t.name: t for t in [
     Task("shortest_path", False, True, 2, False,
-         "Given an undirected graph with positive integer edge weights and two nodes s and t "
-         "(the query 2 s t), print the total weight of a minimum-weight path from s to t, "
-         "or -1 if t is unreachable from s."),
+         "Given an undirected graph with positive integer edge weights and two nodes s and t. "
+         "The query line is `2 s t`: k=2 is the NUMBER of arguments (not a type code), "
+         "then s and t. Print the total weight of a minimum-weight path from s to t, or -1 "
+         "if t is unreachable from s."),
     Task("reachability", True, False, 2, False,
-         "Given a directed graph and two nodes s and t (query 2 s t), print YES if there is a "
-         "directed path from s to t, otherwise NO."),
+         "Given a directed graph and two nodes s and t. The query line is `2 s t`: k=2 is the "
+         "NUMBER of arguments (not a type code), then s and t. Print YES if there is a directed "
+         "path from s to t, otherwise NO."),
     Task("connected_components", False, False, 0, False,
          "Given an undirected graph, print the number of connected components "
          "(an isolated node is its own component)."),
@@ -41,8 +43,9 @@ TASKS: dict[str, Task] = {t.name: t for t in [
          "Given a connected undirected unweighted graph, print its diameter: the largest "
          "shortest-path distance (in edges) between any two nodes.", max_n=5_000),
     Task("common_neighbors", False, False, 2, False,
-         "Given an undirected graph and two nodes u and v (query 2 u v), print the number of "
-         "nodes adjacent to both u and v."),
+         "Given an undirected graph and two nodes u and v. The query line is `2 u v`: k=2 is the "
+         "NUMBER of arguments (not a type code), then u and v. Print the number of nodes "
+         "adjacent to both u and v."),
     Task("triangle_count", False, False, 0, False,
          "Given an undirected simple graph, print the number of triangles "
          "(unordered triples of mutually adjacent nodes)."),

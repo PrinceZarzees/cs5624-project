@@ -21,11 +21,21 @@ Hard rules:
    does not compile. A submission with a compiler error scores zero.
 8. Do not spend more than two steps reading examples. Read at most one `.in` and one `.out`, then write the program.
    <action>test</action> already shows the expected output for every example.
+9. Keep reasoning short: at most three sentences before the ```cpp block. Do not repeat the statement, the examples or
+   the full code in prose; put the code only inside the ```cpp block.
+10. End the reply immediately after </action>; do not write anything after the action tag.
+11. Every <action>compile</action>, <action>test</action>, <action>run</action> or <action>stress</action> reply MUST
+    contain the full ```cpp block in that same reply. A bare action with no code is invalid and will be rejected; the
+    router does not silently reuse an older program.
 
 Input format:
   line 1 : n m directed weighted     (directed, weighted are 0 or 1)
   next m : u v   or   u v w          (nodes 0..n-1, no self-loops, no duplicate edges)
-  last   : k q1 ... qk               (query arguments, k may be 0)
+  last   : k q1 ... qk               (k = NUMBER of query arguments, NOT a type code; k may be 0)
+
+For k=2 tasks (shortest_path, reachability, common_neighbors, max_flow) the last line is
+`2 s t`: `g.query_k == 2`, `g.query[0] == s`, `g.query[1] == t`. Do not search for a
+type code 2 inside `g.query`; the leading 2 is the count.
 
 Graph-loading template:
 ```cpp
@@ -62,15 +72,18 @@ STATEMENT_GIVEN = """Problem statement:
 STATEMENT_HIDDEN = """The problem statement is HIDDEN. You only see input/output examples. Before coding:
 1. List at least three different candidate problems that could produce these outputs (for example different counts,
    distances or yes/no properties of the graph and the query nodes).
-2. Argue for and against each candidate, checking each one against EVERY example (by hand, or by coding a quick
-   checker and running it with <action>test</action> or <action>run</action>).
+2. Argue for and against each candidate, checking each one against EVERY example. Try them one at a time: write a
+   small checker/program for a candidate, run it with <action>run</action> or <action>test</action>, and eliminate
+   candidates that disagree with any example.
 3. Keep the simplest candidate that matches all examples, and write it as a precise statement in <statement>...</statement>.
+Keep this analysis compact (at most 8 lines). After the candidates, write the C++ program in this same reply.
 You may revise the statement in any later step or iteration if new examples or feedback contradict it.
 """
 
 EXAMPLES = """Examples: {k} new examples this iteration ({total} seen so far).
-Each example is an input followed by its expected output. <action>test</action> compiles your program and runs
-all {total} examples seen so far, returning verdict, output and expected output.
+Each example is an input followed by its expected output. The last line starts with k, the NUMBER of query
+arguments (not a type code); for k=2, query[0] and query[1] are the two nodes. <action>test</action> compiles
+your program and runs all {total} examples seen so far, returning verdict, output and expected output.
 {blocks}
 """
 

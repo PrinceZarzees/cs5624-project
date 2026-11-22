@@ -39,7 +39,10 @@ class OpenAIClient:
         self.model, self.temperature, self.max_tokens, self.effort = model, temperature, max_tokens, reasoning_effort
 
     def chat(self, messages):
-        kw = dict(model=self.model, messages=messages, temperature=self.temperature, max_tokens=self.max_tokens)
+        kw = dict(model=self.model, messages=messages, temperature=self.temperature,
+                  stop=["</action>"])
+        if self.max_tokens:
+            kw["max_tokens"] = self.max_tokens
         if self.effort:
             kw["extra_body"] = {"reasoning_effort": self.effort}
         r = self.c.chat.completions.create(**kw)
@@ -132,13 +135,19 @@ def run(cfg: RunConfig, client, judge_client=None):
             best_block = "No valid program yet."
         user += ITERATION.format(it=it, n_iter=cfg.n_iter, feedback=fb,
                                  best_block=best_block, statement=statement, steps=cfg.steps)
+        if cfg.condition == "hidden" and task.statement in user:
+            raise RuntimeError("hidden prompt leaked the problem statement")
         msgs = [dict(role="system", content=sys_msg), dict(role="user", content=user)]
         log("prompt", it=it, system=sys_msg, user=user)
         code, submitted = None, None
         for step in range(1, cfg.steps + 1):
             r = client.chat(msgs)
             tokens["prompt"] += r["prompt_tokens"]; tokens["completion"] += r["completion_tokens"]
-            text = r["content"]; act = parse_action(text)
+            text = r["content"]
+            # some servers strip the stop sequence; restore it so the action parses
+            if "<action>" in text and "</action>" not in text:
+                text = text + "</action>"
+            act = parse_action(text)
             code = last_block(text, "cpp") or code
             st = parse_statement(text)
             if st:
@@ -149,19 +158,32 @@ def run(cfg: RunConfig, client, judge_client=None):
             if act == "submit" and not code:
                 obs = ("Invalid submission: no complete ```cpp block found. The evaluator scores only the code, "
                        "not the statement or prose. Write the full program in a ```cpp block and submit again.")
-                msgs.append(dict(role="user", content=obs + f"\n({cfg.steps - step} steps left.)"))
+                msgs = [dict(role="system", content=sys_msg), dict(role="user", content=user),
+                        dict(role="assistant", content=text),
+                        dict(role="user", content=obs + f"\n\nCurrent statement: {statement}\n"
+                             f"Current program:\n```cpp\n(no code yet)\n```\n({cfg.steps - step} steps left.)")]
                 continue
             if act == "submit" and step < cfg.steps:
                 ok, clog, _ = compile_cpp(code, out / f"it{it}" / f"pre_submit")
                 if not ok:
                     obs = ("Your submission does not compile and was not submitted. Fix these errors and "
                            "call <action>test</action> or <action>submit</action> again:\n" + clog[-1800:])
-                    msgs.append(dict(role="user", content=obs + f"\n({cfg.steps - step} steps left.)"))
+                    msgs = [dict(role="system", content=sys_msg), dict(role="user", content=user),
+                            dict(role="assistant", content=text),
+                            dict(role="user", content=obs + f"\n\nCurrent statement: {statement}\n"
+                                 f"Current program:\n```cpp\n{code}\n```\n({cfg.steps - step} steps left.)")]
                     continue
             if act == "submit" or step == cfg.steps:
                 submitted = code; break
             obs = tool(act, text, code, examples, out / f"it{it}", log, it, step)
-            msgs.append(dict(role="user", content=obs + f"\n({cfg.steps - step} steps left.)"))
+            # Keep the prompt bounded: drop older replies, keep only the current
+            # program, statement and the latest tool result.
+            state = (f"\n\nCurrent statement: {statement}\nCurrent program:\n```cpp\n"
+                     f"{code or '(no code yet)'}\n```")
+            msgs = [dict(role="system", content=sys_msg),
+                    dict(role="user", content=user),
+                    dict(role="assistant", content=text),
+                    dict(role="user", content=obs + state + f"\n({cfg.steps - step} steps left.)")]
         # ---- score the submission on hidden validation
         res = score_submission(submitted, examples, val, data, out / f"it{it}", cfg, log, it)
         res["statement"] = statement
@@ -193,6 +215,10 @@ def run(cfg: RunConfig, client, judge_client=None):
 
 
 def tool(act, text, code, examples, wd, log, it, step):
+    current_code = last_block(text, "cpp")
+    if act in ("compile", "test", "run", "stress") and not current_code:
+        return ("No ```cpp block in this reply. You must include the FULL program in a ```cpp block in the same "
+                "reply as the action; a bare action is invalid and older code is not reused.")
     if act == "read":
         if step > 2:
             return ("You have read enough. Write the full ```cpp program now and call <action>test</action> "
@@ -292,7 +318,8 @@ def main():
     ap.add_argument("--model", default="openai/gpt-oss-120b")
     ap.add_argument("--base-url", default=os.environ.get("HDA_BASE_URL", "http://localhost:8000/v1"))
     ap.add_argument("--temperature", type=float, default=1.0)
-    ap.add_argument("--max-tokens", type=int, default=16000)
+    ap.add_argument("--max-tokens", type=int, default=0,
+                    help="0 = no output cap (stop at </action> or context limit)")
     ap.add_argument("--reasoning-effort", default="medium")
     ap.add_argument("--judge-model", default=None, help="defaults to --model")
     ap.add_argument("--feedback", default="aggregate", choices=["aggregate", "none"])

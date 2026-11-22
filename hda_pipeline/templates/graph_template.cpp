@@ -5,7 +5,7 @@
 //   next m : u v        (weighted == 0)   or   u v w   (weighted == 1)
 //            nodes are 0 .. n-1, no self-loops, no duplicate edges
 //            (for directed graphs u->v and v->u may both appear)
-//   last   : k q1 q2 ... qk               (query arguments; k may be 0)
+//   last   : k q1 q2 ... qk               (k = NUMBER of query arguments; not a type code)
 // Output (stdout): exactly one line holding the answer.
 // Rules: C++17, standard library only, no file I/O, no threads, single file.
 // ---------------------------------------------------------------------------
@@ -19,7 +19,8 @@ struct Graph {
     long long m = 0;
     bool directed = false, weighted = false;
     vector<Edge> edges;          // edge list exactly as read
-    vector<long long> query;     // query arguments (may be empty)
+    int query_k = 0;             // number of query arguments (k on the last line)
+    vector<long long> query;     // query arguments q1..qk (may be empty)
 };
 
 static Graph read_graph() {
@@ -34,7 +35,7 @@ static Graph read_graph() {
         if (g.weighted) cin >> e.w;
     }
     int k = 0;
-    if (cin >> k) { g.query.resize(k); for (auto &q : g.query) cin >> q; }
+    if (cin >> k) { g.query_k = k; g.query.resize(k); for (auto &q : g.query) cin >> q; }
     return g;
 }
 
