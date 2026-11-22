@@ -94,17 +94,20 @@ def rollout(candidate: dict, task: str, condition: str, seed: int, out_dir: str 
     tokens = final.get("tokens") or {}
     llm_calls = sum(1 for raw in open(run / "log.jsonl") if '"kind": "reply"' in raw)
     val_opt_acc = 0.0
+    score_s = 0.0
     code = run / "best_solution.cpp"
     if code.exists():
+        t_score = time.perf_counter()
         ok, clog, exe = compile_cpp(code.read_text(), run / "score")
         if ok:
             _, s = evaluate_exe(exe, load_split(Path(cfg["data"]), cfg["val_opt"], task),
                                 Path(cfg["data"]), permutation_check=5, seed=seed)
             val_opt_acc = s.get("accuracy") or 0.0
+        score_s = time.perf_counter() - t_score
     result = dict(task=task, condition=condition, seed=seed, val_opt_acc=val_opt_acc,
                   val_acc=final.get("best_val_acc"), tokens_prompt=tokens.get("prompt", 0),
                   tokens_completion=tokens.get("completion", 0), llm_calls=llm_calls,
-                  wall_s=round(wall, 1), returncode=p.returncode,
+                  wall_s=round(wall, 1), score_s=round(score_s, 2), returncode=p.returncode,
                   trace=_trace(run / "log.jsonl", code))
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.write_text(json.dumps(result, indent=2) + "\n")
@@ -112,6 +115,17 @@ def rollout(candidate: dict, task: str, condition: str, seed: int, out_dir: str 
 
 
 def rollout_many(candidate: dict, instances, out_dir, workers: int = 8, config=None):
+    from concurrent.futures import as_completed
+    out = []
     with ThreadPoolExecutor(workers) as ex:
-        futs = [ex.submit(rollout, candidate, t, c, s, out_dir, config) for t, c, s in instances]
-        return [f.result() for f in futs]
+        futs = {ex.submit(rollout, candidate, t, c, s, out_dir, config): (t, c, s)
+                for t, c, s in instances}
+        for f in as_completed(futs):
+            t, c, s = futs[f]
+            try:
+                out.append(f.result())
+            except Exception as exc:  # one bad rollout must not kill the optimizer
+                out.append(dict(task=t, condition=c, seed=s, val_opt_acc=0.0, val_acc=None,
+                                tokens_prompt=0, tokens_completion=0, llm_calls=0, wall_s=0.0,
+                                score_s=0.0, returncode=-1, trace="", error=repr(exc)[:500]))
+    return out

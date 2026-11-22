@@ -1,0 +1,6 @@
+optimizer,hda_model,proposer_model,rollouts,rollouts_cached,hda_llm_calls,hda_prompt_tokens,hda_completion_tokens,proposer_calls,proposer_prompt_tokens,proposer_completion_tokens,proposals,proposals_parsed,proposals_rejected_by_validator,accepted,wall_h,gpu_h,cpu_h_eval,hda_tokens_per_rollout
+shared_baseline,qwen3-4b-q4,-,60,0,682,4213032,837442,0,0,0,0,0,0,0,0.2,0.198,0.0,84174.6
+gepa,qwen3-4b-q4,qwen3-4b-q4,53,0,260,1661714,377003,0,0,0,8,1,7,0,1.01,1.013,0.0,38466.4
+skillopt,qwen3-4b-bf16,qwen3-4b-bf16,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0
+meta_harness,qwen3-4b-bf16,qwen3-4b-bf16,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0
+evoskill,qwen3-4b-bf16,qwen3-4b-bf16,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0

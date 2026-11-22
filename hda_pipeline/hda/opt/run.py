@@ -16,6 +16,16 @@ only, no hardcoding, stdin/stdout, limits). Generic techniques (BFS, DFS,
 union-find, priority queue, adjacency list, fast I/O, testing) are allowed."""
 
 
+def _usage(chat):
+    return chat.calls, chat.prompt_tokens, chat.completion_tokens
+
+
+def _usage_delta(chat, before):
+    return {"proposer_calls": chat.calls - before[0],
+            "proposer_prompt_tokens": chat.prompt_tokens - before[1],
+            "proposer_completion_tokens": chat.completion_tokens - before[2]}
+
+
 def extract_json(text):
     for m in re.finditer(r"\{.*\}", text, re.S):
         try: return json.loads(m.group(0))
@@ -87,12 +97,14 @@ def run_gepa(args, chat, out, parent, parent_rows, parent_mean, base, rng):
         field = FIELDS[(step-1) % 3]
         mb = pick_minibatch(base, rng)
         mb_rows = [r for r in rows if (r["task"],r["condition"],r["seed"]) in mb]
+        before = _usage(chat)
         text = chat.ask(prompt_for("gepa", cand, mb_rows or rows,
             f"Rewrite ONLY the `{field}` field. Keep it general. Return <new_text>...</new_text>."))
         new = extract_tag(text, "new_text") or (extract_json(text) or {}).get(field, "")
         child = dict(cand); child[field] = new
         ok = validate_candidate(child)
-        row = dict(step=step, field=field, accepted=False, validator=ok, mean=None, best=mean, raw=text[:2000])
+        row = dict(step=step, field=field, accepted=False, validator=ok, mean=None, best=mean,
+                   raw=text[:2000], **_usage_delta(chat, before))
         if ok["ok"]:
             _, cm, _ = evaluate(child, args.cfg, out, instances=INSTANCES, workers=args.workers, tag=f"step{step}")
             row["mean"] = cm
@@ -114,6 +126,7 @@ def run_skillopt(args, chat, out, parent, parent_rows, parent_mean, base, rng):
     hist = open(out/"history.jsonl","a")
     for step in range(1, args.rounds+1):
         rows = parent_rows if step == 1 else evaluate(inc, args.cfg, out, instances=INSTANCES, workers=args.workers, tag=f"inc{step}")[0]
+        before = _usage(chat)
         text = chat.ask(prompt_for("skillopt", inc, rows,
             'Return JSON edits: [{"op":"add|modify|delete","field":"strategy|hidden_procedure|iteration_note","index":N,"text":"..."}]. '
             'Rules are newline-separated. 1 to 3 edits.'))
@@ -127,7 +140,8 @@ def run_skillopt(args, chat, out, parent, parent_rows, parent_mean, base, rng):
             elif e.get("op") == "modify" and 0 <= idx < len(lines): lines[idx] = str(e.get("text",""))
             child[f] = "\n".join(lines)
         ok = validate_candidate(child)
-        row = dict(step=step, edits=edits, accepted=False, validator=ok, mean=None, best=inc_mean, raw=text[:2000])
+        row = dict(step=step, edits=edits, accepted=False, validator=ok, mean=None, best=inc_mean,
+                   raw=text[:2000], **_usage_delta(chat, before))
         if ok["ok"]:
             _, cm, _ = evaluate(child, args.cfg, out, instances=INSTANCES, workers=args.workers, tag=f"step{step}")
             row["mean"] = cm
@@ -145,12 +159,14 @@ def run_meta(args, chat, out, parent, parent_rows, parent_mean, base, rng):
     h = open(out/"history.jsonl","a")
     for step in range(1, args.rounds+1):
         rows = parent_rows if step == 1 else evaluate(best[0], args.cfg, out, instances=INSTANCES, workers=args.workers, tag=f"meta{step}")[0]
+        before = _usage(chat)
         text = chat.ask(prompt_for("meta", best[0], rows,
             'Write a full candidate. Return <candidate>{"strategy":"...","hidden_procedure":"...","iteration_note":"..."}</candidate>.'))
         obj = extract_json(extract_tag(text,"candidate") or text) or {}
         child = {k:str(obj.get(k,"") or "") for k in FIELDS}
         ok = validate_candidate(child)
-        row = dict(step=step, accepted=False, validator=ok, mean=None, best=best[1], raw=text[:2000])
+        row = dict(step=step, accepted=False, validator=ok, mean=None, best=best[1],
+                   raw=text[:2000], **_usage_delta(chat, before))
         if ok["ok"]:
             _, cm, _ = evaluate(child, args.cfg, out, instances=INSTANCES, workers=args.workers, tag=f"step{step}")
             row["mean"] = cm
@@ -169,6 +185,7 @@ def run_evoskill(args, chat, out, parent, parent_rows, parent_mean, base, rng):
         rendered = "\n".join(f"Skill {s['name']}: use when {s['when_to_use']}. {s['instructions']}" for s in skills)
         cand = {"strategy": rendered}
         rows = evaluate(cand, args.cfg, out, instances=INSTANCES, workers=args.workers, tag=f"evo{step}")[0]
+        before = _usage(chat)
         text = chat.ask(prompt_for("evoskill", cand, rows,
             'Diagnose the failures and add or refine one skill. Return JSON {"name":...,"when_to_use":...,"instructions":...}.'))
         obj = extract_json(text) or {}
@@ -180,7 +197,8 @@ def run_evoskill(args, chat, out, parent, parent_rows, parent_mean, base, rng):
         text2 = "\n".join(f"Skill {s['name']}: use when {s['when_to_use']}. {s['instructions']}" for s in new_skills)
         child = {"strategy": text2}
         ok = validate_candidate(child)
-        row = dict(step=step, accepted=False, validator=ok, mean=None, best=smean, raw=text[:2000], skills=new_skills)
+        row = dict(step=step, accepted=False, validator=ok, mean=None, best=smean, raw=text[:2000],
+                   skills=new_skills, **_usage_delta(chat, before))
         if ok["ok"]:
             _, cm, _ = evaluate(child, args.cfg, out, instances=INSTANCES, workers=args.workers, tag=f"step{step}")
             row["mean"] = cm

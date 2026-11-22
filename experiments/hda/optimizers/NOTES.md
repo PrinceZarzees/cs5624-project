@@ -42,3 +42,14 @@ was read.
 This validates the loops/validator but shows the 4B proposer is too weak/task-
 specific on CPU. The GPU run uses the same proposer unless a stronger model is
 available.
+
+## GEPA GPU run (falcon a30, job 926163)
+
+8 rounds, **0 accepted edits**. 7/8 proposals were rejected by the validator for
+naming benchmark tasks/algorithms (`shortest path` 7x, `Dijkstra` 7x,
+`reachability` 5x, `connected component` 1x). The one valid child
+(`iteration_note`) scored 0.7838 on A vs the parent's 0.8296 and was rejected by
+the 0.02 margin. The run crashed during the empty recheck when a hidden rollout
+exceeded the 1800 s subprocess timeout; the recheck is now skipped when no edit
+is accepted and per-rollout timeouts are recorded as failures instead of
+aborting the optimizer.
