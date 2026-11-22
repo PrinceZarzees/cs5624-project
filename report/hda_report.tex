@@ -96,8 +96,12 @@ Every graph, example or test, uses the same three-part format:
 \begin{verbatim}
 n m directed weighted        # directed, weighted in {0,1}
 u v [w]                      # m lines, nodes 0..n-1, no self-loops
-k q1 ... qk                  # query arguments (k = 0 or 2)
+k q1 ... qk                  # k = NUMBER of query arguments (not a type code)
 \end{verbatim}
+For the four $k=2$ tasks the last line is \texttt{2 s t}: \texttt{query\_k == 2},
+\texttt{query[0] == s}, \texttt{query[1] == t}. The leading 2 is the count, not
+a query-type tag. The loader exposes both \texttt{query\_k} and
+\texttt{query} to the C++ program.
 The header exposes whether the graph is directed or weighted and how many query
 nodes follow. This narrows the task family but does not identify the task.
 

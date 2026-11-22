@@ -13,10 +13,10 @@ digraph HDA {
 
   subgraph cluster_loop {
     label="Training loop — one run = task × condition × seed"; style="rounded"; color="#777777"; fontsize=9;
-    stmt   [label="Statement condition\nTHIS RUN: HIDDEN\nno statement text\ngiven: text in prompt", fillcolor="#FFFDE7"];
-    prompt [label="Prompt builder\nsystem prompt + [statement]\n+ k=5 examples + feedback\n+ best code", fillcolor="#FFF4E5"];
+    stmt   [label="Problem statement\nNOT given\nHDA infers it from examples\nand writes <statement>", fillcolor="#FFFDE7"];
+    prompt [label="Prompt builder\nsystem prompt\n+ k=5 examples + feedback\n+ best code\n(NO statement)", fillcolor="#FFF4E5"];
     hda    [label="HDA model\nQwen3-4B / gpt-oss", fillcolor="#FFE0B2"];
-    reply  [label="Reply\n<statement> + reasoning\n+ ```cpp code``` + <action>", fillcolor="#FFF9C4"];
+    reply  [label="Reply\n<statement> (inferred)\n+ reasoning\n+ ```cpp code``` + <action>", fillcolor="#FFF9C4"];
     router [label="Action router", shape=diamond, style="filled", fillcolor="#E1F5FE", margin="0.01,0.01"];
     tool   [label="Compiler + sandbox\ng++ -std=c++17\ntraining examples only\n1–5 s CPU · 1 GiB · 8 MiB", fillcolor="#E8F5E9"];
     policy [label="Static policy\nstdlib · no hardcoding", fillcolor="#FCE4EC"];
@@ -30,8 +30,8 @@ digraph HDA {
   note  [shape=note, fillcolor="#FFFFFF", label="The evaluator receives ONLY the ```cpp block.\n<statement> and reasoning are logged, not scored.\nHidden mode: a separate judge labels the statement."];
 
   ex -> prompt [label="k=5 new examples (inline)"];
-  stmt -> prompt [label="given / hidden"];
   prompt -> hda [label="messages [A]"];
+  stmt -> reply [label="inferred", style=dashed, constraint=false];
   hda -> reply;
   reply -> router;
   router -> tool [label="compile / test / run / stress"];
