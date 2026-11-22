@@ -16,3 +16,13 @@
   H6 run.
 - A hidden-condition Q4 smoke (`smoke_qwen_cpu`) spent all steps on candidate
   statements and submitted no code.
+
+## HDA optimizer jobs
+
+| Job ID | Cluster | Script | Purpose | Start | End | Status | Output |
+|---|---|---|---|---|---|---|---|
+| 1554803 | owl | hda_pipeline/scripts/run_opt_baseline.sbatch | baseline A (60 rollouts) | 14:54 | 15:11 | COMPLETED | experiments/hda/optimizers/baseline |
+| 1554804 | owl | run_opt_baseline.sbatch | baseline retry (correct OUT) | 14:54 | 15:11 | COMPLETED | same |
+| 926162 | falcon | run_opt_gepa_falcon.sbatch | GEPA on l40s | – | – | CANCELLED (Resources) | – |
+| 926163 | falcon | run_opt_gepa_a30.sbatch | GEPA on a30 | 18:00 (projected) | 22:00 | PENDING | experiments/hda/optimizers/gepa |
+| 926164/5 | falcon | test-only preempt/t4 | probe | – | – | not queued | – |
