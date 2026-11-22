@@ -53,3 +53,11 @@ the 0.02 margin. The run crashed during the empty recheck when a hidden rollout
 exceeded the 1800 s subprocess timeout; the recheck is now skipped when no edit
 is accepted and per-rollout timeouts are recorded as failures instead of
 aborting the optimizer.
+
+## O5 status
+
+No optimizer accepted an edit, so `gepa`, `skillopt`, `meta_harness` and
+`evoskill` prompt files are empty and identical to `unoptimized`. Per the
+runbook, only the `unoptimized` final grid is run; the other four are recorded
+as "unchanged, same as unoptimized". Script:
+`hda_pipeline/scripts/run_final_grid_falcon.sbatch`.
