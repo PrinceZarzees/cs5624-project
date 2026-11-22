@@ -29,17 +29,17 @@ digraph HDA {
   note  [shape=note, fillcolor="#FFFFFF", label="The evaluator receives ONLY the ```cpp block.\n<statement> and reasoning are logged, not scored.\nHidden mode: a separate judge labels the statement."];
 
   ex -> prompt [label="k=5 new examples (inline)"];
-  prompt -> hda [label="messages"];
+  prompt -> hda [label="messages [A]"];
   hda -> reply;
   reply -> router;
   router -> tool [label="compile / test / run / stress"];
-  tool -> hda [label="diagnostics, verdicts\n(step loop ≤ 8)", style=dashed, constraint=false];
+  tool -> hda [label="compiler diagnostics /\nper-example verdicts [B]\n(step loop ≤ 8)", style=dashed, constraint=false];
   router -> policy [label="submit"];
-  policy -> fb [label="reject: policy,\nno code, or\ncompile error", color="#C62828"];
+  policy -> fb [label="reject [D]: policy,\nno code, or compile error", color="#C62828"];
   policy -> tool [label="allowed: compile"];
   tool -> eval [label="compiled program"];
   val -> eval [style=dashed];
-  eval -> fb [label="score + relabeling"];
+  eval -> fb [label="accuracy, verdicts,\nby size/family [C]"];
   eval -> hstar [label="new best", style=dashed];
   fb -> prompt [label="next iteration (≤ 25)", style=dashed, constraint=false];
   hstar -> tests [label="after last iteration"];

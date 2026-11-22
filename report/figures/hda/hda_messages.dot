@@ -1,0 +1,68 @@
+digraph MSG {
+  graph [rankdir=TB, nodesep=0.22, ranksep=0.22, pad=0.12];
+  node  [shape=box, style="rounded,filled", fillcolor="#FCFCFC", color="#777777",
+         fontname="DejaVu Sans Mono", fontsize=7.6, margin="0.12,0.07"];
+  edge  [style=invis];
+
+  A [label="A  Prompt builder -> HDA (system + user)\l\
+[SYS] You are a Harness Developing Agent...\l\
+      Output contract: <statement>, reasoning, ```cpp, <action>.\l\
+[USER] Problem statement: Given an undirected graph...\l\
+       Examples: 5 new (5 seen so far)\l\
+       Example 1:\l\
+       ```input\l\
+       4 3 0 1        (n m directed weighted)\l\
+       0 1 7\l\
+       1 2 9\l\
+       2 3 4\l\
+       2 0 3          (query s t)\l\
+       ```\l\
+       Expected output: 12\l\
+       Iteration 1 of 25.\l\
+       No valid program yet.\l\
+       Your statement so far: ...\l"];
+
+  B [label="B  Compiler / test tool -> HDA (next user message)\l\
+<action>compile</action>:\l\
+  Compilation failed:\l\
+  solution.cpp:74:20: error: expected primary-expression before 'bool'\l\
+     74 | vector<bool> visited(g.n, false);\l\
+  solution.cpp:87:43: error: 'adjacency' was not declared...\l\
+  (the model edits the code and replies again)\l\
+\l\
+<action>test</action>:\l\
+  Example 1: AC got='12' expected='12'\l\
+  Example 2: WA got='0' expected='16'\l\
+  Example 3: TLE got='' expected='7'\l"];
+
+  C [label="C  Validation -> HDA (feedback in the next iteration)\l\
+Hidden-validation feedback for your last submission\l\
+(graphs are hidden; only aggregates are shown):\l\
+accuracy 0.0 on 40 graphs; verdicts {'AC': 4, 'WA': 31, 'TLE': 5};\l\
+by size {tiny:..., small:...}; by family {er:..., ba:...};\l\
+max CPU 0.31s.\l\
+Relabeling check: 0 of 5 relabeled graphs changed the answer.\l\
+Policy check: passed.\l"];
+
+  D [label="D  Submit gate -> HDA (same iteration, no score yet)\l\
+Invalid submission: no complete ```cpp block found.\l\
+The evaluator scores only the code, not the statement or prose.\l\
+Write the full program in a ```cpp block and submit again.\l\
+\l\
+If the code exists but does not compile:\l\
+Your submission does not compile and was not submitted.\l\
+Fix these errors and call <action>test</action> or <action>submit</action> again:\l\
+  ...compiler diagnostics...\l"];
+
+  E [label="E  run / stress tool -> HDA\l\
+<action>run</action>:\l\
+  verdict=AC cpu=0.002s output='12' stderr=''\l\
+<action>stress</action>:\l\
+  verdict=AC cpu=0.841s output='344' stderr=''\l\
+  (the generator output is fed to the program; up to 64 MiB)\l"];
+
+  A -> B -> C -> D -> E [style=invis];
+  note [shape=note, fillcolor="#FFFFFF", fontname="Helvetica", fontsize=8,
+        label="Only the ```cpp block is compiled and scored. The statement and reasoning are logged.\nA is sent once per iteration; B/E are sent after every tool step; C is sent at the start of the next iteration; D is sent immediately when a submit is invalid."];
+  E -> note [style=invis];
+}

@@ -208,6 +208,23 @@ block.}
 \label{fig:loop}
 \end{figure}
 
+Figure~\ref{fig:messages} shows the exact message structures. The HDA can call
+the compiler itself at any step: \texttt{compile} returns only diagnostics,
+\texttt{test} compiles and runs every example, \texttt{run} uses an input the
+model writes, and \texttt{stress} measures CPU on a generated large graph.
+After each tool call the result is appended as the next user message (B/E), and
+the model continues from the same conversation. At the start of the next
+iteration the validation summary (C) is inserted into the new prompt; an
+invalid submit is answered immediately (D) without ending the iteration.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/hda/hda_messages.pdf}
+\caption{Message structures A--E for the flow in Figure~\ref{fig:loop}.
+Only the \texttt{cpp} block is compiled and scored.}
+\label{fig:messages}
+\end{figure}
+
 \begin{table}[p]
 \centering
 \small
