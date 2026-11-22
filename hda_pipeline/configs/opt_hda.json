@@ -1,0 +1,14 @@
+{
+  "model": "qwen3-4b-q4",
+  "base_url": "http://127.0.0.1:8002/v1",
+  "model_checkpoint": "Qwen3-4B-Instruct-2507 Q4_K_M (llama.cpp)",
+  "data": "data/hda",
+  "val_opt": "val_opt",
+  "k": 5,
+  "n_iter": 3,
+  "steps": 8,
+  "temperature": 0.2,
+  "max_tokens": 4096,
+  "max_model_len": 32768,
+  "optimization_seed": 200
+}

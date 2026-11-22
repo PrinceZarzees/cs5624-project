@@ -155,6 +155,28 @@
     "mst_weight",
     "max_flow"
    ]
+  },
+  "val_opt": {
+   "n_range": [
+    4,
+    50
+   ],
+   "per_task": 40,
+   "families": "seen",
+   "time_limit_s": 1.0,
+   "seed_offset": 12,
+   "tasks": [
+    "shortest_path",
+    "reachability",
+    "connected_components",
+    "cycle_detection",
+    "diameter",
+    "common_neighbors",
+    "triangle_count",
+    "bipartite_check",
+    "mst_weight",
+    "max_flow"
+   ]
   }
  }
 }

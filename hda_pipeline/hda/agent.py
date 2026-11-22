@@ -19,7 +19,8 @@ import argparse, json, os, random, re, time
 from dataclasses import dataclass, field
 from pathlib import Path
 from .tasks import TASKS
-from .prompts import SYSTEM, STATEMENT_GIVEN, STATEMENT_HIDDEN, EXAMPLES, ITERATION, FEEDBACK, FEEDBACK_Q, JUDGE
+from .prompts import (SYSTEM, STATEMENT_GIVEN, STATEMENT_HIDDEN, EXAMPLES, ITERATION,
+                      FEEDBACK, FEEDBACK_Q, JUDGE, STRATEGY_NOTE, HIDDEN_NOTE, ITERATION_NOTE)
 from .sandbox import compile_cpp, run_binary, run_capture
 from .policy import check_source
 from .evaluate import load_split, evaluate_exe, evaluate_exe_quality
@@ -126,7 +127,11 @@ def run(cfg: RunConfig, client, judge_client=None):
         blocks = "\n".join(f"Example {i+1}:\n```input\n{show_input(e['input'])}```\nExpected output: {e['output']}\n"
                            for i, e in enumerate(cur))
         sys_msg = SYSTEM.replace("{template}", TEMPLATE)
+        if STRATEGY_NOTE:
+            sys_msg += "\n\nStrategy notes:\n" + STRATEGY_NOTE.strip()
         user = (STATEMENT_GIVEN.format(statement=task.statement) if cfg.condition == "given" else STATEMENT_HIDDEN)
+        if cfg.condition == "hidden" and HIDDEN_NOTE:
+            user += "\n\n" + HIDDEN_NOTE.strip()
         user += EXAMPLES.format(k=len(new), total=len(examples), blocks=blocks)
         fb = history[-1]["feedback"] if history and cfg.feedback == "aggregate" else "This is the first iteration." if not history else "(no feedback)"
         if best["it"] > 0:
@@ -136,6 +141,8 @@ def run(cfg: RunConfig, client, judge_client=None):
             best_block = "No valid program yet."
         user += ITERATION.format(it=it, n_iter=cfg.n_iter, feedback=fb,
                                  best_block=best_block, statement=statement, steps=cfg.steps)
+        if ITERATION_NOTE:
+            user += "\n" + ITERATION_NOTE.strip()
         if cfg.condition == "hidden" and task.statement in user:
             raise RuntimeError("hidden prompt leaked the problem statement")
         msgs = [dict(role="system", content=sys_msg), dict(role="user", content=user)]

@@ -93,3 +93,9 @@ experiments/hda/**/sandbox*/
 hda_pipeline.tgz
 experiments/hda/**/final/solution
 experiments/hda/**/build/
+experiments/hda/optimizers/**/rollouts/
+experiments/hda/optimizers/**/rollouts.json
+experiments/hda/optimizers/**/cache/
+experiments/hda/optimizers/**/vllm*.log
+experiments/hda/optimizers/**/stdout.log
+experiments/hda/optimizers/**/stderr.log

@@ -111,3 +111,30 @@ TRUE: {truth}
 INFERRED: {inferred}
 Answer with one word: EQUIVALENT (same output on every valid input), PARTIAL (same on most inputs or a special case
 of it), or WRONG. Then one sentence of justification."""
+
+
+# ---------------------------------------------------------------- prompt override
+# The prompt optimizer writes a JSON file with three optional fields. The fixed
+# contract (system rules, tool protocol, input format, task statements) is not
+# editable; these notes are appended.
+import json as _json
+import os as _os
+
+STRATEGY_NOTE = ""
+HIDDEN_NOTE = ""
+ITERATION_NOTE = ""
+
+
+def _apply_prompt_override():
+    global STRATEGY_NOTE, HIDDEN_NOTE, ITERATION_NOTE
+    path = _os.environ.get("HDA_PROMPT_FILE")
+    if not path:
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        data = _json.load(f)
+    STRATEGY_NOTE = str(data.get("strategy", "") or "")
+    HIDDEN_NOTE = str(data.get("hidden_procedure", "") or "")
+    ITERATION_NOTE = str(data.get("iteration_note", "") or "")
+
+
+_apply_prompt_override()
