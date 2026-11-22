@@ -49,3 +49,13 @@ report/tables/hda/tab_hda_given_all.csv.
 - MVC: val [0.455, 0.455, 0.455]; test_small q 0.490, feasible 1.0,
   optimal 0.00 (all feasible but poor covers).
 Summary: experiments/hda/phase2_grid_3it/summary.csv.
+
+## Phase-2 large best-known pilot (given, 1 iteration)
+
+- References for n>50 are frozen multi-start heuristics (exact only n<=60);
+  q=1 means "matched best-known", not proven optimal.
+- max clique: val q 0.557; test q 0.952/1.0/1.0/1.0/1.0 (feasible 1.0).
+- MIS: val q 0.144; test q 0.713/0.774/0.750/0.153/0.046; xl feasible 0.4,
+  others 1.0.
+- MVC: val q 0.148; test q 0.087/0/0/0/0; feasible 0.1 on small, 0 above.
+- Summary: experiments/hda/phase2_large_summary.csv.

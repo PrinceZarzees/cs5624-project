@@ -13,6 +13,59 @@ from .tasks import TASKS
 ROOT = Path(__file__).resolve().parent.parent
 
 
+def greedy_mis(G, rng, mode="min"):
+    nodes = list(G.nodes)
+    if mode == "min":
+        nodes.sort(key=lambda v: (G.degree(v), rng.random()))
+    elif mode == "max":
+        nodes.sort(key=lambda v: (-G.degree(v), rng.random()))
+    else:
+        rng.shuffle(nodes)
+    blocked = set(); out = []
+    for v in nodes:
+        if v not in blocked:
+            out.append(v); blocked.add(v); blocked.update(G[v])
+    return out
+
+
+def greedy_clique(G, rng, mode="max"):
+    nodes = list(G.nodes)
+    if mode == "max":
+        nodes.sort(key=lambda v: (-G.degree(v), rng.random()))
+    else:
+        rng.shuffle(nodes)
+    out = []
+    for v in nodes:
+        if all(G.has_edge(v, u) for u in out):
+            out.append(v)
+    return out
+
+
+def best_known(task, n, edges, rng):
+    """Exact for n<=60; multi-start heuristics above that."""
+    G = nx.Graph(); G.add_nodes_from(range(n)); G.add_edges_from((u, v) for u, v, *_ in edges)
+    if n <= 60:
+        return exact_solution(task, n, edges)
+    if task == "max_clique":
+        cands = []
+        for _ in range(16):
+            cands.append(greedy_clique(G, rng, "max"))
+        for _ in range(4):
+            cands.append(greedy_clique(G, rng, "random"))
+        best = max(cands, key=len)
+        return "[" + ", ".join(str(v) for v in sorted(best, key=str)) + "]", len(best)
+    if task in ("max_independent_set", "min_vertex_cover"):
+        cands = []
+        for _ in range(12): cands.append(greedy_mis(G, rng, "min"))
+        for _ in range(8): cands.append(greedy_mis(G, rng, "random"))
+        ind = max(cands, key=len)
+        if task == "max_independent_set":
+            return "[" + ", ".join(str(v) for v in sorted(ind, key=str)) + "]", len(ind)
+        cover = sorted(set(G.nodes) - set(ind), key=str)
+        return "[" + ", ".join(str(v) for v in cover) + "]", len(cover)
+    raise KeyError(task)
+
+
 def exact_solution(task, n, edges):
     G = nx.Graph(); G.add_nodes_from(range(n)); G.add_edges_from((u, v) for u, v, *_ in edges)
     if task == "max_clique":
@@ -55,7 +108,7 @@ def main():
                     edges = [tuple(vals[j:j + 3]) for j in range(0, 3 * mm, 3)]
                 else:
                     edges = [tuple(vals[j:j + 2]) for j in range(0, 2 * mm, 2)]
-                ans, ref = exact_solution(task, nn, edges)
+                ans, ref = best_known(task, nn, edges, rng)
                 rid = f"{name}-{task}-{i:04d}"
                 (tdir / f"{rid}.in").write_text(text)
                 recs.append(dict(id=rid, split=name, task=task,

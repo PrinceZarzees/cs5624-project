@@ -1,5 +1,110 @@
-{"seed": 5625, "splits": {
- "examples": {"n_range": [4, 50], "per_task": 60, "families": "seen", "time_limit_s": 1.0, "seed_offset": 1, "tasks": ["max_clique","max_independent_set","min_vertex_cover"]},
- "val": {"n_range": [4, 50], "per_task": 20, "families": "seen", "time_limit_s": 1.0, "seed_offset": 2, "tasks": ["max_clique","max_independent_set","min_vertex_cover"]},
- "test_small": {"n_range": [4, 50], "per_task": 20, "families": "all", "time_limit_s": 1.0, "seed_offset": 3, "tasks": ["max_clique","max_independent_set","min_vertex_cover"]}
-}}
+{
+ "seed": 5625,
+ "splits": {
+  "examples": {
+   "n_range": [
+    4,
+    50
+   ],
+   "per_task": 60,
+   "families": "seen",
+   "time_limit_s": 1.0,
+   "seed_offset": 1,
+   "tasks": [
+    "max_clique",
+    "max_independent_set",
+    "min_vertex_cover"
+   ]
+  },
+  "val": {
+   "n_range": [
+    4,
+    50
+   ],
+   "per_task": 20,
+   "families": "seen",
+   "time_limit_s": 1.0,
+   "seed_offset": 2,
+   "tasks": [
+    "max_clique",
+    "max_independent_set",
+    "min_vertex_cover"
+   ]
+  },
+  "test_small": {
+   "n_range": [
+    4,
+    50
+   ],
+   "per_task": 20,
+   "families": "all",
+   "time_limit_s": 1.0,
+   "seed_offset": 3,
+   "tasks": [
+    "max_clique",
+    "max_independent_set",
+    "min_vertex_cover"
+   ]
+  },
+  "test_medium": {
+   "n_range": [
+    100,
+    300
+   ],
+   "per_task": 10,
+   "families": "all",
+   "time_limit_s": 2.0,
+   "seed_offset": 4,
+   "tasks": [
+    "max_clique",
+    "max_independent_set",
+    "min_vertex_cover"
+   ]
+  },
+  "test_large": {
+   "n_range": [
+    500,
+    1000
+   ],
+   "per_task": 8,
+   "families": "all",
+   "time_limit_s": 2.0,
+   "seed_offset": 5,
+   "tasks": [
+    "max_clique",
+    "max_independent_set",
+    "min_vertex_cover"
+   ]
+  },
+  "test_xl": {
+   "n_range": [
+    2000,
+    2000
+   ],
+   "per_task": 5,
+   "families": "all",
+   "time_limit_s": 3.0,
+   "seed_offset": 6,
+   "tasks": [
+    "max_clique",
+    "max_independent_set",
+    "min_vertex_cover"
+   ]
+  },
+  "test_stress": {
+   "n_range": [
+    10000,
+    20000
+   ],
+   "per_task": 3,
+   "families": "all",
+   "time_limit_s": 5.0,
+   "seed_offset": 7,
+   "tasks": [
+    "max_clique",
+    "max_independent_set",
+    "min_vertex_cover"
+   ]
+  }
+ }
+}
