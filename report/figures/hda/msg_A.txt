@@ -1,8 +1,11 @@
-A. Prompt builder -> HDA
+A. Prompt builder -> HDA  (HIDDEN: no statement)
 [SYS] You are a Harness Developing Agent...
       Only the ```cpp block is evaluated.
       Output: <statement>, reasoning, ```cpp, <action>.
-[USER] Problem statement: Given an undirected graph...
+[USER] The problem statement is HIDDEN. You only see
+       input/output examples. Before coding: list at least
+       three candidate problems, argue for/against each,
+       keep the simplest consistent one in <statement>.
        Examples: 5 new (5 seen so far)
        Example 1:
        ```input

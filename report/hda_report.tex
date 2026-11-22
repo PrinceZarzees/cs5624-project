@@ -389,12 +389,12 @@ pipeline's human references score 100\% and all component tests pass.
 \end{itemize}
 
 \subsection{Focused shortest-path run}
-The current run uses the given condition (the statement is in the prompt),
-$k=5$ inline examples, 25 iterations and 8 tool steps. Validation accuracy is
-1.000 at iterations 1--11; the run is still active, so test-split numbers are
-not yet available. In the hidden condition the statement block is omitted and
-the model must write \texttt{<statement>}; that condition has not been run for
-shortest path yet.
+The current run uses the \emph{hidden} condition: the statement is NOT in the
+prompt. The model sees five inline examples, must infer the task, and writes
+\texttt{<statement>} before coding. Settings: $k=5$, 25 iterations, 8 tool
+steps. The previous given-condition run reached validation 1.000 through
+iteration 11 before it was stopped; its test numbers were not produced. The
+hidden run is active, so no hidden test numbers are available yet.
 
 Expected answers for the hidden validation set are used only inside the
 evaluator. The HDA receives aggregate feedback (accuracy, verdict mix, size and

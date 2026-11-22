@@ -13,7 +13,7 @@ digraph HDA {
 
   subgraph cluster_loop {
     label="Training loop — one run = task × condition × seed"; style="rounded"; color="#777777"; fontsize=9;
-    stmt   [label="Statement condition\ngiven: text in prompt\nhidden: no text", fillcolor="#FFFDE7"];
+    stmt   [label="Statement condition\nTHIS RUN: HIDDEN\nno statement text\ngiven: text in prompt", fillcolor="#FFFDE7"];
     prompt [label="Prompt builder\nsystem prompt + [statement]\n+ k=5 examples + feedback\n+ best code", fillcolor="#FFF4E5"];
     hda    [label="HDA model\nQwen3-4B / gpt-oss", fillcolor="#FFE0B2"];
     reply  [label="Reply\n<statement> + reasoning\n+ ```cpp code``` + <action>", fillcolor="#FFF9C4"];
