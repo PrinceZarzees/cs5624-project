@@ -1,130 +1,153 @@
-# Project Completion Plan: Harness Optimization for Graph Reasoning (CS 5624)
+# CS 5624 Project Plan — Harness Optimization for Graph Reasoning
 
-**Project Title:** *Harness Optimization for Graph Reasoning: Learn Small, Run Big*  
-**Authors:** Bikash Kumar Paul, Abdullah Al Noman, Samin Rahman Khan, Md Zarzees Uddin Shah Chowdhury  
-**Target Completion:** Early December 2026 (~7-8 weeks from proposal)
+## What's Already Done (Phase 1 ✅)
 
----
-
-## 1. Executive Summary & Objective
-
-The goal of this project is to determine whether an LLM agent harness or prompt skill optimized exclusively on small, computationally cheap graphs ($|V| \in [4, 50]$) can generalize to much larger graphs ($|V| \in [100, 2000]$), or if the learned strategies overfit to small-scale topologies.
-
-```mermaid
-flowchart LR
-    A["Phase 1: Setup & Data\n(Weeks 1-2)"] --> B["Phase 2: Baseline Harness\n(Weeks 3-4)"]
-    B --> C["Phase 3: Small-Graph Optimization\n(Weeks 5-6)"]
-    C --> D["Phase 4: Large-Scale Evaluation\n(Weeks 6-7)"]
-    D --> E["Phase 5: Ablation & Final Report\n(Weeks 7-8)"]
-```
+- [x] Repository setup (src/graphharness/, configs, data, tests, scripts)
+- [x] Synthetic data pipeline (train/val/test splits, 4–2000 nodes, seed-reproducible)
+- [x] 6 task types: shortest_path, connected_components, cycle_detection, diameter, max_clique, reachability
+- [x] 3 graph families: Erdős–Rényi, Barabási–Albert, Watts–Strogatz
+- [x] Ground truth solvers (NetworkX-based exact solvers for all tasks)
+- [x] Answer scoring pipeline (parse → verify → score, CLI batch mode)
+- [x] GraphArena adapter (pickle → unified JSONL)
+- [x] GraphQA adapter (HuggingFace → unified JSONL)
+- [x] Graph encoding for prompts (edge_list, adjacency_list)
+- [x] 50+ pytest tests
+- [x] Slurm scripts for ARC cluster
 
 ---
 
-## 2. Work Breakdown Structure (Phases & Deliverables)
+## Reviewer Feedback Tracker
 
-### Phase 1: Environment, Dataset Pipeline & Ground Truth Solvers (Weeks 1–2: Oct 15 – Oct 28)
-* **Objective:** Establish the testbed, repository structure, and data splits.
-* **Key Tasks:**
-  1. **Repo Setup:** Initialize Git repository with structured subdirectories (`src/`, `data/`, `experiments/`, `report/`), linting, and `.gitignore`.
-  2. **Data Sourcing:**
-     * Integrate **GraphArena** and **GraphQA** benchmark questions.
-     * Implement a NetworkX-based generator to produce synthetic benchmark graphs at varying node scales:
-       - **Small (Train/Val):** $N \in [4, 50]$ (Erdős–Rényi, Barabási–Albert, Watts–Strogatz).
-       - **Medium (Test 1):** $N \in [100, 300]$.
-       - **Large (Test 2):** $N \in [500, 1000]$.
-       - **Stress Test (Test 3):** $N \approx 2000$.
-  3. **Tasks & Verifiers:**
-     * Define 3 fast polynomial tasks: Shortest Path, Connected Components, Cycle Detection.
-     * Define 1–2 NP-hard / combinatorial tasks with small ground truth: Max Clique or Hamiltonian Path.
-     * Implement deterministic ground truth verifiers using NetworkX and `pytest`.
-* **Deliverable:** Working `data_loader.py` and `evaluate_answer.py` with reproducible data splits saved in JSONL format.
+- [ ] F1: SkillLift-style proxy scorer for cheap harness ranking (arXiv:2609.15396)
+- [ ] F2: Tools-on vs tools-off analysis (does NetworkX access trivialize tasks?)
+- [ ] F3: Stratified analysis by graph density, topology, task difficulty
+- [ ] F4: Additional baselines — GEPA (prompt evolution), SkillOpt/EvoSkill (skill evolution)
+- [ ] F5: Report optimization costs (tokens, time, $)
+- [ ] F6: Specialized harnesses per graph class + agentic router
+- [ ] F7: RRSI-style overfitting prevention (arXiv:2609.24972)
 
 ---
 
-### Phase 2: Agent Sandbox & Baseline Evaluation (Weeks 3–4: Oct 29 – Nov 11)
-* **Objective:** Build the runtime agent harness and benchmark baseline performance.
-* **Key Tasks:**
-  1. **Sandbox & Tool Registry:**
-     * Develop execution environment: LLM interaction loop with Python code execution / NetworkX tool calling.
-     * Ensure timeout limits and memory guards (critical when LLM generates code on 2,000-node graphs).
-  2. **Baseline A (Unoptimized / Zero-Shot Harness):**
-     * Minimal system prompt + raw tool definitions.
-     * Benchmark Baseline A on both small and large graph splits.
-  3. **Baseline B (Human Expert Hand-Crafted Harness):**
-     * Hand-write best practice instructions: e.g., *"Always load the graph via NetworkX API calls; never iterate nodes textually; verify subgraphs before returning final answer."*
-     * Benchmark Baseline B across all graph sizes.
-  4. **Compute Infrastructure:**
-     * Verify GPU access on Virginia Tech ARC (Advanced Research Computing) for open-weight models (e.g., DeepSeek-V4.1-Flash, GLM, or Qwen) or set up API fallback.
-* **Deliverable:** Initial benchmark accuracy curves for Baselines A and B across all graph scales.
+## WEEK 1 (Nov 22–28): Agent Sandbox, Baselines, Optimization
+
+### Member 1 — Agent Environment & Tool Modes
+
+- [ ] Build LLM interaction loop (system prompt → model call → parse answer → score)
+- [ ] Support API models (DeepSeek-V4.1-Flash / GLM-5.3 on ARC) and local models
+- [ ] Add execution timeout (30s) and token-budget guards
+- [ ] Implement tools-on/off switch (F2): --tools flag for sandboxed NetworkX calls
+- [ ] Write run_experiment.py (takes harness config + split + model → preds.jsonl)
+- [ ] Add cost instrumentation: log wall-clock time, token counts, API cost per problem (F5)
+- [ ] Smoke test: end-to-end run of Baselines A & B on 20 train problems
+
+### Member 2 — Baselines & Graph Feature Metadata
+
+- [ ] Write Baseline A (zero-shot): minimal prompt, no instructions, no tools
+- [ ] Write Baseline B (hand-crafted expert harness): best-practice instructions for graph reasoning
+- [ ] Extend record metadata with graph features (F3): density, avg clustering coefficient, degree stats (mean, max, std)
+- [ ] Run Baselines A & B on train, val, test_small (both tool modes)
+- [ ] Run Baselines A & B on test_medium, test_large, test_stress (both tool modes)
+
+### Member 3 — Optimization Loop & Overfitting Prevention
+
+- [ ] Implement GEPA-style optimizer (F4): run harness → collect failures → critic LLM edits → accept if val improves
+- [ ] Implement SkillOpt-style variant (F4): evolve textual skill snippets appended to system prompt
+- [ ] Implement SkillLift-inspired proxy scorer (F1): rubric-based cheap ranking of candidate harnesses
+- [ ] Add RRSI-inspired overfitting prevention (F7): validation gating, node-ID randomization, complexity penalty
+- [ ] Run 15–25 optimization rounds on small training graphs
+- [ ] Log every harness version, scores, token costs, wall-clock time
+- [ ] Save frozen best harness H*_small
+
+### Member 4 — Evaluation Infrastructure & Preliminary Analysis
+
+- [ ] Build stratified analysis pipeline (F3): breakdowns by task × graph family × density bins × node-count bins
+- [ ] Build cost tracking dashboard (F5): tokens, time, $ per optimization round, per split, per task
+- [ ] Write visualization scripts: accuracy vs graph size curves, optimization convergence, generalization gap, cost breakdown
+- [ ] Generate preliminary figures from baseline + early optimization results
+- [ ] Identify and report any pipeline bugs or issues
 
 ---
 
-### Phase 3: Automated Optimization on Small Graphs (Weeks 5–6: Nov 12 – Nov 25)
-* **Objective:** Run automated optimization on small instances to evolve the optimal harness $\mathcal{H}^*$.
-* **Key Tasks:**
-  1. **Optimizer Engine Selection & Implementation:**
-     * Implement either **Meta-Harness** (code-level evolution of prompts + tool loop) or **SkillOpt / GEPA** (textual skill evolution via reflection).
-     * Optimization loop:
-       1. Run current harness $\mathcal{H}_t$ on a batch of small training graphs ($|V| \le 50$).
-       2. Collect failure trajectories (syntax errors, timeouts, incorrect node paths).
-       3. Critic LLM synthesizes lessons and outputs proposed edits to the harness $\mathcal{H}_{t+1}$.
-       4. Evaluate on validation split; accept mutation if score improves.
-  2. **Checkpointing & Run Tracking:**
-     * Log evolution history (prompt changes, code changes, score progression) over $N=15-30$ rounds.
-     * Save the highest-performing harness checkpoint $\mathcal{H}^*_{small}$.
-* **Deliverable:** The frozen, optimized harness $\mathcal{H}^*_{small}$ and detailed optimization logs.
+## WEEK 2 (Nov 29 – Dec 6): Large-Scale Evaluation, Ablation, Report
+
+### Member 1 — Large-Scale Runs & Cross-Model Transfer
+
+- [ ] Run optimized harness H* on test_medium, test_large, test_stress (both tool modes)
+- [ ] Cross-model transfer: run best harness from Model 1 on a different Model 2
+- [ ] Write up tools-on vs tools-off findings (F2): which tasks become trivial with NetworkX?
+- [ ] Draft report section: Methodology (agent sandbox, tool modes, experiment setup)
+
+### Member 2 — Rule Ablation & Error Analysis
+
+- [ ] Diff H* vs Baseline A: identify every distinct rule/skill added by optimizer
+- [ ] Rule-by-rule ablation: disable each rule on test_large, measure accuracy drop
+- [ ] Error taxonomy: classify large-graph failures (context overflow, wrong algorithm, timeout, hallucinated edges, etc.)
+- [ ] Generalization analysis: which rules transferred well? Cross-reference with graph characteristics (F3)
+- [ ] Draft report section: Results (ablation tables, error categories, qualitative examples)
+
+### Member 3 — Specialized Harnesses & Router
+
+- [ ] Optimize separate harnesses per graph class (F6): dense graphs, sparse/tree-like graphs, NP-hard tasks
+- [ ] Build agentic router (F6): given graph features → select best specialized harness
+- [ ] (Stretch) Subgraph decomposition: if large graph has components, apply different harness per subgraph
+- [ ] Evaluate router: single H* vs router-selected specialized harnesses
+- [ ] Draft report section: Optimization (loop design, convergence, RRSI, proxy scorer, router)
+
+### Member 4 — Full Evaluation, Final Plots & Report Lead
+
+- [ ] Run complete evaluation pipeline on all methods × all splits
+- [ ] Compute generalization gap: Score(H* | D_small) − Score(H* | D_large) for all variants
+- [ ] Produce cost-effectiveness analysis (F5): accuracy improvement per token/dollar spent
+- [ ] Produce stratified performance heatmap (F3): tasks × families × density × scale
+- [ ] Polish all paper figures (6+ figures)
+- [ ] Draft report sections: Introduction, Related Work (add SkillLift + RRSI refs), Experimental Setup, Conclusion
+- [ ] Compile all sections, coordinate final proofreading
 
 ---
 
-### Phase 4: Large-Scale Generalization Experiments (Weeks 6–7: Nov 26 – Dec 3)
-* **Objective:** Test $\mathcal{H}^*_{small}$ on large unseen graphs and measure the Generalization Gap.
-* **Key Tasks:**
-  1. **Full Scaling Evaluation:**
-     * Run $\mathcal{H}^*_{small}$ on Medium ($N=100$), Large ($N=500$), and Very Large ($N=2000$) graphs.
-     * Compare head-to-head against Baseline A and Baseline B.
-  2. **Metrics Computation:**
-     * Task Accuracy vs. Graph Size ($|V|$).
-     * Generalization Gap:
-       $$\Delta_{\text{gen}} = \text{Score}(\mathcal{H}^* \mid \mathcal{D}_{\text{small}}) - \text{Score}(\mathcal{H}^* \mid \mathcal{D}_{\text{large}})$$
-     * Token consumption and runtime latency per problem scale.
-  3. **Cross-Model Transfer (Bonus / RQ4):**
-     * Evaluate the best harness found by Model 1 on a secondary open-source model.
-* **Deliverable:** Comprehensive results table, scaling curves (accuracy vs. $|V|$), and error classification logs.
+## Final Deliverables Checklist
+
+- [ ] Agent sandbox with tools-on/off modes
+- [ ] Baseline A (zero-shot) and B (hand-crafted) scores across all splits
+- [ ] GEPA-style optimizer implementation
+- [ ] SkillOpt-style optimizer implementation
+- [ ] SkillLift-inspired proxy scorer
+- [ ] RRSI-inspired overfitting prevention
+- [ ] Frozen best harness H*_small with full optimization logs
+- [ ] Specialized harnesses (dense, sparse, NP-hard)
+- [ ] Agentic router for harness selection
+- [ ] Full evaluation across all scales (4–2000 nodes)
+- [ ] Stratified analysis by density, topology, task difficulty
+- [ ] Optimization cost report (tokens, time, $)
+- [ ] Rule ablation study
+- [ ] Error taxonomy on large-graph failures
+- [ ] Cross-model transfer experiment
+- [ ] Generalization gap table and scaling curves
+- [ ] Final report (ACL format)
+- [ ] Clean GitHub repository with reproducible code
 
 ---
 
-### Phase 5: Qualitative Analysis, Ablations & Final Report (Weeks 7–8: Dec 4 – Dec 12)
-* **Objective:** Analyze why rules transferred or broke, write the final paper, and package code.
-* **Key Tasks:**
-  1. **Rule-by-Rule Ablation:**
-     * Inspect the diff of $\mathcal{H}^*$ compared to baseline.
-     * Systematically disable discovered rules one-by-one on large graphs to identify which specific heuristics transferred vs. which caused failures.
-  2. **Final Paper Writing (ACL Format):**
-     * Revisit [main.tex](file:///c:/Users/princ/nlp/project_proposal/main.tex) to expand into the final report format.
-     * Include: Introduction, Related Work, Formal Problem Setup, Experimental Results, Scaling Curves, Qualitative Analysis, Discussion, and Pangram-compliant human-written text.
-  3. **Artifact Packaging:**
-     * Clean and document GitHub repository, release benchmark generator and $\mathcal{H}^*$ prompts/code.
-* **Deliverable:** Final submission PDF, slide deck/presentation, and public GitHub repository.
+## Priority Tiers
+
+- P0 (Must Have): Agent sandbox, baselines, single-harness optimization, large-scale evaluation, generalization gap, cost report, ablation, final report
+- P1 (Should Have): Router + specialized harnesses (F6), cross-model transfer, stratified heatmaps
+- P2 (Nice to Have): Proxy scorer (F1), subgraph decomposition routing
 
 ---
 
-## 3. Team Role Assignments (4 Members)
+## Key Deadlines
 
-| Role & Focus | Primary Lead | Responsibilities |
-| :--- | :--- | :--- |
-| **Data & Verifier Engineering** | **Member 1 (Bikash)** | GraphArena/GraphQA data ingestion; synthetic graph generator; exact solver ground truth verifiers (`pytest`). |
-| **Agent Environment & Baselines** | **Member 2 (Noman)** | Python sandbox environment; NetworkX tool registry; execution timeout/resource monitors; Baselines A & B implementation. |
-| **Optimization Loop (Meta-Harness/SkillOpt)** | **Member 3 (Samin)** | Optimization loop script; failure trajectory extraction; reflection prompts; ARC cluster compute coordination. |
-| **Scaling Experiments & Ablation Analysis** | **Member 4 (Zarzees)** | Running test suites on 100–2,000 node graphs; metric calculations; rule ablation tests; visualization & plotting. |
-| **Paper & Presentation (Shared)** | **All Members** | Collaborative drafting, error analysis, peer proofreading (ensuring zero AI-generated prose per course policy). |
+- [ ] Nov 27: Agent sandbox working, baselines running
+- [ ] Nov 28: Optimization complete, H*_small frozen, baseline scores done
+- [ ] Dec 2: All large-scale evaluation complete
+- [ ] Dec 3: Ablation, router experiments, error analysis done
+- [ ] Dec 4: All figures finalized
+- [ ] Dec 6: Final report submitted
 
 ---
 
-## 4. Key Risks & Mitigation Strategies
+## References to Add
 
-| Risk | Impact | Mitigation Strategy |
-| :--- | :--- | :--- |
-| **Timeout on large graphs (2,000 nodes)** | Agent code hangs or exhausts context tokens | Enforce strict 30s code execution timeouts; provide NetworkX graph summary statistics in the prompt rather than full adjacency matrices. |
-| **ARC GPU queue delays** | Stalled optimization runs | Use lightweight API models (or smaller 7B-14B models) for rapid local debugging; run large batch jobs overnight on ARC. |
-| **Optimization collapse / Overfitting** | Skill optimizer generates rules valid only for small node labels (e.g. "nodes 0 to 5") | Validate each iteration on held-out small graphs with randomized node labelings before accepting a mutation. |
-| **Pangram AI detector flags on final paper** | Grade penalty | All members write sections directly in LaTeX; maintain git commit histories proving human authoring progression. |
+- SkillLift (arXiv:2609.15396) — rubric evolution for cheap harness ranking
+- RRSI (arXiv:2609.24972) — overfitting prevention during harness optimization
