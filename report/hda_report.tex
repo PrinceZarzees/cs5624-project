@@ -199,16 +199,18 @@ iterations in the current shortest-path run, 5 in the standard grid). Only the
 C++ block is compiled and scored; the statement and reasoning are logged but
 never passed to the evaluator.
 
+
+
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.95\linewidth]{figures/hda/hda_loop.pdf}
-\caption{Training and validation loop. Solid arrows are data flow, dashed
-arrows are feedback or control. The evaluator receives only the \texttt{cpp}
-block.}
+\includegraphics[width=\linewidth]{figures/hda/hda_diagram_full.pdf}
+\caption{Training and validation loop (top) and the exact message structures
+A--E returned to the HDA (bottom). Only the \texttt{cpp} block is compiled and
+scored; validation labels stay inside the evaluator.}
 \label{fig:loop}
 \end{figure}
 
-Figure~\ref{fig:messages} shows the exact message structures. The HDA can call
+Figure~\ref{fig:loop} shows both the flow and the exact message structures. The HDA can call
 the compiler itself at any step: \texttt{compile} returns only diagnostics,
 \texttt{test} compiles and runs every example, \texttt{run} uses an input the
 model writes, and \texttt{stress} measures CPU on a generated large graph.
@@ -217,13 +219,7 @@ the model continues from the same conversation. At the start of the next
 iteration the validation summary (C) is inserted into the new prompt; an
 invalid submit is answered immediately (D) without ending the iteration.
 
-\begin{figure}[p]
-\centering
-\includegraphics[width=0.92\linewidth]{figures/hda/hda_messages.pdf}
-\caption{Message structures A--E for the flow in Figure~\ref{fig:loop}.
-Only the \texttt{cpp} block is compiled and scored.}
-\label{fig:messages}
-\end{figure}
+
 
 \begin{table}[p]
 \centering
@@ -391,6 +387,20 @@ every step debating candidate statements and submitted no code, so score 0.
 \item This is a model-strength result, not a pipeline failure: the same
 pipeline's human references score 100\% and all component tests pass.
 \end{itemize}
+
+\subsection{Focused shortest-path run}
+The current run uses the given condition (the statement is in the prompt),
+$k=5$ inline examples, 25 iterations and 8 tool steps. Validation accuracy is
+1.000 at iterations 1--11; the run is still active, so test-split numbers are
+not yet available. In the hidden condition the statement block is omitted and
+the model must write \texttt{<statement>}; that condition has not been run for
+shortest path yet.
+
+Expected answers for the hidden validation set are used only inside the
+evaluator. The HDA receives aggregate feedback (accuracy, verdict mix, size and
+family breakdowns, max CPU, relabeling and policy results) and never the
+validation answers. The compiler/\texttt{test} tool runs only the training
+examples, whose expected outputs are part of the prompt by design.
 
 \subsection{Queued but not run}
 

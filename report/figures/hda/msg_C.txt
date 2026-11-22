@@ -1,0 +1,10 @@
+C. Validation -> HDA (next iteration only)
+Hidden-validation feedback for your last submission
+(graphs are hidden; only aggregates are shown):
+accuracy 0.0 on 40 graphs;
+verdicts {'AC': 4, 'WA': 31, 'TLE': 5};
+by size {tiny:..., small:...};
+by family {er:..., ba:...}; max CPU 0.31s.
+Relabeling check: 0 of 5 relabeled graphs changed the answer.
+Policy check: passed.
+Expected answers are never listed.
