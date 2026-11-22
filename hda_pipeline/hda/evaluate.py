@@ -89,3 +89,70 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ---------------------------------------------------------------- phase 2 quality
+def _parse_input(text):
+    from .generator import parse_text
+    return parse_text(text)
+
+
+def evaluate_exe_quality(exe: Path, recs, data_dir: Path, task: str, workers: int = 4,
+                        permutation_check: int = 0, seed: int = 0):
+    """Score a phase-2 solution by feasibility and pure normalized quality."""
+    from .quality import VALIDATORS, normalized_quality, parse_nodes
+
+    validator = VALIDATORS[task]
+
+    def one(r):
+        text = (data_dir / r["input_path"]).read_text()
+        n, edges, q, d, w = _parse_input(text)
+        res = run_binary(exe, text, r["time_limit_s"], expected=None)
+        nodes = parse_nodes(res.output) if res.verdict == "OK" else None
+        feasible = bool(nodes is not None and validator(nodes, n, edges))
+        value = len(nodes) if feasible else 0
+        quality = normalized_quality(task, value, r["ref_value"]) if feasible else 0.0
+        verdict = ("AC" if quality >= 0.999999 else "FEAS") if feasible else (
+            res.verdict if res.verdict in {"TLE", "RE", "MLE", "OLE"} else "WA")
+        return dict(id=r["id"], verdict=verdict, output=res.output.strip()[:200],
+                    expected=r.get("answer", ""), value=value, ref_value=r.get("ref_value"),
+                    quality=quality, cpu_s=res.cpu_s, n=r["n"], m=r["m"], family=r["family"],
+                    density_bin=r["density_bin"], seen_family=r.get("seen_family", True),
+                    bucket=bucket(r["n"]))
+
+    with ThreadPoolExecutor(workers) as ex:
+        rows = list(ex.map(one, recs))
+
+    inv = None
+    if permutation_check:
+        rng = random.Random(seed); bad = 0; tried = 0
+        for r in rng.sample(recs, min(permutation_check, len(recs))):
+            text = (data_dir / r["input_path"]).read_text()
+            n, edges, q, d, w = _parse_input(text)
+            e2, q2 = relabel(n, edges, q, d, rng)
+            text2 = to_text(n, e2, q2, d, w)
+            res = run_binary(exe, text2, r["time_limit_s"], expected=None)
+            nodes = parse_nodes(res.output) if res.verdict == "OK" else None
+            feas = bool(nodes is not None and validator(nodes, n, e2))
+            val = len(nodes) if feas else 0
+            q2v = normalized_quality(task, val, r["ref_value"]) if feas else 0.0
+            tried += 1
+            orig = next((x for x in rows if x["id"] == r["id"]), None)
+            if orig is None or abs(q2v - orig["quality"]) > 1e-9:
+                bad += 1
+        inv = dict(tried=tried, failed=bad)
+
+    def mean(rs, key="quality"):
+        return round(sum(x[key] for x in rs) / len(rs), 4) if rs else None
+    by = lambda key: {k: dict(n=len(v), quality=mean(v),
+                              feasible=round(sum(x["verdict"] in {"AC", "FEAS"} for x in v) / len(v), 4))
+                      for k, v in sorted(group(rows, key).items())}
+    return rows, dict(n=len(rows), quality=mean(rows),
+                      feasible=round(sum(x["verdict"] in {"AC", "FEAS"} for x in rows) / len(rows), 4),
+                      optimal=round(sum(x["verdict"] == "AC" for x in rows) / len(rows), 4),
+                      verdicts=dict(Counter(x["verdict"] for x in rows)),
+                      by_bucket=by("bucket"), by_family=by("family"),
+                      by_density=by("density_bin"), by_seen_family=by("seen_family"),
+                      max_cpu_s=max((x["cpu_s"] for x in rows), default=0.0),
+                      median_cpu_s=statistics.median([x["cpu_s"] for x in rows]) if rows else 0.0,
+                      invariance=inv)

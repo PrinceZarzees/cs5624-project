@@ -217,6 +217,8 @@ def ensure_reference_binaries() -> None:
     _BIN.mkdir(exist_ok=True)
     for task in TASKS:
         src, exe = ROOT / "reference" / f"{task}.cpp", _BIN / task
+        if not src.exists():
+            continue
         if not exe.exists() or exe.stat().st_mtime < src.stat().st_mtime:
             subprocess.run(["g++", "-std=c++17", "-O2", "-o", str(exe), str(src)], check=True)
 

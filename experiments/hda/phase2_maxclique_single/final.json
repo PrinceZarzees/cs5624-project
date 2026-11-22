@@ -1,0 +1,125 @@
+{
+  "task": "max_clique",
+  "condition": "given",
+  "k": 5,
+  "seed": 0,
+  "best_it": 1,
+  "best_val_acc": 0.488,
+  "final_statement": "Given an undirected simple graph, print the nodes of a maximum clique as a list in square brackets, e.g. [0, 2, 5]. Any maximum clique is accepted; every pair of printed nodes must be adjacent.",
+  "val_curve": [
+    0.488
+  ],
+  "statements": [
+    "Given an undirected simple graph, print the nodes of a maximum clique as a list in square brackets, e.g. [0, 2, 5]. Any maximum clique is accepted; every pair of printed nodes must be adjacent."
+  ],
+  "tokens": {
+    "prompt": 27999,
+    "completion": 8110
+  },
+  "test": {
+    "test_small": {
+      "n": 20,
+      "quality": 0.9115,
+      "feasible": 1.0,
+      "optimal": 0.65,
+      "verdicts": {
+        "AC": 13,
+        "FEAS": 7
+      },
+      "by_bucket": {
+        "small": {
+          "n": 18,
+          "quality": 0.9017,
+          "feasible": 1.0
+        },
+        "tiny": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 2,
+          "quality": 0.875,
+          "feasible": 1.0
+        },
+        "components": {
+          "n": 2,
+          "quality": 0.875,
+          "feasible": 1.0
+        },
+        "dense": {
+          "n": 2,
+          "quality": 0.7321,
+          "feasible": 1.0
+        },
+        "er": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "grid": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "path_like": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "powerlaw": {
+          "n": 2,
+          "quality": 0.9,
+          "feasible": 1.0
+        },
+        "regular": {
+          "n": 2,
+          "quality": 0.8333,
+          "feasible": 1.0
+        },
+        "tree": {
+          "n": 2,
+          "quality": 1.0,
+          "feasible": 1.0
+        },
+        "ws": {
+          "n": 2,
+          "quality": 0.9,
+          "feasible": 1.0
+        }
+      },
+      "by_density": {
+        "medium": {
+          "n": 10,
+          "quality": 0.8517,
+          "feasible": 1.0
+        },
+        "sparse": {
+          "n": 10,
+          "quality": 0.9714,
+          "feasible": 1.0
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 12,
+          "quality": 0.8942,
+          "feasible": 1.0
+        },
+        "true": {
+          "n": 8,
+          "quality": 0.9375,
+          "feasible": 1.0
+        }
+      },
+      "max_cpu_s": 0.007,
+      "median_cpu_s": 0.0049499999999999995,
+      "invariance": {
+        "tried": 5,
+        "failed": 1
+      }
+    }
+  }
+}

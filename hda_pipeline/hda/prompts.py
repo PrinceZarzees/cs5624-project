@@ -100,6 +100,12 @@ accuracy {acc} on {n} graphs; verdicts {verdicts}; by size {by_bucket}; by famil
 Relabeling check: {inv}. Policy check: {policy}.
 """
 
+FEEDBACK_Q = """Hidden-validation quality feedback for your last submission (graphs are hidden):
+mean normalized quality {q} on {n} graphs; feasible {feas}; optimal {opt}; verdicts {verdicts};
+by size {by_bucket}; by family {by_family}; max CPU {max_cpu}s.
+Relabeling check: {inv}. Policy check: {policy}. Quality 1.0 means optimal or best known.
+"""
+
 JUDGE = """You compare two descriptions of a graph problem.
 TRUE: {truth}
 INFERRED: {inferred}

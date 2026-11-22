@@ -2,12 +2,15 @@
 import random
 import pytest
 from hda.tasks import TASKS, nx_answer
+from pathlib import Path
+ROOT = Path(__file__).resolve().parent.parent
+REF_TASKS = [t for t in TASKS if (ROOT / "reference" / f"{t}.cpp").exists()]
 from hda.generator import (ALL_FAMILIES, DENSITY_BINS, make_instance, parse_text,
                            reference_answer, ensure_reference_binaries)
 
 ensure_reference_binaries()
 
-@pytest.mark.parametrize("task", list(TASKS))
+@pytest.mark.parametrize("task", REF_TASKS)
 def test_reference_matches_networkx(task):
     rng = random.Random(task)
     for i in range(60):

@@ -19,6 +19,8 @@ class Task:
     needs_connected: bool
     statement: str
     max_n: int = 100_000          # largest graph used in the stress split
+    objective: str = "exact"      # exact | max | min (phase-2 quality scoring)
+    validator: str = ""            # clique | independent_set | vertex_cover
 
 
 IO_NOTE = ("Print exactly one line. YES/NO answers are upper case; numeric answers "
@@ -55,6 +57,18 @@ TASKS: dict[str, Task] = {t.name: t for t in [
     Task("mst_weight", False, True, 0, True,
          "Given a connected undirected graph with positive integer edge weights, print the "
          "total weight of a minimum spanning tree."),
+    Task("max_clique", False, False, 0, False,
+         "Given an undirected simple graph, print the nodes of a maximum clique as a list "
+         "in square brackets, e.g. [0, 2, 5]. Any maximum clique is accepted; every pair "
+         "of printed nodes must be adjacent.", objective="max", validator="clique"),
+    Task("max_independent_set", False, False, 0, False,
+         "Given an undirected simple graph, print the nodes of a maximum independent set as "
+         "a list in square brackets. No two printed nodes may be adjacent. Any maximum set "
+         "is accepted.", objective="max", validator="independent_set"),
+    Task("min_vertex_cover", False, False, 0, False,
+         "Given an undirected simple graph, print the nodes of a minimum vertex cover as a "
+         "list in square brackets. Every edge must have at least one endpoint in the list. "
+         "Any minimum cover is accepted.", objective="min", validator="vertex_cover"),
     Task("max_flow", True, True, 2, False,
          "Given a directed graph whose edge weights are capacities and two nodes s and t "
          "(query 2 s t), print the value of a maximum flow from s to t.", max_n=20_000),

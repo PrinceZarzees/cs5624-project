@@ -1,0 +1,5 @@
+{"seed": 5625, "splits": {
+ "examples": {"n_range": [4, 50], "per_task": 60, "families": "seen", "time_limit_s": 1.0, "seed_offset": 1, "tasks": ["max_clique","max_independent_set","min_vertex_cover"]},
+ "val": {"n_range": [4, 50], "per_task": 20, "families": "seen", "time_limit_s": 1.0, "seed_offset": 2, "tasks": ["max_clique","max_independent_set","min_vertex_cover"]},
+ "test_small": {"n_range": [4, 50], "per_task": 20, "families": "all", "time_limit_s": 1.0, "seed_offset": 3, "tasks": ["max_clique","max_independent_set","min_vertex_cover"]}
+}}

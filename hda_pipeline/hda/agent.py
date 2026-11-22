@@ -19,10 +19,10 @@ import argparse, json, os, random, re, time
 from dataclasses import dataclass, field
 from pathlib import Path
 from .tasks import TASKS
-from .prompts import SYSTEM, STATEMENT_GIVEN, STATEMENT_HIDDEN, EXAMPLES, ITERATION, FEEDBACK, JUDGE
+from .prompts import SYSTEM, STATEMENT_GIVEN, STATEMENT_HIDDEN, EXAMPLES, ITERATION, FEEDBACK, FEEDBACK_Q, JUDGE
 from .sandbox import compile_cpp, run_binary, run_capture
 from .policy import check_source
-from .evaluate import load_split, evaluate_exe
+from .evaluate import load_split, evaluate_exe, evaluate_exe_quality
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = (ROOT / "templates" / "graph_template.cpp").read_text()
@@ -119,7 +119,8 @@ def run(cfg: RunConfig, client, judge_client=None):
             pool = load_split(data, "examples", cfg.task)
             rng.shuffle(pool)
         new = [pool.pop() for _ in range(min(cfg.k, len(pool)))]
-        examples += [dict(id=r["id"], input=(data / r["input_path"]).read_text(), output=r["answer"]) for r in new]
+        examples += [dict(id=r["id"], input=(data / r["input_path"]).read_text(),
+                          output=r["answer"], ref_value=r.get("ref_value")) for r in new]
         log("examples", it=it, ids=[r["id"] for r in new], answers=[r["answer"] for r in new])
         cur = examples[-len(new):] if new else []
         blocks = "\n".join(f"Example {i+1}:\n```input\n{show_input(e['input'])}```\nExpected output: {e['output']}\n"
@@ -175,7 +176,7 @@ def run(cfg: RunConfig, client, judge_client=None):
                     continue
             if act == "submit" or step == cfg.steps:
                 submitted = code; break
-            obs = tool(act, text, code, examples, out / f"it{it}", log, it, step)
+            obs = tool(act, text, code, examples, out / f"it{it}", log, it, step, task=cfg.task)
             # Keep the prompt bounded: drop older replies, keep only the current
             # program, statement and the latest tool result.
             state = (f"\n\nCurrent statement: {statement}\nCurrent program:\n```cpp\n"
@@ -207,14 +208,18 @@ def run(cfg: RunConfig, client, judge_client=None):
         for sp in cfg.test_splits:
             if not (data / f"{sp}.jsonl").exists():
                 continue
-            rows, s = evaluate_exe(exe, load_split(data, sp, cfg.task), data, permutation_check=5, seed=cfg.seed)
+            if task.objective in ("max", "min"):
+                rows, s = evaluate_exe_quality(exe, load_split(data, sp, cfg.task), data, cfg.task,
+                                               permutation_check=5, seed=cfg.seed)
+            else:
+                rows, s = evaluate_exe(exe, load_split(data, sp, cfg.task), data, permutation_check=5, seed=cfg.seed)
             final["test"][sp] = s
             log("test", split=sp, summary=s, rows=rows)
     json.dump(final, open(out / "final.json", "w"), indent=2)
     return final
 
 
-def tool(act, text, code, examples, wd, log, it, step):
+def tool(act, text, code, examples, wd, log, it, step, task=None):
     current_code = last_block(text, "cpp")
     if act in ("compile", "test", "run", "stress") and not current_code:
         return ("No ```cpp block in this reply. You must include the FULL program in a ```cpp block in the same "
@@ -247,12 +252,30 @@ def tool(act, text, code, examples, wd, log, it, step):
         log("tool", it=it, step=step, action=act, compile_ok=True)
         return "Compilation succeeded."
     if act == "test":
+        from .generator import parse_text
+        from .quality import VALIDATORS, normalized_quality, parse_nodes
+        quality_task = task and TASKS[task].objective in ("max", "min")
         lines, outs = [], []
         for i, e in enumerate(examples):
-            r = run_binary(exe, e["input"], 2.0, e["output"])
-            outs.append(dict(id=e["id"], verdict=r.verdict, output=r.output.strip()[:200], expected=e["output"]))
-            lines.append(f"Example {i+1}: {r.verdict}  got={r.output.strip()[:80]!r} expected={e['output']!r}"
-                         + (f" stderr={r.stderr[-200:]!r}" if r.stderr else ""))
+            if quality_task:
+                r = run_binary(exe, e["input"], 2.0, None)
+                n, edges, q, d, w = parse_text(e["input"])
+                nodes = parse_nodes(r.output) if r.verdict == "OK" else None
+                feasible = bool(nodes is not None and VALIDATORS[task](nodes, n, edges))
+                size = len(nodes) if feasible else 0
+                ref = e.get("ref_value") or 0
+                qual = normalized_quality(task, size, ref) if feasible else 0.0
+                v = "AC" if qual >= 0.999999 else ("FEAS" if feasible else (
+                    r.verdict if r.verdict in {"TLE", "RE", "MLE", "OLE"} else "WA"))
+                outs.append(dict(id=e["id"], verdict=v,
+                                 output=r.output.strip()[:200], value=size, ref_value=ref, quality=qual))
+                lines.append(f"Example {i+1}: {'FEAS' if feasible else r.verdict}  size={size}  "
+                             f"quality={qual:.3f}  best_known={ref}")
+            else:
+                r = run_binary(exe, e["input"], 2.0, e["output"])
+                outs.append(dict(id=e["id"], verdict=r.verdict, output=r.output.strip()[:200], expected=e["output"]))
+                lines.append(f"Example {i+1}: {r.verdict}  got={r.output.strip()[:80]!r} expected={e['output']!r}"
+                             + (f" stderr={r.stderr[-200:]!r}" if r.stderr else ""))
         log("tool", it=it, step=step, action=act, compile_ok=True, example_outputs=outs)
         return "\n".join(lines)
     if act == "run":
@@ -280,6 +303,7 @@ def tool(act, text, code, examples, wd, log, it, step):
 
 
 def score_submission(code, examples, val, data, wd, cfg, log, it):
+    task = TASKS[cfg.task]
     if not code:
         log("submission", it=it, ok=False, reason="no code")
         return dict(acc=0.0, policy=["no code submitted"], feedback="No program was submitted.")
@@ -291,11 +315,24 @@ def score_submission(code, examples, val, data, wd, cfg, log, it):
         fbk = (f"Your submission was REJECTED (score 0). Policy: {pol or 'ok'}. "
                + ("" if ok else f"Compiler output:\n{clog[-1500:]}"))
         return dict(acc=0.0, policy=reason, feedback=fbk)
-    rows, s = evaluate_exe(exe, val, data, permutation_check=5, seed=cfg.seed + it)
+    if task.objective in ("max", "min"):
+        rows, s = evaluate_exe_quality(exe, val, data, cfg.task, permutation_check=5, seed=cfg.seed + it)
+    else:
+        rows, s = evaluate_exe(exe, val, data, permutation_check=5, seed=cfg.seed + it)
     ex_outs = [dict(id=e["id"], **{k: v for k, v in run_binary(exe, e["input"], 2.0, e["output"]).to_dict().items()
                                    if k in ("verdict", "output")}) for e in examples]
     log("submission", it=it, ok=True, code=code, val_summary=s, val_rows=rows, example_outputs=ex_outs)
     inv = s["invariance"]
+    if task.objective in ("max", "min"):
+        acc = s["quality"] if not inv or inv["failed"] == 0 else s["quality"] * (1 - inv["failed"] / inv["tried"])
+        fbk = FEEDBACK_Q.format(q=s["quality"], n=s["n"], feas=s["feasible"], opt=s["optimal"],
+                                verdicts=s["verdicts"],
+                                by_bucket={k: v["quality"] for k, v in s["by_bucket"].items()},
+                                by_family={k: v["quality"] for k, v in s["by_family"].items()},
+                                max_cpu=s["max_cpu_s"],
+                                inv=f"{inv['failed']} of {inv['tried']} relabeled graphs changed the score" if inv else "n/a",
+                                policy="passed")
+        return dict(acc=round(acc, 4), policy=[], feedback=fbk, summary=s)
     acc = s["accuracy"] if not inv or inv["failed"] == 0 else s["accuracy"] * (1 - inv["failed"] / inv["tried"])
     fbk = FEEDBACK.format(acc=s["accuracy"], n=s["n"], verdicts=s["verdicts"],
                           by_bucket={k: v["acc"] for k, v in s["by_bucket"].items()},

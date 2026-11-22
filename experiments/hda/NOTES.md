@@ -28,3 +28,14 @@ on all sizes; triangle 96.7% large; diameter 77.5-83.3%; max flow 100% up to
 2000 nodes but 30% on the 10k-20k stress split (small-to-large failure).
 Results: experiments/hda/all_given_fixed_3it/, table
 report/tables/hda/tab_hda_given_all.csv.
+
+## Phase-2 scoring and max-clique pilot (2026-11-22)
+
+- Scoring is pure normalized quality with a feasibility gate:
+  max clique/MIS q = value/reference; MVC q = reference/value; infeasible/TLE = 0.
+- `hda/quality.py`: node-list parsers and validators for clique/MIS/MVC.
+- `hda/generate_phase2.py`: exact n=4-50 splits from NetworkX.
+- One given max-clique run, k=5, 1 iteration: validation mean q 0.488;
+  test_small mean q 0.9115, feasible 1.0, optimal 0.65 (13 AC, 7 FEAS),
+  max CPU 0.007 s.
+- MIS/MVC have data and scoring but no runs yet.
