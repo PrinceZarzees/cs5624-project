@@ -112,6 +112,9 @@ def run(cfg: RunConfig, client, judge_client=None):
     statement = task.statement if cfg.condition == "given" else "(not yet stated)"
     tokens = dict(prompt=0, completion=0)
     for it in range(1, cfg.n_iter + 1):
+        if len(pool) < cfg.k:
+            pool = load_split(data, "examples", cfg.task)
+            rng.shuffle(pool)
         new = [pool.pop() for _ in range(min(cfg.k, len(pool)))]
         examples += [dict(id=r["id"], input=(data / r["input_path"]).read_text(), output=r["answer"]) for r in new]
         log("examples", it=it, ids=[r["id"] for r in new], answers=[r["answer"] for r in new])
@@ -122,8 +125,13 @@ def run(cfg: RunConfig, client, judge_client=None):
         user = (STATEMENT_GIVEN.format(statement=task.statement) if cfg.condition == "given" else STATEMENT_HIDDEN)
         user += EXAMPLES.format(k=len(new), total=len(examples), blocks=blocks)
         fb = history[-1]["feedback"] if history and cfg.feedback == "aggregate" else "This is the first iteration." if not history else "(no feedback)"
-        user += ITERATION.format(it=it, n_iter=cfg.n_iter, feedback=fb, best_acc=max(best["acc"], 0.0),
-                                 best_code=best["code"], statement=statement, steps=cfg.steps)
+        if best["it"] > 0:
+            best_block = (f"Current best program (validation accuracy {max(best['acc'], 0.0):.3f}):\n"
+                          f"```cpp\n{best['code']}\n```")
+        else:
+            best_block = "No valid program yet."
+        user += ITERATION.format(it=it, n_iter=cfg.n_iter, feedback=fb,
+                                 best_block=best_block, statement=statement, steps=cfg.steps)
         msgs = [dict(role="system", content=sys_msg), dict(role="user", content=user)]
         log("prompt", it=it, system=sys_msg, user=user)
         code, submitted = None, None
@@ -138,6 +146,18 @@ def run(cfg: RunConfig, client, judge_client=None):
             log("reply", it=it, step=step, content=text, reasoning=r["reasoning"], action=act,
                 statement=statement, code=code, prompt_tokens=r["prompt_tokens"], completion_tokens=r["completion_tokens"])
             msgs.append(dict(role="assistant", content=text))
+            if act == "submit" and not code:
+                obs = ("Invalid submission: no complete ```cpp block found. The evaluator scores only the code, "
+                       "not the statement or prose. Write the full program in a ```cpp block and submit again.")
+                msgs.append(dict(role="user", content=obs + f"\n({cfg.steps - step} steps left.)"))
+                continue
+            if act == "submit" and step < cfg.steps:
+                ok, clog, _ = compile_cpp(code, out / f"it{it}" / f"pre_submit")
+                if not ok:
+                    obs = ("Your submission does not compile and was not submitted. Fix these errors and "
+                           "call <action>test</action> or <action>submit</action> again:\n" + clog[-1800:])
+                    msgs.append(dict(role="user", content=obs + f"\n({cfg.steps - step} steps left.)"))
+                    continue
             if act == "submit" or step == cfg.steps:
                 submitted = code; break
             obs = tool(act, text, code, examples, out / f"it{it}", log, it, step)
@@ -173,14 +193,33 @@ def run(cfg: RunConfig, client, judge_client=None):
 
 
 def tool(act, text, code, examples, wd, log, it, step):
-    if act not in ("test", "run", "stress"):
-        return "No valid action found. End your reply with <action>test</action>, <action>run</action>, <action>stress</action> or <action>submit</action>."
+    if act == "read":
+        if step > 2:
+            return ("You have read enough. Write the full ```cpp program now and call <action>test</action> "
+                    "or <action>compile</action>.")
+        rel = (last_block(text, "input") or "").strip().splitlines()[0:1]
+        rel = rel[0].strip() if rel else ""
+        if not rel:
+            return "No ```input block with a file path found."
+        path = (wd / rel).resolve()
+        try:
+            path.relative_to(wd.resolve())
+        except ValueError:
+            return "That path is outside the working directory."
+        if not path.exists():
+            return f"No such file: {rel}"
+        return path.read_text()[:8000]
+    if act not in ("compile", "test", "run", "stress"):
+        return "No valid action found. Use <action>compile</action>, <action>test</action>, <action>run</action>, <action>read</action>, <action>stress</action> or <action>submit</action>."
     if not code:
-        return "No ```cpp block found yet."
+        return "No ```cpp block found yet. Write the full program in a ```cpp block."
     ok, clog, exe = compile_cpp(code, wd / f"s{step}")
     if not ok:
         log("tool", it=it, step=step, action=act, compile_ok=False, compile_log=clog)
         return f"Compilation failed:\n{clog}"
+    if act == "compile":
+        log("tool", it=it, step=step, action=act, compile_ok=True)
+        return "Compilation succeeded."
     if act == "test":
         lines, outs = [], []
         for i, e in enumerate(examples):

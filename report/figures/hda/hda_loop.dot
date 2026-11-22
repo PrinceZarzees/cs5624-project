@@ -1,0 +1,52 @@
+digraph HDA {
+  graph [rankdir=TB, splines=true, nodesep=0.28, ranksep=0.34, fontsize=10, pad=0.15];
+  node  [shape=box, style="rounded,filled", fillcolor="#F7F7F7", color="#444444", fontsize=8.5, margin="0.08,0.04"];
+  edge  [fontsize=7, color="#555555", arrowsize=0.6];
+
+  subgraph cluster_data {
+    label="Data (fixed seed)"; style="rounded,dashed"; color="#999999"; fontsize=9;
+    ex   [label="examples pool\n120/task · 4–50 nodes", fillcolor="#E8F1FB"];
+    val  [label="hidden validation\n40/task · 4–50 nodes", fillcolor="#E8F1FB"];
+    test [label="test splits\nsmall 4–50 · medium 100–300\nlarge 500–1000 · xl 2000\nstress 10k–100k", fillcolor="#E8F1FB"];
+    {rank=same; ex; val; test;}
+  }
+
+  subgraph cluster_loop {
+    label="Training loop — one run = task × condition × seed"; style="rounded"; color="#777777"; fontsize=9;
+    prompt [label="Prompt builder\nsystem prompt + statement\n+ k=5 examples + feedback\n+ best code", fillcolor="#FFF4E5"];
+    hda    [label="HDA model\nQwen3-4B / gpt-oss", fillcolor="#FFE0B2"];
+    reply  [label="Reply\n<statement> + reasoning\n+ ```cpp code``` + <action>", fillcolor="#FFF9C4"];
+    router [label="Action router", shape=diamond, style="filled", fillcolor="#E1F5FE", margin="0.01,0.01"];
+    tool   [label="Compiler + sandbox\ng++ -std=c++17\n1–5 s CPU · 1 GiB · 8 MiB stack", fillcolor="#E8F5E9"];
+    policy [label="Static policy\nstdlib · no hardcoding", fillcolor="#FCE4EC"];
+    eval   [label="Validation evaluator\n40 hidden graphs + 5 relabeled", fillcolor="#EDE7F6"];
+    fb     [label="Feedback\naccuracy · verdicts\nby size/family · max CPU", fillcolor="#FFF3E0"];
+  }
+
+  hstar [label="Best harness H*\nC++ code only", fillcolor="#C8E6C9"];
+  tests [label="Test evaluator\n5 splits · per-graph verdicts", fillcolor="#D1C4E9"];
+  logs  [label="Logs: log.jsonl / final.json", shape=note, fillcolor="#ECEFF1"];
+  note  [shape=note, fillcolor="#FFFFFF", label="The evaluator receives ONLY the ```cpp block.\n<statement> and reasoning are logged, not scored.\nHidden mode: a separate judge labels the statement."];
+
+  ex -> prompt [label="k=5 new examples (inline)"];
+  prompt -> hda [label="messages"];
+  hda -> reply;
+  reply -> router;
+  router -> tool [label="compile / test / run / stress"];
+  tool -> hda [label="diagnostics, verdicts\n(step loop ≤ 8)", style=dashed, constraint=false];
+  router -> policy [label="submit"];
+  policy -> fb [label="reject: policy,\nno code, or\ncompile error", color="#C62828"];
+  policy -> tool [label="allowed: compile"];
+  tool -> eval [label="compiled program"];
+  val -> eval [style=dashed];
+  eval -> fb [label="score + relabeling"];
+  eval -> hstar [label="new best", style=dashed];
+  fb -> prompt [label="next iteration (≤ 25)", style=dashed, constraint=false];
+  hstar -> tests [label="after last iteration"];
+  test -> tests [style=dashed];
+  tests -> logs;
+  eval -> logs [style=dotted, constraint=false];
+  note -> note [style=invis];
+
+  {rank=same; hstar; tests;}
+}

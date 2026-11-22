@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{amsmath}
@@ -187,6 +188,67 @@ After five iterations, $H^*$ is the submission with the best validation
 accuracy. It is evaluated once on \texttt{test\_small}, \texttt{test\_medium},
 \texttt{test\_large}, \texttt{test\_xl} and \texttt{test\_stress}. The problem
 statement is logged at every step but is not scored during training.
+
+
+\section{Training and validation loop: components and I/O}
+\label{sec:loop-diagram}
+
+Figure~\ref{fig:loop} shows one run. The inner loop is the \emph{step loop}
+(at most 8 replies); the outer loop is the \emph{iteration loop} (at most 25
+iterations in the current shortest-path run, 5 in the standard grid). Only the
+C++ block is compiled and scored; the statement and reasoning are logged but
+never passed to the evaluator.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=0.95\linewidth]{figures/hda/hda_loop.pdf}
+\caption{Training and validation loop. Solid arrows are data flow, dashed
+arrows are feedback or control. The evaluator receives only the \texttt{cpp}
+block.}
+\label{fig:loop}
+\end{figure}
+
+\begin{table}[p]
+\centering
+\small
+\begin{tabular}{p{3.0cm}p{4.6cm}p{5.6cm}}
+\toprule
+Component & Input & Output \\
+\midrule
+Data generator & split config (seed, node range, per-task count,
+families) & JSONL graph records with input text and expected answer; C++
+reference answers \\
+Prompt builder & system prompt, given/hidden condition, the $k$ new examples,
+last feedback, best code, iteration index & one message list (system + user)
+for the model \\
+HDA model & message list & reply containing \texttt{<statement>}, optional
+reasoning, a \texttt{cpp} block, and one action tag \\
+Action router & reply & tool call (\texttt{compile}, \texttt{test},
+\texttt{run}, \texttt{stress}) or \texttt{submit}; no code on submit is
+rejected \\
+Compiler + sandbox & C++ source, stdin, limits (1--5\,s, 1\,GiB, 8\,MiB
+stack) & compiler diagnostics; stdout/stderr; verdict AC/WA/TLE/RE/MLE; CPU
+seconds \\
+Static policy & C++ source, example answers & allow/reject with a reason
+(headers, I/O, threads, hardcoded tables) \\
+Validation evaluator & compiled program, 40 hidden validation graphs, 5
+relabeled copies & accuracy, verdict mix, accuracy by size and family, max
+CPU, relabeling failures \\
+Feedback builder & validation summary, policy/compile result & short text
+returned to the prompt builder \\
+Best-harness tracker & per-iteration code and validation score & $H^*$ (the
+best C++ program); ties go to the later iteration \\
+Test evaluator & $H^*$, the five test splits & per-graph verdicts and
+per-split accuracy; no test graph is shown to the HDA \\
+Statement judge (hidden) & true statement, inferred statement & EQUIVALENT /
+PARTIAL / WRONG; not used for scoring the program \\
+Logger & every event above & \texttt{log.jsonl} (prompts, replies, tools,
+submissions, iterations, tests) and \texttt{final.json} \\
+\bottomrule
+\end{tabular}
+\caption{Components, inputs and outputs.}
+\label{tab:components}
+\end{table}
 
 \section{Given and hidden problem statements}
 \label{sec:ident}
