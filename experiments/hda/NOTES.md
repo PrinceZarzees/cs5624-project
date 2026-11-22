@@ -39,3 +39,13 @@ report/tables/hda/tab_hda_given_all.csv.
   test_small mean q 0.9115, feasible 1.0, optimal 0.65 (13 AC, 7 FEAS),
   max CPU 0.007 s.
 - MIS/MVC have data and scoring but no runs yet.
+
+## Phase-2 3-iteration grid (given, k=5)
+
+- max clique: val [0.944, 0.755, 0.944]; test_small q 0.931, feasible 1.0,
+  optimal 0.70.
+- MIS: val [0.664, 0.965, 0.965]; test_small q 0.971, feasible 1.0,
+  optimal 0.70.
+- MVC: val [0.455, 0.455, 0.455]; test_small q 0.490, feasible 1.0,
+  optimal 0.00 (all feasible but poor covers).
+Summary: experiments/hda/phase2_grid_3it/summary.csv.
