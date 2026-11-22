@@ -99,3 +99,6 @@ experiments/hda/optimizers/**/cache/
 experiments/hda/optimizers/**/vllm*.log
 experiments/hda/optimizers/**/stdout.log
 experiments/hda/optimizers/**/stderr.log
+experiments/hda/optimizers/*.log
+experiments/hda/optimizers/*.out
+experiments/hda/optimizers/*.err

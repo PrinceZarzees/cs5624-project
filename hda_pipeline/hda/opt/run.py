@@ -201,9 +201,16 @@ def main():
     ap.add_argument("--rounds", type=int, default=10)
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--dry-run", action="store_true",
+                    help="one round, two instances, one HDA iteration")
     a = ap.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True); (out/"candidates").mkdir(exist_ok=True)
     a.cfg = {"model":a.model, "base_url":a.base_url}
+    if a.dry_run:
+        global INSTANCES
+        INSTANCES = [("shortest_path","given",200), ("bipartite_check","hidden",200)]
+        a.rounds = 1
+        a.cfg["n_iter"] = 1
     base, parent_rows = baseline_data(out)
     parent_mean = float(base.get("overall") or 0.0)
     chat = Chat(a.model, a.base_url)
@@ -212,7 +219,8 @@ def main():
     best, best_mean = fn(a, chat, out, {}, parent_rows, parent_mean, base, rng)
     save_candidate(best, out/"best.json")
     # 3-seed re-check (seeds 201,202; seed 200 comes from the best A score)
-    inst = [(t,c,s) for t in TASKS for c in ("given","hidden") for s in (201,202)]
+    inst = ([("shortest_path","given",201)]
+            if a.dry_run else [(t,c,s) for t in TASKS for c in ("given","hidden") for s in (201,202)])
     rows, m, _ = evaluate(best, a.cfg, out, instances=inst, workers=a.workers, tag="recheck")
     payload = dict(best_fields=best, best_A=best_mean, recheck_mean=m, n=len(rows),
                    proposer_calls=chat.calls, proposer_prompt_tokens=chat.prompt_tokens,

@@ -1,0 +1,3 @@
+{"tag": "evo1", "n": 2, "mean": 1.0, "hda_llm_calls": 6, "hda_prompt_tokens": 31868, "hda_completion_tokens": 5685, "wall_s": 405.9}
+{"tag": "step1", "n": 2, "mean": 0.75, "hda_llm_calls": 6, "hda_prompt_tokens": 34201, "hda_completion_tokens": 8738, "wall_s": 617.4}
+{"tag": "recheck", "n": 1, "mean": 1.0, "hda_llm_calls": 3, "hda_prompt_tokens": 19177, "hda_completion_tokens": 1798, "wall_s": 174.5}

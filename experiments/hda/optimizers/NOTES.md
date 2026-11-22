@@ -26,3 +26,19 @@ Empty prompt, acceptance set A = 20 instances x seeds 200/201/202, 60 rollouts:
 - O4 code for GEPA/SkillOpt/Meta-Harness/EvoSkill is in `hda/opt/run.py`;
   GEPA is queued on falcon a30 (job 926163, 18:00). O5 final grids wait on the
   optimized prompts.
+
+## CPU proposer dry runs (one round, two instances, one HDA iteration)
+
+All four optimizer entry points completed on the Q4 CPU server. No test split
+was read.
+
+- GEPA: proposal rejected; named `shortest path` and `Dijkstra`.
+- SkillOpt: valid edit, child mean 0.75 vs parent 0.830 -> not accepted.
+- Meta-Harness: proposal rejected; named `Dijkstra` and `shortest path`.
+- EvoSkill: one skill added to the frontier; child mean 0.75; best unchanged.
+- Proposer: Qwen3-4B Q4; 1 call each, ~5.4k prompt tokens (Evo 2.3k).
+- Recheck: shortest given seed 201 -> 1.0; no optimized prompt improved A.
+
+This validates the loops/validator but shows the 4B proposer is too weak/task-
+specific on CPU. The GPU run uses the same proposer unless a stronger model is
+available.
