@@ -1,0 +1,91 @@
+prompt,condition,split,mean,std,gap,gap_std,note
+unoptimized,given,val_opt,0.9933333333333333,0.02494438257849294,,,
+unoptimized,given,test_small,0.9833333333333333,0.06236095644623236,0.026666666666666665,0.16265163865007803,
+unoptimized,given,test_medium,0.9666633333333333,0.1043594221375765,,,
+unoptimized,given,test_large,0.9577766666666667,0.14553351889589636,,,
+unoptimized,given,test_xl,0.96,0.1374772708486752,,,
+unoptimized,given,test_stress,0.9566666666666667,0.16669999666733315,,,
+unoptimized,hidden,val_opt,0.6141666666666666,0.367632251335791,,,
+unoptimized,hidden,test_small,0.5841666666666667,0.3876469255506728,0.004166666666666668,0.11833626756925461,
+unoptimized,hidden,test_medium,0.56444,0.3992556103550707,,,
+unoptimized,hidden,test_large,0.55111,0.411023642750633,,,
+unoptimized,hidden,test_xl,0.5733333333333334,0.38594760726756105,,,
+unoptimized,hidden,test_stress,0.58,0.393615717843347,,,
+unoptimized,all,val_opt,0.80375,0.3222261434148384,,,
+unoptimized,all,test_small,0.78375,0.3419254609316676,0.015416666666666667,0.14267472231929834,
+unoptimized,all,test_medium,0.7655516666666666,0.3543922518395244,,,
+unoptimized,all,test_large,0.7544433333333334,0.3693300210591546,,,
+unoptimized,all,test_xl,0.7666666666666667,0.3482894709226157,,,
+unoptimized,all,test_stress,0.7683333333333333,0.3561327779853401,,,
+gepa,given,val_opt,0.9933333333333333,0.02494438257849294,,,unchanged; identical to unoptimized
+gepa,given,test_small,0.9833333333333333,0.06236095644623236,0.026666666666666665,0.16265163865007803,unchanged; identical to unoptimized
+gepa,given,test_medium,0.9666633333333333,0.1043594221375765,,,unchanged; identical to unoptimized
+gepa,given,test_large,0.9577766666666667,0.14553351889589636,,,unchanged; identical to unoptimized
+gepa,given,test_xl,0.96,0.1374772708486752,,,unchanged; identical to unoptimized
+gepa,given,test_stress,0.9566666666666667,0.16669999666733315,,,unchanged; identical to unoptimized
+gepa,hidden,val_opt,0.6141666666666666,0.367632251335791,,,unchanged; identical to unoptimized
+gepa,hidden,test_small,0.5841666666666667,0.3876469255506728,0.004166666666666668,0.11833626756925461,unchanged; identical to unoptimized
+gepa,hidden,test_medium,0.56444,0.3992556103550707,,,unchanged; identical to unoptimized
+gepa,hidden,test_large,0.55111,0.411023642750633,,,unchanged; identical to unoptimized
+gepa,hidden,test_xl,0.5733333333333334,0.38594760726756105,,,unchanged; identical to unoptimized
+gepa,hidden,test_stress,0.58,0.393615717843347,,,unchanged; identical to unoptimized
+gepa,all,val_opt,0.80375,0.3222261434148384,,,unchanged; identical to unoptimized
+gepa,all,test_small,0.78375,0.3419254609316676,0.015416666666666667,0.14267472231929834,unchanged; identical to unoptimized
+gepa,all,test_medium,0.7655516666666666,0.3543922518395244,,,unchanged; identical to unoptimized
+gepa,all,test_large,0.7544433333333334,0.3693300210591546,,,unchanged; identical to unoptimized
+gepa,all,test_xl,0.7666666666666667,0.3482894709226157,,,unchanged; identical to unoptimized
+gepa,all,test_stress,0.7683333333333333,0.3561327779853401,,,unchanged; identical to unoptimized
+skillopt,given,val_opt,0.9933333333333333,0.02494438257849294,,,unchanged; identical to unoptimized
+skillopt,given,test_small,0.9833333333333333,0.06236095644623236,0.026666666666666665,0.16265163865007803,unchanged; identical to unoptimized
+skillopt,given,test_medium,0.9666633333333333,0.1043594221375765,,,unchanged; identical to unoptimized
+skillopt,given,test_large,0.9577766666666667,0.14553351889589636,,,unchanged; identical to unoptimized
+skillopt,given,test_xl,0.96,0.1374772708486752,,,unchanged; identical to unoptimized
+skillopt,given,test_stress,0.9566666666666667,0.16669999666733315,,,unchanged; identical to unoptimized
+skillopt,hidden,val_opt,0.6141666666666666,0.367632251335791,,,unchanged; identical to unoptimized
+skillopt,hidden,test_small,0.5841666666666667,0.3876469255506728,0.004166666666666668,0.11833626756925461,unchanged; identical to unoptimized
+skillopt,hidden,test_medium,0.56444,0.3992556103550707,,,unchanged; identical to unoptimized
+skillopt,hidden,test_large,0.55111,0.411023642750633,,,unchanged; identical to unoptimized
+skillopt,hidden,test_xl,0.5733333333333334,0.38594760726756105,,,unchanged; identical to unoptimized
+skillopt,hidden,test_stress,0.58,0.393615717843347,,,unchanged; identical to unoptimized
+skillopt,all,val_opt,0.80375,0.3222261434148384,,,unchanged; identical to unoptimized
+skillopt,all,test_small,0.78375,0.3419254609316676,0.015416666666666667,0.14267472231929834,unchanged; identical to unoptimized
+skillopt,all,test_medium,0.7655516666666666,0.3543922518395244,,,unchanged; identical to unoptimized
+skillopt,all,test_large,0.7544433333333334,0.3693300210591546,,,unchanged; identical to unoptimized
+skillopt,all,test_xl,0.7666666666666667,0.3482894709226157,,,unchanged; identical to unoptimized
+skillopt,all,test_stress,0.7683333333333333,0.3561327779853401,,,unchanged; identical to unoptimized
+meta_harness,given,val_opt,0.9933333333333333,0.02494438257849294,,,unchanged; identical to unoptimized
+meta_harness,given,test_small,0.9833333333333333,0.06236095644623236,0.026666666666666665,0.16265163865007803,unchanged; identical to unoptimized
+meta_harness,given,test_medium,0.9666633333333333,0.1043594221375765,,,unchanged; identical to unoptimized
+meta_harness,given,test_large,0.9577766666666667,0.14553351889589636,,,unchanged; identical to unoptimized
+meta_harness,given,test_xl,0.96,0.1374772708486752,,,unchanged; identical to unoptimized
+meta_harness,given,test_stress,0.9566666666666667,0.16669999666733315,,,unchanged; identical to unoptimized
+meta_harness,hidden,val_opt,0.6141666666666666,0.367632251335791,,,unchanged; identical to unoptimized
+meta_harness,hidden,test_small,0.5841666666666667,0.3876469255506728,0.004166666666666668,0.11833626756925461,unchanged; identical to unoptimized
+meta_harness,hidden,test_medium,0.56444,0.3992556103550707,,,unchanged; identical to unoptimized
+meta_harness,hidden,test_large,0.55111,0.411023642750633,,,unchanged; identical to unoptimized
+meta_harness,hidden,test_xl,0.5733333333333334,0.38594760726756105,,,unchanged; identical to unoptimized
+meta_harness,hidden,test_stress,0.58,0.393615717843347,,,unchanged; identical to unoptimized
+meta_harness,all,val_opt,0.80375,0.3222261434148384,,,unchanged; identical to unoptimized
+meta_harness,all,test_small,0.78375,0.3419254609316676,0.015416666666666667,0.14267472231929834,unchanged; identical to unoptimized
+meta_harness,all,test_medium,0.7655516666666666,0.3543922518395244,,,unchanged; identical to unoptimized
+meta_harness,all,test_large,0.7544433333333334,0.3693300210591546,,,unchanged; identical to unoptimized
+meta_harness,all,test_xl,0.7666666666666667,0.3482894709226157,,,unchanged; identical to unoptimized
+meta_harness,all,test_stress,0.7683333333333333,0.3561327779853401,,,unchanged; identical to unoptimized
+evoskill,given,val_opt,0.9933333333333333,0.02494438257849294,,,unchanged; identical to unoptimized
+evoskill,given,test_small,0.9833333333333333,0.06236095644623236,0.026666666666666665,0.16265163865007803,unchanged; identical to unoptimized
+evoskill,given,test_medium,0.9666633333333333,0.1043594221375765,,,unchanged; identical to unoptimized
+evoskill,given,test_large,0.9577766666666667,0.14553351889589636,,,unchanged; identical to unoptimized
+evoskill,given,test_xl,0.96,0.1374772708486752,,,unchanged; identical to unoptimized
+evoskill,given,test_stress,0.9566666666666667,0.16669999666733315,,,unchanged; identical to unoptimized
+evoskill,hidden,val_opt,0.6141666666666666,0.367632251335791,,,unchanged; identical to unoptimized
+evoskill,hidden,test_small,0.5841666666666667,0.3876469255506728,0.004166666666666668,0.11833626756925461,unchanged; identical to unoptimized
+evoskill,hidden,test_medium,0.56444,0.3992556103550707,,,unchanged; identical to unoptimized
+evoskill,hidden,test_large,0.55111,0.411023642750633,,,unchanged; identical to unoptimized
+evoskill,hidden,test_xl,0.5733333333333334,0.38594760726756105,,,unchanged; identical to unoptimized
+evoskill,hidden,test_stress,0.58,0.393615717843347,,,unchanged; identical to unoptimized
+evoskill,all,val_opt,0.80375,0.3222261434148384,,,unchanged; identical to unoptimized
+evoskill,all,test_small,0.78375,0.3419254609316676,0.015416666666666667,0.14267472231929834,unchanged; identical to unoptimized
+evoskill,all,test_medium,0.7655516666666666,0.3543922518395244,,,unchanged; identical to unoptimized
+evoskill,all,test_large,0.7544433333333334,0.3693300210591546,,,unchanged; identical to unoptimized
+evoskill,all,test_xl,0.7666666666666667,0.3482894709226157,,,unchanged; identical to unoptimized
+evoskill,all,test_stress,0.7683333333333333,0.3561327779853401,,,unchanged; identical to unoptimized
