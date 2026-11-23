@@ -106,3 +106,4 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 | `figures/hda_nocompiler/fig_nocompiler_accuracy.pdf` | Accuracy by split, two panels | `compare_all10.csv` |
 | `figures/hda_nocompiler/fig_nocompiler_effects.pdf` | Per-task effect and win/tie/loss counts | `compare_all10.csv` |
 | `figures/hda_nocompiler/fig_nocompiler_cost.pdf` | Prompt tokens and failed submissions | `compare_all10.csv`, `summary.csv` |
+| `hda_paper.pdf` | Rebuilt with Tectonic 0.17 (no system LaTeX); 12 pages | `hda_paper.tex` |

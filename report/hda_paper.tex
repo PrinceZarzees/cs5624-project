@@ -273,7 +273,7 @@ compiler loop is worth its cost for this interface: it prevents avoidable compil
 hidden-statement search, and removing it saves tokens but loses accuracy,
 especially where the task must be identified from examples.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \small
 \input{tables/hda_nocompiler/tab_nocompiler.tex}
@@ -282,7 +282,7 @@ compiler-on grid; ``off'' disables the interactive compiler tools.}
 \label{tab:nocomp}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \small
 \input{tables/hda_nocompiler/tab_nocompiler_ci.tex}
@@ -291,7 +291,7 @@ compiler-on grid; ``off'' disables the interactive compiler tools.}
 \label{tab:nocomp:ci}
 \end{table}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/hda_nocompiler/fig_nocompiler_accuracy.pdf}
 \caption{Accuracy by split with and without the compiler. Panel titles give
@@ -299,7 +299,7 @@ mean prompt tokens per run.}
 \label{fig:nocomp:acc}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/hda_nocompiler/fig_nocompiler_effects.pdf}
 \caption{Compiler-tool effects. (a) Per-task difference on test\_small,
@@ -308,13 +308,6 @@ compiler-off minus compiler-on. (b) Paired win/tie/loss counts over the 60
 \label{fig:nocomp:eff}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.82\linewidth]{figures/hda_nocompiler/fig_nocompiler_cost.pdf}
-\caption{Cost and reliability. (a) Prompt tokens per run. (b) Failed
-submissions in the 60-run grid, split into compiler errors and other causes.}
-\label{fig:nocomp:cost}
-\end{figure}
 % <<< AI-DRAFT
 
 % >>> AI-DRAFT (HDA-OPT-O7, 2026-11-22)
@@ -549,6 +542,20 @@ python -m hda.agent --task max_clique --condition given \
   --out runs/max_clique --base-url http://HOST:PORT/v1
 python -m hda.aggregate --runs runs/main --out report/tables/hda
 \end{verbatim}
+
+\section{Compiler-tool ablation: cost and failures}
+\label{app:nocomp}
+
+Figure~\ref{fig:nocomp:cost} shows the token cost and the failed-submission
+counts discussed in Section~\ref{sec:nocompiler}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/hda_nocompiler/fig_nocompiler_cost.pdf}
+\caption{Cost and reliability. (a) Prompt tokens per run. (b) Failed
+submissions in the 60-run grid, split into compiler errors and other causes.}
+\label{fig:nocomp:cost}
+\end{figure}
 
 \begin{thebibliography}{9}
 \bibitem{grapharena} GraphArena: A benchmark for graph reasoning.
