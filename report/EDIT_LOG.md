@@ -94,3 +94,15 @@ Both edits are inside the `% >>> AI-DRAFT` block (lines ~103+).
 | Location | Change | Source |
 |---|---|---|
 | main.tex HDA section | added combined loop/message diagram, all-task given results table and heatmap; replaced pilot text with corrected 10-task results | experiments/hda/all_given_fixed_3it, report/hda_report.tex |
+
+## 2026-11-22 compiler-tool ablation (inside new AI-DRAFT block)
+
+| Location | Change | Source |
+|---|---|---|
+| `hda_paper.tex` abstract | Added the compiler-off/on validation and failure counts | `experiments/hda/nocompiler_grid_all10/summary.csv` |
+| `hda_paper.tex` new "Compiler-tool ablation" | Added method, results, paired bootstrap, per-task exceptions, cost, and caveats | `experiments/hda/nocompiler_grid_all10/{compare_all10.csv,summary.csv,bootstrap.json,per_task_delta.csv}` |
+| `tables/hda_nocompiler/tab_nocompiler.tex` | Accuracy by condition and split, compiler on/off | `summary.csv` |
+| `tables/hda_nocompiler/tab_nocompiler_ci.tex` | Paired bootstrap differences and 95% CIs | `bootstrap.json` |
+| `figures/hda_nocompiler/fig_nocompiler_accuracy.pdf` | Accuracy by split, two panels | `compare_all10.csv` |
+| `figures/hda_nocompiler/fig_nocompiler_effects.pdf` | Per-task effect and win/tie/loss counts | `compare_all10.csv` |
+| `figures/hda_nocompiler/fig_nocompiler_cost.pdf` | Prompt tokens and failed submissions | `compare_all10.csv`, `summary.csv` |

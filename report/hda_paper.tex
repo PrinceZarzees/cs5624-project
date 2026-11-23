@@ -36,6 +36,10 @@ set reach 0.93 and 0.97 of optimal on small exact references; min vertex cover
 is the weak case (0.49, all feasible, never optimal). At scale, MIS quality
 falls from 0.75 on 500--1000 nodes to 0.15 on 2{,}000 and 0.05 on 10k--20k,
 while MVC becomes infeasible above small graphs.
+% >>> AI-DRAFT (HDA-NOCOMPILER-ABSTRACT, 2026-11-22)
+Removing the compiler tool drops validation accuracy from 0.754 to 0.613 and
+raises failed submissions from 4 to 17, while saving 4.4$\times$ prompt tokens.
+% <<< AI-DRAFT
 % >>> AI-DRAFT (HDA-OPT-ABSTRACT, 2026-11-22)
 Four automatic prompt optimizers (GEPA, SkillOpt, Meta-Harness, EvoSkill)
 accepted zero edits with a 4B proposer; because the same empty prompt varied by
@@ -214,6 +218,104 @@ Above 60 nodes the reference is a frozen heuristic, not a proof.}
 \caption{Phase-2 quality by task and split; F is the feasible rate.}
 \label{fig:p2}
 \end{figure}
+
+% >>> AI-DRAFT (HDA-NOCOMPILER-O7, 2026-11-22)
+\subsection{Compiler-tool ablation}
+\label{sec:nocompiler}
+
+The HDA interface gives the model a real \texttt{g++} compiler: it can compile,
+run the examples, test candidate interpretations, and read diagnostics before
+submitting. To measure what this loop contributes, we reran the phase-1 grid
+with the compiler tool disabled. In the ablation the prompt lists only
+\texttt{submit}; \texttt{compile}, \texttt{test}, \texttt{run} and
+\texttt{stress} are unavailable, the pre-submit compile check is skipped, and a
+rejected submission does not include compiler diagnostics. The evaluator still
+compiles the submitted program, so a program that does not compile scores zero.
+All other prompt text, the model and the frozen config are unchanged.
+
+The grid is ten tasks $\times$ \{given, hidden\} $\times$ seeds 0--2, matched to
+the compiler-on final grid of Section~\ref{sec:optimizers}.
+Table~\ref{tab:nocomp} and Figure~\ref{fig:nocomp:acc} give the result. Without
+the compiler, mean validation accuracy falls from 0.754 to 0.613, and test
+accuracy falls from 0.784 to 0.644 on small graphs and from 0.768 to 0.613 on
+stress graphs. The drop is larger in the hidden condition (0.521 to 0.338) than
+in the given condition (0.986 to 0.888). A paired bootstrap over the 60
+(task, condition, seed) pairs gives negative 95\% intervals on every split
+(Table~\ref{tab:nocomp:ci}), so the effect is not a seed fluctuation at this
+sample size.
+
+The compiler mainly buys compile-error recovery and a way to test candidate
+statements. Compiler-off produced 17 failed submissions in 60 runs, 16 of them
+compiler errors, versus 4 failures with the compiler. The clearest case is
+connected components in the given condition: all three compiler-off seeds fail
+every submission with the same error (a recursive \texttt{find} used before
+\texttt{auto} deduction), so validation is zero and no test result exists;
+compiler-on solves the task, with one seed needing a single fix. The hidden
+condition also loses the ability to run small checkers for candidate
+interpretations, which explains why most hidden tasks drop sharply
+(Figure~\ref{fig:nocomp:eff}a).
+
+The loss is not uniform. Hidden shortest path ($+0.34$) and reachability
+($+0.12$) score higher without the compiler, but that is a compiler-on failure
+in statement identification, not a benefit of removing the tool: the
+compiler-on shortest-path seed~1 misidentified the problem and scored zero.
+Scale behavior is also noisy: max-flow stress is 0.1/1.0/1.0 with the compiler
+and 0.3/0.3/0.3 without it in the full grid, while the pilot seed~1 scored 1.0
+without the compiler. Figure~\ref{fig:nocomp:eff}b counts the paired outcomes:
+most runs tie because both arms solve the task, and when they differ the
+compiler-on arm wins more often than it loses on every split except the two
+hidden identification cases above.
+
+The compiler is not free: compiler-on uses 76.7k prompt tokens per run versus
+17.5k without it, a factor of 4.4$\times$. The cost is concentrated in hidden runs
+(99.6k versus 22.1k tokens; Figure~\ref{fig:nocomp:cost}). We conclude that the
+compiler loop is worth its cost for this interface: it prevents avoidable compile failures and supports the
+hidden-statement search, and removing it saves tokens but loses accuracy,
+especially where the task must be identified from examples.
+
+\begin{table}[H]
+\centering
+\small
+\input{tables/hda_nocompiler/tab_nocompiler.tex}
+\caption{Compiler-tool ablation (ten tasks, seeds 0--2). ``on'' is the matched
+compiler-on grid; ``off'' disables the interactive compiler tools.}
+\label{tab:nocomp}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\input{tables/hda_nocompiler/tab_nocompiler_ci.tex}
+\caption{Paired bootstrap for compiler-off minus compiler-on over the 60
+(task, condition, seed) pairs; 10{,}000 resamples.}
+\label{tab:nocomp:ci}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/hda_nocompiler/fig_nocompiler_accuracy.pdf}
+\caption{Accuracy by split with and without the compiler. Panel titles give
+mean prompt tokens per run.}
+\label{fig:nocomp:acc}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/hda_nocompiler/fig_nocompiler_effects.pdf}
+\caption{Compiler-tool effects. (a) Per-task difference on test\_small,
+compiler-off minus compiler-on. (b) Paired win/tie/loss counts over the 60
+(task, condition, seed) runs.}
+\label{fig:nocomp:eff}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/hda_nocompiler/fig_nocompiler_cost.pdf}
+\caption{Cost and reliability. (a) Prompt tokens per run. (b) Failed
+submissions in the 60-run grid, split into compiler errors and other causes.}
+\label{fig:nocomp:cost}
+\end{figure}
+% <<< AI-DRAFT
 
 % >>> AI-DRAFT (HDA-OPT-O7, 2026-11-22)
 \subsection{Prompt-optimizer baselines}
