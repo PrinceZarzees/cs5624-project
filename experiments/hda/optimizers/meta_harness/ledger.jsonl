@@ -1,0 +1,4 @@
+{"tag": "meta2", "n": 20, "mean": 0.925, "hda_llm_calls": 233, "hda_prompt_tokens": 1378126, "hda_completion_tokens": 248619, "wall_s": 7332.9}
+{"tag": "meta3", "n": 20, "mean": 0.925, "hda_llm_calls": 233, "hda_prompt_tokens": 1378126, "hda_completion_tokens": 248619, "wall_s": 7332.9}
+{"tag": "meta4", "n": 20, "mean": 0.925, "hda_llm_calls": 233, "hda_prompt_tokens": 1378126, "hda_completion_tokens": 248619, "wall_s": 7332.9}
+{"tag": "recheck", "n": 40, "mean": 0.84, "hda_llm_calls": 480, "hda_prompt_tokens": 2976555, "hda_completion_tokens": 589535, "wall_s": 20623.7}

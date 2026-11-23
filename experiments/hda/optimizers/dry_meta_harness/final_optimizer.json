@@ -1,0 +1,9 @@
+{
+  "best_fields": {},
+  "best_A": 0.8295833333333333,
+  "recheck_mean": 1.0,
+  "n": 1,
+  "proposer_calls": 1,
+  "proposer_prompt_tokens": 5415,
+  "proposer_completion_tokens": 334
+}

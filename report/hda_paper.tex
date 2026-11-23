@@ -35,7 +35,18 @@ normalized quality under a feasibility gate. Max clique and maximum independent
 set reach 0.93 and 0.97 of optimal on small exact references; min vertex cover
 is the weak case (0.49, all feasible, never optimal). At scale, MIS quality
 falls from 0.75 on 500--1000 nodes to 0.15 on 2{,}000 and 0.05 on 10k--20k,
-while MVC becomes infeasible above small graphs. The pipeline, prompts, splits,
+while MVC becomes infeasible above small graphs.
+% >>> AI-DRAFT (HDA-NOCOMPILER-ABSTRACT, 2026-11-22)
+Removing the compiler tool drops validation accuracy from 0.754 to 0.613 and
+raises failed submissions from 4 to 17, while saving 4.4$\times$ prompt tokens.
+% <<< AI-DRAFT
+% >>> AI-DRAFT (HDA-OPT-ABSTRACT, 2026-11-22)
+Four automatic prompt optimizers (GEPA, SkillOpt, Meta-Harness, EvoSkill)
+accepted zero edits with a 4B proposer; because the same empty prompt varied by
+0.04--0.06 across seed-200 reruns, above the 0.02 acceptance margin, the five
+final prompts are identical and only one final grid is needed.
+% <<< AI-DRAFT
+The pipeline, prompts, splits,
 logs and scoring code are released with the paper.
 \end{abstract}
 
@@ -208,6 +219,215 @@ Above 60 nodes the reference is a frozen heuristic, not a proof.}
 \label{fig:p2}
 \end{figure}
 
+% >>> AI-DRAFT (HDA-NOCOMPILER-O7, 2026-11-22)
+\subsection{Compiler-tool ablation}
+\label{sec:nocompiler}
+
+The HDA interface gives the model a real \texttt{g++} compiler: it can compile,
+run the examples, test candidate interpretations, and read diagnostics before
+submitting. To measure what this loop contributes, we reran the phase-1 grid
+with the compiler tool disabled. In the ablation the prompt lists only
+\texttt{submit}; \texttt{compile}, \texttt{test}, \texttt{run} and
+\texttt{stress} are unavailable, the pre-submit compile check is skipped, and a
+rejected submission does not include compiler diagnostics. The evaluator still
+compiles the submitted program, so a program that does not compile scores zero.
+All other prompt text, the model and the frozen config are unchanged.
+
+The grid is ten tasks $\times$ \{given, hidden\} $\times$ seeds 0--2, matched to
+the compiler-on final grid of Section~\ref{sec:optimizers}.
+Table~\ref{tab:nocomp} and Figure~\ref{fig:nocomp:acc} give the result. Without
+the compiler, mean validation accuracy falls from 0.754 to 0.613, and test
+accuracy falls from 0.784 to 0.644 on small graphs and from 0.768 to 0.613 on
+stress graphs. The drop is larger in the hidden condition (0.521 to 0.338) than
+in the given condition (0.986 to 0.888). A paired bootstrap over the 60
+(task, condition, seed) pairs gives negative 95\% intervals on every split
+(Table~\ref{tab:nocomp:ci}), so the effect is not a seed fluctuation at this
+sample size.
+
+The compiler mainly buys compile-error recovery and a way to test candidate
+statements. Compiler-off produced 17 failed submissions in 60 runs, 16 of them
+compiler errors, versus 4 failures with the compiler. The clearest case is
+connected components in the given condition: all three compiler-off seeds fail
+every submission with the same error (a recursive \texttt{find} used before
+\texttt{auto} deduction), so validation is zero and no test result exists;
+compiler-on solves the task, with one seed needing a single fix. The hidden
+condition also loses the ability to run small checkers for candidate
+interpretations, which explains why most hidden tasks drop sharply
+(Figure~\ref{fig:nocomp:eff}a).
+
+The loss is not uniform. Hidden shortest path ($+0.34$) and reachability
+($+0.12$) score higher without the compiler, but that is a compiler-on failure
+in statement identification, not a benefit of removing the tool: the
+compiler-on shortest-path seed~1 misidentified the problem and scored zero.
+Scale behavior is also noisy: max-flow stress is 0.1/1.0/1.0 with the compiler
+and 0.3/0.3/0.3 without it in the full grid, while the pilot seed~1 scored 1.0
+without the compiler. Figure~\ref{fig:nocomp:eff}b counts the paired outcomes:
+most runs tie because both arms solve the task, and when they differ the
+compiler-on arm wins more often than it loses on every split except the two
+hidden identification cases above.
+
+The compiler is not free: compiler-on uses 76.7k prompt tokens per run versus
+17.5k without it, a factor of 4.4$\times$. The cost is concentrated in hidden runs
+(99.6k versus 22.1k tokens; Figure~\ref{fig:nocomp:cost}). We conclude that the
+compiler loop is worth its cost for this interface: it prevents avoidable compile failures and supports the
+hidden-statement search, and removing it saves tokens but loses accuracy,
+especially where the task must be identified from examples.
+
+\begin{table}[htbp]
+\centering
+\small
+\input{tables/hda_nocompiler/tab_nocompiler.tex}
+\caption{Compiler-tool ablation (ten tasks, seeds 0--2). ``on'' is the matched
+compiler-on grid; ``off'' disables the interactive compiler tools.}
+\label{tab:nocomp}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\input{tables/hda_nocompiler/tab_nocompiler_ci.tex}
+\caption{Paired bootstrap for compiler-off minus compiler-on over the 60
+(task, condition, seed) pairs; 10{,}000 resamples.}
+\label{tab:nocomp:ci}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/hda_nocompiler/fig_nocompiler_accuracy.pdf}
+\caption{Accuracy by split with and without the compiler. Panel titles give
+mean prompt tokens per run.}
+\label{fig:nocomp:acc}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/hda_nocompiler/fig_nocompiler_effects.pdf}
+\caption{Compiler-tool effects. (a) Per-task difference on test\_small,
+compiler-off minus compiler-on. (b) Paired win/tie/loss counts over the 60
+(task, condition, seed) runs.}
+\label{fig:nocomp:eff}
+\end{figure}
+
+% <<< AI-DRAFT
+
+% >>> AI-DRAFT (HDA-OPT-O7, 2026-11-22)
+\subsection{Prompt-optimizer baselines}
+\label{sec:optimizers}
+
+We ran four automatic prompt optimizers on the HDA prompt: GEPA
+\cite{gepa}, SkillOpt \cite{skillopt}, Meta-Harness, and EvoSkill
+\cite{evoskill}. All four changed only three appended text fields (strategy
+notes, hidden-statement procedure, iteration note); the fixed contract, tool
+protocol, input format and graph template were read-only. A validator rejected
+any field longer than its limit, containing a pasted solver or a 3+ digit
+number, or naming a benchmark task or its textbook algorithm, so a prompt could
+not hand the agent the task list or a known solution. Optimization used a
+20-instance acceptance set (ten tasks $\times$ two conditions, seed 200) scored
+on \texttt{val\_opt}, a 400-record split with zero graph overlap with
+\texttt{examples}, \texttt{val} or any test split. No optimizer process could
+read a test split. The HDA was the same Qwen3-4B-Instruct-2507 checkpoint and
+frozen config as the grid ($k=5$, three iterations, eight tool steps,
+temperature 0.2, 4{,}096-token replies, 32k context). The proposer was the same
+4B model: no larger model was available on the cluster, a limitation because
+prior work found that 4B critics propose poor edits. Each optimizer got four
+rounds and up to 240 HDA rollouts.
+
+\textbf{Result: zero accepted edits.} Table~\ref{tab:optout} summarizes the 20
+proposals. Sixteen were rejected by the validator, mostly for naming
+\texttt{shortest path}, \texttt{Dijkstra}, \texttt{reachability} or
+\texttt{connected component}; the proposer ignored the task-agnostic
+instruction. Four valid candidates were evaluated on the acceptance set but
+none reached the $+0.02$ margin: GEPA's best child scored 0.784 and SkillOpt's
+three children scored 0.825 against the 0.830 parent. Consequently every
+optimizer returned the empty prompt, the five prompt files are byte-identical,
+and one final grid serves all five rows; we did not run four redundant grids.
+
+\textbf{Noise exceeds the acceptance margin.} Re-running the empty prompt on
+the 20-instance acceptance set at seed 200 gave 0.825, 0.890 and 0.925 across
+the three optimizer jobs, versus 0.859 in the baseline; the seed 201/202
+rechecks gave 0.748, 0.840 and 0.817 versus 0.815. The run-to-run standard
+deviation is roughly 0.04--0.06, two to three times the 0.02 acceptance margin.
+A 20-instance single-seed acceptance set therefore cannot separate a real small
+improvement from sampling noise. This is the main methodological finding of the
+baseline study, and it is consistent with the RRSI warning that validation
+gains can be noise rather than transferable improvement \cite{rrsi}.
+
+\textbf{Unoptimized reference grid.} Table~\ref{tab:optsplits} gives the frozen
+final grid for the unoptimized prompt (60 runs, seeds 0--2, all test splits).
+Given statements are near ceiling and hidden statements are not: 11 of 30
+hidden runs identify the statement correctly (judge label EQUIVALENT) and 11 of
+30 reach test\_small accuracy at least 0.95. Hidden accuracy is 0.58 on small
+graphs and 0.58 on stress graphs, so the gap is in identification, not scale.
+The four optimized prompts have exactly these numbers.
+
+\textbf{Cost.} Table~\ref{tab:optcost} lists optimization cost. The four
+optimizers used 4.5M--5.4M HDA tokens each and 3.8 GPU-hours in total; the
+shared baseline used 0.2 GPU-hour and the final grid 0.9 GPU-hour. Proposer
+cost was small (20 calls and about 65k prompt tokens plus 2.6k completion
+tokens for the three runs that logged it; GEPA's proposer tokens were not
+logged before the instrumentation patch). No large graph was executed during
+optimization.
+
+\textbf{Interpretation.} With a 4B proposer, none of the four methods improved
+the HDA prompt. The negative result has three causes: proposal quality (the
+proposer kept naming tasks and textbook algorithms), the task-agnostic
+validator (which correctly rejected those proposals), and acceptance-set noise
+(which is larger than the effect being sought). A stronger proposer and a
+larger, multi-seed acceptance set are the obvious next steps; both change the
+experiment and were not tried after seeing these results.
+
+\begin{table}[H]
+\centering
+\small
+\input{tables/hda_optimizers/tab_opt_outcomes.tex}
+\caption{Optimizer outcomes on the acceptance set. ``Rejected'' counts
+task-agnostic validation failures; ``Valid'' proposals were evaluated on the
+20-instance set; ``Recheck'' is the 3-seed mean of the returned (empty) prompt.
+All four returned the unoptimized prompt.}
+\label{tab:optout}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\input{tables/hda_optimizers/tab_final_splits.tex}
+\caption{Unoptimized final grid on the frozen config (mean over seeds 0--2;
+standard deviation in parentheses). The four optimized prompt files are
+identical to this one.}
+\label{tab:optsplits}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Run & Rollouts & HDA tokens (M) & Proposer calls & GPU-h \\
+\midrule
+Shared baseline & 60 & 5.05 & -- & 0.20 \\
+GEPA & 53 & 4.54 & 8 & 1.01 \\
+SkillOpt & 57 & 5.35 & 4 & 1.11 \\
+Meta-Harness & 60 & 5.19 & 4 & 0.88 \\
+EvoSkill & 60 & 4.88 & 4 & 0.77 \\
+Final grid & 60 & 5.51 & -- & 0.91 \\
+\bottomrule
+\end{tabular}
+\caption{Optimization cost. Rollouts are uncached HDA runs; HDA tokens are
+prompt plus completion tokens. Cost covers small-graph optimization only.}
+\label{tab:optcost}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\linewidth]{figures/hda_optimizers/fig1_tokens_vs_acceptance.pdf}
+\caption{Best acceptance score versus cumulative HDA tokens. No optimizer
+accepted an edit, so every curve stays at the parent score (0.830); the shaded
+band is the baseline spread across seeds. Crosses are valid children that were
+evaluated and rejected.}
+\label{fig:opt}
+\end{figure}
+% <<< AI-DRAFT
+
 \section{Discussion and limitations}
 The main phase-1 result is that a 4B model can write a correct, scale-safe C++
 graph harness for most polynomial tasks when the interface is unambiguous and
@@ -226,7 +446,15 @@ Limitations: only Qwen3-4B Q4 on CPU was run; the intended gpt-oss-120b/BF16
 grid was blocked by the GPU queue. Phase 2 uses one seed and one iteration at
 large sizes; best-known references above 60 nodes are heuristics, so
 max-clique $q=1$ is not proof of optimality. Hidden-statement runs at scale and
-NP-hard integer-programming references are future work. All HDA prose in the
+NP-hard integer-programming references are future work.
+% >>> AI-DRAFT (HDA-OPT-LIMITS, 2026-11-22)
+The optimizer study is limited by using the same 4B model as proposer, four
+rounds and 20 proposals per method, and a small single-seed acceptance set
+whose rerun noise (0.04--0.06) exceeds the 0.02 acceptance margin. A stronger
+proposer and a multi-seed acceptance set were not tried after seeing these
+results, to avoid tuning the baseline to its outcome.
+% <<< AI-DRAFT
+All HDA prose in the
 course report is an AI draft and must be rewritten by the authors.
 
 \section*{Supplementary material}
@@ -315,13 +543,31 @@ python -m hda.agent --task max_clique --condition given \
 python -m hda.aggregate --runs runs/main --out report/tables/hda
 \end{verbatim}
 
+\section{Compiler-tool ablation: cost and failures}
+\label{app:nocomp}
+
+Figure~\ref{fig:nocomp:cost} shows the token cost and the failed-submission
+counts discussed in Section~\ref{sec:nocompiler}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/hda_nocompiler/fig_nocompiler_cost.pdf}
+\caption{Cost and reliability. (a) Prompt tokens per run. (b) Failed
+submissions in the 60-run grid, split into compiler errors and other causes.}
+\label{fig:nocomp:cost}
+\end{figure}
+
 \begin{thebibliography}{9}
 \bibitem{grapharena} GraphArena: A benchmark for graph reasoning.
 \bibitem{graphqa} GraphQA: A benchmark for graph question answering.
-\bibitem{gepa} GEPA: reflective prompt evolution.
-\bibitem{skillopt} SkillOpt: skill-level optimization.
-\bibitem{rrsi} RRSI: regularized reflective self-improvement.
-\bibitem{evoskill} EvoSkill: evolving reusable skills.
+\bibitem{gepa} L. A. Agrawal et al. GEPA: Reflective Prompt Evolution Can
+Outperform Reinforcement Learning. arXiv:2507.19457, 2025.
+\bibitem{skillopt} Y. Yang et al. SkillOpt: Executive Strategy for
+Self-Evolving Agent Skills. arXiv:2605.23904, 2026.
+\bibitem{rrsi} P. Xia et al. RRSI: Regularized Recursive Self-Improvement of
+Agent Harnesses. arXiv:2609.24972, 2026.
+\bibitem{evoskill} S. Alzubi et al. EvoSkill: Automated Skill Discovery for
+Multi-Agent Systems. arXiv:2603.02766, 2026.
 \end{thebibliography}
 
 \end{document}

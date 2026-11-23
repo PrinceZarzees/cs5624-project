@@ -1,0 +1,440 @@
+{
+  "task": "cycle_detection",
+  "condition": "hidden",
+  "k": 5,
+  "seed": 1,
+  "best_it": 2,
+  "best_val_acc": 0.62,
+  "final_statement": "(not yet stated)",
+  "val_curve": [
+    0.51,
+    0.62,
+    0.0
+  ],
+  "statements": [
+    "(not yet stated)",
+    "(not yet stated)",
+    "Output \"YES\" if the graph has more than n-1 edges (i.e., contains a cycle), otherwise \"NO\". This holds for undirected graphs: a connected graph with m > n-1 has a cycle; even disconnected, m > n-1 implies at least one component has a cycle."
+  ],
+  "tokens": {
+    "prompt": 85799,
+    "completion": 25070
+  },
+  "statement_judge": "EQUIVALENT",
+  "test": {
+    "test_small": {
+      "n": 40,
+      "accuracy": 0.9,
+      "verdicts": {
+        "AC": 36,
+        "WA": 4
+      },
+      "by_bucket": {
+        "small": {
+          "n": 29,
+          "acc": 0.931
+        },
+        "tiny": {
+          "n": 11,
+          "acc": 0.8182
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "components": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "dense": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "er": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "grid": {
+          "n": 4,
+          "acc": 0.5
+        },
+        "path_like": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "powerlaw": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "regular": {
+          "n": 4,
+          "acc": 0.75
+        },
+        "tree": {
+          "n": 4,
+          "acc": 1.0
+        },
+        "ws": {
+          "n": 4,
+          "acc": 1.0
+        }
+      },
+      "by_density": {
+        "dense": {
+          "n": 10,
+          "acc": 1.0
+        },
+        "medium": {
+          "n": 10,
+          "acc": 0.9
+        },
+        "sparse": {
+          "n": 20,
+          "acc": 0.85
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 24,
+          "acc": 0.875
+        },
+        "true": {
+          "n": 16,
+          "acc": 0.9375
+        }
+      },
+      "max_cpu_s": 0.0081,
+      "median_cpu_s": 0.0049,
+      "invariance": {
+        "tried": 5,
+        "failed": 0
+      }
+    },
+    "test_medium": {
+      "n": 30,
+      "accuracy": 0.7667,
+      "verdicts": {
+        "WA": 7,
+        "AC": 23
+      },
+      "by_bucket": {
+        "medium": {
+          "n": 30,
+          "acc": 0.7667
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "components": {
+          "n": 3,
+          "acc": 0.3333
+        },
+        "dense": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "er": {
+          "n": 3,
+          "acc": 0.6667
+        },
+        "grid": {
+          "n": 3,
+          "acc": 0.3333
+        },
+        "path_like": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "powerlaw": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "regular": {
+          "n": 3,
+          "acc": 0.6667
+        },
+        "tree": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "ws": {
+          "n": 3,
+          "acc": 0.6667
+        }
+      },
+      "by_density": {
+        "dense": {
+          "n": 10,
+          "acc": 0.9
+        },
+        "medium": {
+          "n": 10,
+          "acc": 0.8
+        },
+        "sparse": {
+          "n": 10,
+          "acc": 0.6
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 18,
+          "acc": 0.7778
+        },
+        "true": {
+          "n": 12,
+          "acc": 0.75
+        }
+      },
+      "max_cpu_s": 0.0054,
+      "median_cpu_s": 0.0049499999999999995,
+      "invariance": {
+        "tried": 5,
+        "failed": 1
+      }
+    },
+    "test_large": {
+      "n": 30,
+      "accuracy": 0.8333,
+      "verdicts": {
+        "WA": 5,
+        "AC": 25
+      },
+      "by_bucket": {
+        "large": {
+          "n": 30,
+          "acc": 0.8333
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "components": {
+          "n": 3,
+          "acc": 0.6667
+        },
+        "dense": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "er": {
+          "n": 3,
+          "acc": 0.3333
+        },
+        "grid": {
+          "n": 3,
+          "acc": 0.6667
+        },
+        "path_like": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "powerlaw": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "regular": {
+          "n": 3,
+          "acc": 0.6667
+        },
+        "tree": {
+          "n": 3,
+          "acc": 1.0
+        },
+        "ws": {
+          "n": 3,
+          "acc": 1.0
+        }
+      },
+      "by_density": {
+        "dense": {
+          "n": 10,
+          "acc": 0.8
+        },
+        "medium": {
+          "n": 10,
+          "acc": 0.9
+        },
+        "sparse": {
+          "n": 10,
+          "acc": 0.8
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 18,
+          "acc": 0.8889
+        },
+        "true": {
+          "n": 12,
+          "acc": 0.75
+        }
+      },
+      "max_cpu_s": 0.0082,
+      "median_cpu_s": 0.005,
+      "invariance": {
+        "tried": 5,
+        "failed": 1
+      }
+    },
+    "test_xl": {
+      "n": 20,
+      "accuracy": 0.85,
+      "verdicts": {
+        "WA": 3,
+        "AC": 17
+      },
+      "by_bucket": {
+        "xl": {
+          "n": 20,
+          "acc": 0.85
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 2,
+          "acc": 1.0
+        },
+        "components": {
+          "n": 2,
+          "acc": 1.0
+        },
+        "er": {
+          "n": 4,
+          "acc": 0.5
+        },
+        "grid": {
+          "n": 2,
+          "acc": 1.0
+        },
+        "path_like": {
+          "n": 2,
+          "acc": 1.0
+        },
+        "powerlaw": {
+          "n": 2,
+          "acc": 1.0
+        },
+        "regular": {
+          "n": 2,
+          "acc": 0.5
+        },
+        "tree": {
+          "n": 2,
+          "acc": 1.0
+        },
+        "ws": {
+          "n": 2,
+          "acc": 1.0
+        }
+      },
+      "by_density": {
+        "medium": {
+          "n": 10,
+          "acc": 1.0
+        },
+        "sparse": {
+          "n": 10,
+          "acc": 0.7
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 10,
+          "acc": 0.9
+        },
+        "true": {
+          "n": 10,
+          "acc": 0.8
+        }
+      },
+      "max_cpu_s": 0.0082,
+      "median_cpu_s": 0.005,
+      "invariance": {
+        "tried": 5,
+        "failed": 1
+      }
+    },
+    "test_stress": {
+      "n": 10,
+      "accuracy": 0.6,
+      "verdicts": {
+        "AC": 6,
+        "WA": 4
+      },
+      "by_bucket": {
+        "stress": {
+          "n": 10,
+          "acc": 0.6
+        }
+      },
+      "by_family": {
+        "ba": {
+          "n": 1,
+          "acc": 1.0
+        },
+        "components": {
+          "n": 1,
+          "acc": 0.0
+        },
+        "er": {
+          "n": 2,
+          "acc": 0.5
+        },
+        "grid": {
+          "n": 1,
+          "acc": 0.0
+        },
+        "path_like": {
+          "n": 1,
+          "acc": 1.0
+        },
+        "powerlaw": {
+          "n": 1,
+          "acc": 1.0
+        },
+        "regular": {
+          "n": 1,
+          "acc": 1.0
+        },
+        "tree": {
+          "n": 1,
+          "acc": 1.0
+        },
+        "ws": {
+          "n": 1,
+          "acc": 0.0
+        }
+      },
+      "by_density": {
+        "sparse": {
+          "n": 10,
+          "acc": 0.6
+        }
+      },
+      "by_seen_family": {
+        "false": {
+          "n": 5,
+          "acc": 0.6
+        },
+        "true": {
+          "n": 5,
+          "acc": 0.6
+        }
+      },
+      "max_cpu_s": 0.013,
+      "median_cpu_s": 0.0102,
+      "invariance": {
+        "tried": 5,
+        "failed": 2
+      }
+    }
+  }
+}

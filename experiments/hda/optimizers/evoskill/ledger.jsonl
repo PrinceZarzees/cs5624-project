@@ -1,0 +1,5 @@
+{"tag": "evo1", "n": 20, "mean": 0.89, "hda_llm_calls": 231, "hda_prompt_tokens": 1392983, "hda_completion_tokens": 226687, "wall_s": 6546.5}
+{"tag": "evo2", "n": 20, "mean": 0.89, "hda_llm_calls": 231, "hda_prompt_tokens": 1392983, "hda_completion_tokens": 226687, "wall_s": 6546.5}
+{"tag": "evo3", "n": 20, "mean": 0.89, "hda_llm_calls": 231, "hda_prompt_tokens": 1392983, "hda_completion_tokens": 226687, "wall_s": 6546.5}
+{"tag": "evo4", "n": 20, "mean": 0.89, "hda_llm_calls": 231, "hda_prompt_tokens": 1392983, "hda_completion_tokens": 226687, "wall_s": 6546.5}
+{"tag": "recheck", "n": 40, "mean": 0.8169, "hda_llm_calls": 440, "hda_prompt_tokens": 2722068, "hda_completion_tokens": 540122, "wall_s": 19269.7}

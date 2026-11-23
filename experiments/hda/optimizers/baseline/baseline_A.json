@@ -1,0 +1,35 @@
+{
+  "overall": 0.8295833333333333,
+  "per_instance": {
+    "shortest_path|given": 1.0,
+    "shortest_path|hidden": 0.975,
+    "reachability|given": 1.0,
+    "reachability|hidden": 0.9583333333333334,
+    "connected_components|given": 1.0,
+    "connected_components|hidden": 0.7,
+    "cycle_detection|given": 1.0,
+    "cycle_detection|hidden": 0.7,
+    "diameter|given": 0.9416666666666667,
+    "diameter|hidden": 0.30833333333333335,
+    "common_neighbors|given": 1.0,
+    "common_neighbors|hidden": 0.7333333333333333,
+    "triangle_count|given": 1.0,
+    "triangle_count|hidden": 0.6666666666666666,
+    "bipartite_check|given": 1.0,
+    "bipartite_check|hidden": 0.8333333333333334,
+    "mst_weight|given": 1.0,
+    "mst_weight|hidden": 0.475,
+    "max_flow|given": 1.0,
+    "max_flow|hidden": 0.3
+  },
+  "seed_means": {
+    "200": 0.85875,
+    "201": 0.76875,
+    "202": 0.86125
+  },
+  "std_across_instances": 0.23010376584392433,
+  "n": 60,
+  "tokens_prompt": 4213032,
+  "tokens_completion": 837442,
+  "llm_calls": 682
+}

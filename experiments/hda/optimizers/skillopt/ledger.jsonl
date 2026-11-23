@@ -1,0 +1,7 @@
+{"tag": "step1", "n": 20, "mean": 0.825, "hda_llm_calls": 231, "hda_prompt_tokens": 1417307, "hda_completion_tokens": 300906, "wall_s": 7720.1}
+{"tag": "inc2", "n": 20, "mean": 0.825, "hda_llm_calls": 231, "hda_prompt_tokens": 1417307, "hda_completion_tokens": 300906, "wall_s": 7720.1}
+{"tag": "step2", "n": 20, "mean": 0.825, "hda_llm_calls": 231, "hda_prompt_tokens": 1417307, "hda_completion_tokens": 300906, "wall_s": 7720.1}
+{"tag": "inc3", "n": 20, "mean": 0.825, "hda_llm_calls": 231, "hda_prompt_tokens": 1417307, "hda_completion_tokens": 300906, "wall_s": 7720.1}
+{"tag": "step3", "n": 20, "mean": 0.825, "hda_llm_calls": 231, "hda_prompt_tokens": 1417307, "hda_completion_tokens": 300906, "wall_s": 7720.1}
+{"tag": "inc4", "n": 20, "mean": 0.825, "hda_llm_calls": 231, "hda_prompt_tokens": 1417307, "hda_completion_tokens": 300906, "wall_s": 7720.1}
+{"tag": "recheck", "n": 40, "mean": 0.7481, "hda_llm_calls": 470, "hda_prompt_tokens": 2980663, "hda_completion_tokens": 648070, "wall_s": 24855.8}

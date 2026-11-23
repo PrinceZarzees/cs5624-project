@@ -1,0 +1,2 @@
+{"tag": "step1", "n": 2, "mean": 0.75, "hda_llm_calls": 5, "hda_prompt_tokens": 25466, "hda_completion_tokens": 4869, "wall_s": 352.5}
+{"tag": "recheck", "n": 1, "mean": 1.0, "hda_llm_calls": 4, "hda_prompt_tokens": 24014, "hda_completion_tokens": 1682, "wall_s": 169.9}

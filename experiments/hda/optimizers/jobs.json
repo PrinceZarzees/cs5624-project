@@ -1,0 +1,30 @@
+{
+  "skillopt": {
+    "cluster": "falcon",
+    "job": "926720",
+    "elapsed_s": 3984,
+    "gpus": 1,
+    "cpus": 16
+  },
+  "meta_harness": {
+    "cluster": "falcon",
+    "job": "926721",
+    "elapsed_s": 3154,
+    "gpus": 1,
+    "cpus": 16
+  },
+  "evoskill": {
+    "cluster": "falcon",
+    "job": "926722",
+    "elapsed_s": 2781,
+    "gpus": 1,
+    "cpus": 16
+  },
+  "final_eval_unoptimized": {
+    "cluster": "falcon",
+    "job": "926780",
+    "elapsed_s": 3269,
+    "gpus": 1,
+    "cpus": 16
+  }
+}

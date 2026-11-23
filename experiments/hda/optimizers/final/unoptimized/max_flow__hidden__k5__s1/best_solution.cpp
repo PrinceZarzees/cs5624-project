@@ -1,0 +1,73 @@
+// ---------------------------------------------------------------------------
+// HDA graph-loading template (given verbatim to the Harness Developing Agent).
+// Input format (stdin):
+//   line 1 : n m directed weighted      (directed, weighted are 0/1)
+//   next m : u v        (weighted == 0)   or   u v w   (weighted == 1)
+//            nodes are 0 .. n-1, no self-loops, no duplicate edges
+//            (for directed graphs u->v and v->u may both appear)
+//   last   : k q1 q2 ... qk               (k = NUMBER of query arguments; not a type code)
+// Output (stdout): exactly one line holding the answer.
+// Rules: C++17, standard library only, no file I/O, no threads, single file.
+// ---------------------------------------------------------------------------
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Edge { int u, v; long long w; };
+
+struct Graph {
+    int n = 0;
+    long long m = 0;
+    bool directed = false, weighted = false;
+    vector<Edge> edges;          // edge list exactly as read
+    int query_k = 0;             // number of query arguments (k on the last line)
+    vector<long long> query;     // query arguments q1..qk (may be empty)
+};
+
+static Graph read_graph() {
+    Graph g;
+    int d = 0, w = 0;
+    if (!(cin >> g.n >> g.m >> d >> w)) return g;
+    g.directed = d; g.weighted = w;
+    g.edges.resize(g.m);
+    for (auto &e : g.edges) {
+        cin >> e.u >> e.v;
+        e.w = 1;
+        if (g.weighted) cin >> e.w;
+    }
+    int k = 0;
+    if (cin >> k) { g.query_k = k; g.query.resize(k); for (auto &q : g.query) cin >> q; }
+    return g;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    Graph g = read_graph();
+    if (g.query_k < 2) {
+        cout << 0 << "\n";
+        return 0;
+    }
+    int s = g.query[0], t = g.query[1];
+    
+    vector<long long> dist(g.n, LLONG_MAX);
+    dist[s] = 0;
+    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<>> pq;
+    pq.push({0, s});
+    
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d > dist[u]) continue;
+        for (const auto &e : g.edges) {
+            if (e.u == u) {
+                long long new_dist = d + e.w;
+                if (new_dist < dist[e.v]) {
+                    dist[e.v] = new_dist;
+                    pq.push({new_dist, e.v});
+                }
+            }
+        }
+    }
+    
+    cout << (dist[t] == LLONG_MAX ? -1 : dist[t]) << "\n";
+    return 0;
+}

@@ -19,7 +19,10 @@ import argparse, json, os, random, re, time
 from dataclasses import dataclass, field
 from pathlib import Path
 from .tasks import TASKS
-from .prompts import SYSTEM, STATEMENT_GIVEN, STATEMENT_HIDDEN, EXAMPLES, ITERATION, FEEDBACK, FEEDBACK_Q, JUDGE
+from .prompts import (SYSTEM, SYSTEM_NO_COMPILER, STATEMENT_GIVEN, STATEMENT_HIDDEN,
+                      STATEMENT_HIDDEN_NO_COMPILER, EXAMPLES, EXAMPLES_NO_COMPILER,
+                      ITERATION, ITERATION_NO_COMPILER, FEEDBACK, FEEDBACK_Q, JUDGE,
+                      STRATEGY_NOTE, HIDDEN_NOTE, ITERATION_NOTE)
 from .sandbox import compile_cpp, run_binary, run_capture
 from .policy import check_source
 from .evaluate import load_split, evaluate_exe, evaluate_exe_quality
@@ -93,6 +96,7 @@ class RunConfig:
     out: str = "runs/hda/debug"
     val_limit: int | None = None
     feedback: str = "aggregate"      # aggregate | none
+    no_compiler: bool = False        # ablation: no compile/test/run/stress tools
     test_splits: list = field(default_factory=lambda: ["test_small", "test_medium", "test_large", "test_xl", "test_stress"])
 
 
@@ -125,17 +129,27 @@ def run(cfg: RunConfig, client, judge_client=None):
         cur = examples[-len(new):] if new else []
         blocks = "\n".join(f"Example {i+1}:\n```input\n{show_input(e['input'])}```\nExpected output: {e['output']}\n"
                            for i, e in enumerate(cur))
-        sys_msg = SYSTEM.replace("{template}", TEMPLATE)
-        user = (STATEMENT_GIVEN.format(statement=task.statement) if cfg.condition == "given" else STATEMENT_HIDDEN)
-        user += EXAMPLES.format(k=len(new), total=len(examples), blocks=blocks)
+        system_text = SYSTEM_NO_COMPILER if cfg.no_compiler else SYSTEM
+        sys_msg = system_text.replace("{template}", TEMPLATE)
+        if STRATEGY_NOTE:
+            sys_msg += "\n\nStrategy notes:\n" + STRATEGY_NOTE.strip()
+        hidden_text = STATEMENT_HIDDEN_NO_COMPILER if cfg.no_compiler else STATEMENT_HIDDEN
+        user = (STATEMENT_GIVEN.format(statement=task.statement) if cfg.condition == "given" else hidden_text)
+        if cfg.condition == "hidden" and HIDDEN_NOTE:
+            user += "\n\n" + HIDDEN_NOTE.strip()
+        examples_text = EXAMPLES_NO_COMPILER if cfg.no_compiler else EXAMPLES
+        user += examples_text.format(k=len(new), total=len(examples), blocks=blocks)
         fb = history[-1]["feedback"] if history and cfg.feedback == "aggregate" else "This is the first iteration." if not history else "(no feedback)"
         if best["it"] > 0:
             best_block = (f"Current best program (validation accuracy {max(best['acc'], 0.0):.3f}):\n"
                           f"```cpp\n{best['code']}\n```")
         else:
             best_block = "No valid program yet."
-        user += ITERATION.format(it=it, n_iter=cfg.n_iter, feedback=fb,
-                                 best_block=best_block, statement=statement, steps=cfg.steps)
+        iteration_text = ITERATION_NO_COMPILER if cfg.no_compiler else ITERATION
+        user += iteration_text.format(it=it, n_iter=cfg.n_iter, feedback=fb,
+                                      best_block=best_block, statement=statement, steps=cfg.steps)
+        if ITERATION_NOTE:
+            user += "\n" + ITERATION_NOTE.strip()
         if cfg.condition == "hidden" and task.statement in user:
             raise RuntimeError("hidden prompt leaked the problem statement")
         msgs = [dict(role="system", content=sys_msg), dict(role="user", content=user)]
@@ -164,7 +178,7 @@ def run(cfg: RunConfig, client, judge_client=None):
                         dict(role="user", content=obs + f"\n\nCurrent statement: {statement}\n"
                              f"Current program:\n```cpp\n(no code yet)\n```\n({cfg.steps - step} steps left.)")]
                 continue
-            if act == "submit" and step < cfg.steps:
+            if act == "submit" and step < cfg.steps and not cfg.no_compiler:
                 ok, clog, _ = compile_cpp(code, out / f"it{it}" / f"pre_submit")
                 if not ok:
                     obs = ("Your submission does not compile and was not submitted. Fix these errors and "
@@ -176,7 +190,8 @@ def run(cfg: RunConfig, client, judge_client=None):
                     continue
             if act == "submit" or step == cfg.steps:
                 submitted = code; break
-            obs = tool(act, text, code, examples, out / f"it{it}", log, it, step, task=cfg.task)
+            obs = tool(act, text, code, examples, out / f"it{it}", log, it, step,
+                       task=cfg.task, no_compiler=cfg.no_compiler)
             # Keep the prompt bounded: drop older replies, keep only the current
             # program, statement and the latest tool result.
             state = (f"\n\nCurrent statement: {statement}\nCurrent program:\n```cpp\n"
@@ -195,7 +210,8 @@ def run(cfg: RunConfig, client, judge_client=None):
             policy=res["policy"], verdicts=res.get("summary", {}).get("verdicts"))
     # ---- final harness and test evaluation
     (out / "best_solution.cpp").write_text(best["code"])
-    final = dict(task=cfg.task, condition=cfg.condition, k=cfg.k, seed=cfg.seed, best_it=best["it"],
+    final = dict(task=cfg.task, condition=cfg.condition, k=cfg.k, seed=cfg.seed,
+                 no_compiler=cfg.no_compiler, best_it=best["it"],
                  best_val_acc=best["acc"], final_statement=best.get("statement", statement),
                  val_curve=[h["acc"] for h in history], statements=[h["statement"] for h in history], tokens=tokens)
     if judge_client and cfg.condition == "hidden":
@@ -219,13 +235,18 @@ def run(cfg: RunConfig, client, judge_client=None):
     return final
 
 
-def tool(act, text, code, examples, wd, log, it, step, task=None):
+def tool(act, text, code, examples, wd, log, it, step, task=None, no_compiler=False):
+    if no_compiler and act in ("compile", "test", "run", "stress"):
+        return ("Compiler tools are disabled in this run. Write the full program and call "
+                "<action>submit</action>.")
     current_code = last_block(text, "cpp")
     if act in ("compile", "test", "run", "stress") and not current_code:
         return ("No ```cpp block in this reply. You must include the FULL program in a ```cpp block in the same "
                 "reply as the action; a bare action is invalid and older code is not reused.")
     if act == "read":
         if step > 2:
+            if no_compiler:
+                return "You have read enough. Write the full ```cpp program now and call <action>submit</action>."
             return ("You have read enough. Write the full ```cpp program now and call <action>test</action> "
                     "or <action>compile</action>.")
         rel = (last_block(text, "input") or "").strip().splitlines()[0:1]
@@ -241,6 +262,8 @@ def tool(act, text, code, examples, wd, log, it, step, task=None):
             return f"No such file: {rel}"
         return path.read_text()[:8000]
     if act not in ("compile", "test", "run", "stress"):
+        if no_compiler:
+            return "No valid action found. Use <action>read</action> or <action>submit</action>."
         return "No valid action found. Use <action>compile</action>, <action>test</action>, <action>run</action>, <action>read</action>, <action>stress</action> or <action>submit</action>."
     if not code:
         return "No ```cpp block found yet. Write the full program in a ```cpp block."
@@ -312,8 +335,13 @@ def score_submission(code, examples, val, data, wd, cfg, log, it):
     if pol or not ok:
         reason = pol if pol else ["compile error"]
         log("submission", it=it, ok=False, policy=pol, compile_log=None if ok else clog)
-        fbk = (f"Your submission was REJECTED (score 0). Policy: {pol or 'ok'}. "
-               + ("" if ok else f"Compiler output:\n{clog[-1500:]}"))
+        if ok:
+            detail = ""
+        elif cfg.no_compiler:
+            detail = "Compilation failed; compiler diagnostics are disabled in this run."
+        else:
+            detail = f"Compiler output:\n{clog[-1500:]}"
+        fbk = f"Your submission was REJECTED (score 0). Policy: {pol or 'ok'}. {detail}"
         return dict(acc=0.0, policy=reason, feedback=fbk)
     if task.objective in ("max", "min"):
         rows, s = evaluate_exe_quality(exe, val, data, cfg.task, permutation_check=5, seed=cfg.seed + it)
@@ -361,11 +389,13 @@ def main():
     ap.add_argument("--judge-model", default=None, help="defaults to --model")
     ap.add_argument("--feedback", default="aggregate", choices=["aggregate", "none"])
     ap.add_argument("--test-splits", nargs="*", default=None)
+    ap.add_argument("--no-compiler", action="store_true",
+                    help="ablation: disable compile/test/run/stress tools and compiler diagnostics")
     a = ap.parse_args()
     client = OpenAIClient(a.model, a.base_url, a.temperature, a.max_tokens, a.reasoning_effort)
     judge = OpenAIClient(a.judge_model or a.model, a.base_url, 0.0, 2000, "low")
     cfg = RunConfig(task=a.task, condition=a.condition, k=a.k, n_iter=a.n_iter, steps=a.steps, seed=a.seed,
-                    data=a.data, out=a.out, feedback=a.feedback)
+                    data=a.data, out=a.out, feedback=a.feedback, no_compiler=a.no_compiler)
     if a.test_splits is not None:
         cfg.test_splits = a.test_splits
     print(json.dumps(run(cfg, client, judge), indent=2)[:3000])

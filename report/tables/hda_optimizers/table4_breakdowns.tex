@@ -1,0 +1,28 @@
+\begin{tabular}{llllr}
+\toprule
+Split & Condition & View & Bucket & Acc. \\
+\midrule
+test small & given & by bucket & small & 0.980 \\
+test small & given & by bucket & tiny & 1.000 \\
+test small & given & by density & dense & 0.980 \\
+test small & given & by density & medium & 0.973 \\
+test small & given & by density & sparse & 0.990 \\
+test small & given & by seen family & false & 0.975 \\
+test small & given & by seen family & true & 0.996 \\
+test small & hidden & by bucket & small & 0.583 \\
+test small & hidden & by bucket & tiny & 0.591 \\
+test small & hidden & by density & dense & 0.567 \\
+test small & hidden & by density & medium & 0.553 \\
+test small & hidden & by density & sparse & 0.608 \\
+test small & hidden & by seen family & false & 0.579 \\
+test small & hidden & by seen family & true & 0.592 \\
+test stress & given & by bucket & stress & 0.957 \\
+test stress & given & by density & sparse & 0.957 \\
+test stress & given & by seen family & false & 0.940 \\
+test stress & given & by seen family & true & 0.973 \\
+test stress & hidden & by bucket & stress & 0.580 \\
+test stress & hidden & by density & sparse & 0.580 \\
+test stress & hidden & by seen family & false & 0.553 \\
+test stress & hidden & by seen family & true & 0.607 \\
+\bottomrule
+\end{tabular}

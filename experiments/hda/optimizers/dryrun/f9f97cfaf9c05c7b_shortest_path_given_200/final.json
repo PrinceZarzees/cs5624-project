@@ -1,0 +1,20 @@
+{
+  "task": "shortest_path",
+  "condition": "given",
+  "k": 5,
+  "seed": 200,
+  "best_it": 1,
+  "best_val_acc": 1.0,
+  "final_statement": "Given an undirected graph with positive integer edge weights and two nodes s and t. The query line is `2 s t`: k=2 is the NUMBER of arguments (not a type code), then s and t. Print the total weight of a minimum-weight path from s to t, or -1 if t is unreachable from s.",
+  "val_curve": [
+    1.0
+  ],
+  "statements": [
+    "Given an undirected graph with positive integer edge weights and two nodes s and t. The query line is `2 s t`: k=2 is the NUMBER of arguments (not a type code), then s and t. Print the total weight of a minimum-weight path from s to t, or -1 if t is unreachable from s."
+  ],
+  "tokens": {
+    "prompt": 18065,
+    "completion": 1656
+  },
+  "test": {}
+}
