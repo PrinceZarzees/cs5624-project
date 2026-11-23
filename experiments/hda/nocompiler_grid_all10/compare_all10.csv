@@ -1,0 +1,121 @@
+arm,task,condition,seed,val_acc,judge,no_compiler,tokens_prompt,tokens_completion,failed_submissions,compile_fail_submissions,tool_events,actions,test_small,test_medium,test_large,test_xl,test_stress
+on,shortest_path,given,0,1.0,,False,53463,2865,0,0,3,compile:1 submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,shortest_path,given,0,1.0,,True,15102,2871,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,shortest_path,given,1,1.0,,False,48994,2803,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,shortest_path,given,1,1.0,,True,15529,2836,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,shortest_path,given,2,1.0,,False,54040,2655,0,0,3,compile:1 submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,shortest_path,given,2,1.0,,True,15241,2706,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,shortest_path,hidden,0,0.975,WRONG,False,169408,35398,0,0,12,None:4 submit:2 test:14,0.975,0.9,0.9667,0.9,1.0
+off,shortest_path,hidden,0,1.0,EQUIVALENT,True,17973,2793,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,shortest_path,hidden,1,0.0,WRONG,False,139952,32812,0,0,7,None:5 submit:2 test:10,0.025,0.0333,0.0,0.05,0.0
+off,shortest_path,hidden,1,1.0,PARTIAL,True,16206,2863,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,shortest_path,hidden,2,1.0,PARTIAL,False,37642,2915,0,0,2,submit:3 test:2,1.0,1.0,1.0,1.0,1.0
+off,shortest_path,hidden,2,1.0,PARTIAL,True,28592,6303,0,0,0,None:1 submit:3,1.0,1.0,1.0,1.0,1.0
+on,reachability,given,0,1.0,,False,55465,5084,0,0,4,compile:1 submit:3 test:6,1.0,1.0,1.0,1.0,1.0
+off,reachability,given,0,1.0,,True,13315,2735,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,reachability,given,1,1.0,,False,56598,5108,0,0,4,compile:1 submit:3 test:6,1.0,1.0,1.0,1.0,1.0
+off,reachability,given,1,1.0,,True,13707,2445,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,reachability,given,2,1.0,,False,54804,3641,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,reachability,given,2,1.0,,True,16768,2537,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,reachability,hidden,0,1.0,EQUIVALENT,False,42512,6785,0,0,3,None:1 submit:3 test:3,1.0,1.0,1.0,1.0,1.0
+off,reachability,hidden,0,1.0,EQUIVALENT,True,22577,6729,0,0,0,None:1 submit:3,1.0,1.0,1.0,1.0,1.0
+on,reachability,hidden,1,0.64,WRONG,False,102380,22465,1,1,12,submit:2 test:13,0.725,0.8667,0.8333,0.7,0.4
+off,reachability,hidden,1,1.0,WRONG,True,28943,15662,0,0,0,None:2 submit:3,1.0,1.0,1.0,1.0,1.0
+on,reachability,hidden,2,1.0,EQUIVALENT,False,23052,2784,0,0,1,submit:3 test:1,1.0,1.0,1.0,1.0,1.0
+off,reachability,hidden,2,1.0,EQUIVALENT,True,15335,2713,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,connected_components,given,0,1.0,,False,55433,3773,0,0,4,submit:3 test:7,1.0,1.0,1.0,1.0,1.0
+off,connected_components,given,0,0.0,,True,13235,2923,3,3,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,connected_components,given,1,1.0,,False,99389,13268,1,1,13,compile:6 submit:1 test:12,1.0,1.0,1.0,1.0,1.0
+off,connected_components,given,1,0.0,,True,10920,2897,3,3,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,connected_components,given,2,1.0,,False,94850,13632,1,1,13,compile:6 submit:1 test:12,1.0,1.0,1.0,1.0,1.0
+off,connected_components,given,2,0.0,,True,10511,2831,3,3,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,connected_components,hidden,0,0.0,WRONG,False,122298,21606,0,0,7,None:2 submit:2 test:14,0.0,0.0,0.0,0.0,0.0
+off,connected_components,hidden,0,0.0,WRONG,True,14216,2748,0,0,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,connected_components,hidden,1,1.0,EQUIVALENT,False,37007,8254,0,0,2,None:1 submit:3 test:2,1.0,1.0,1.0,1.0,1.0
+off,connected_components,hidden,1,0.0,WRONG,True,13909,5113,0,0,0,submit:3,0.05,0.0,0.0,0.0,0.0
+on,connected_components,hidden,2,1.0,WRONG,False,34571,5129,0,0,3,submit:3 test:3,1.0,1.0,1.0,1.0,1.0
+off,connected_components,hidden,2,0.0,WRONG,True,13239,5774,0,0,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,cycle_detection,given,0,1.0,,False,58251,8903,0,0,6,compile:1 submit:4 test:8,1.0,1.0,1.0,1.0,1.0
+off,cycle_detection,given,0,1.0,,True,9382,2771,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,cycle_detection,given,1,1.0,,False,33146,3504,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,cycle_detection,given,1,1.0,,True,9411,3008,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,cycle_detection,given,2,1.0,,False,41454,6736,0,0,4,submit:3 test:6,1.0,1.0,1.0,1.0,1.0
+off,cycle_detection,given,2,1.0,,True,9794,2721,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,cycle_detection,hidden,0,0.4,WRONG,False,86502,25827,0,0,6,None:2 submit:2 test:12,0.4,0.5333,0.5,0.5,0.7
+off,cycle_detection,hidden,0,0.4,WRONG,True,16045,9859,0,0,0,None:1 submit:3,0.4,0.5333,0.5,0.5,0.4
+on,cycle_detection,hidden,1,0.62,EQUIVALENT,False,85799,25070,1,1,10,None:2 submit:2 test:12,0.9,0.7667,0.8333,0.85,0.6
+off,cycle_detection,hidden,1,0.3,WRONG,True,16209,6788,0,0,0,None:1 submit:3,0.4,0.5333,0.5,0.5,0.7
+on,cycle_detection,hidden,2,0.68,WRONG,False,61316,13973,0,0,7,submit:3 test:8,0.875,0.9333,0.8333,0.75,0.8
+off,cycle_detection,hidden,2,0.105,WRONG,True,17545,6900,1,1,0,None:1 submit:3,0.55,0.6,0.4333,0.35,0.5
+on,diameter,given,0,0.7,,False,37456,2909,0,0,3,submit:3 test:5,0.75,0.7333,0.8667,0.75,0.8
+off,diameter,given,0,0.9,,True,10808,3010,0,0,0,submit:3,0.775,0.8,0.8333,0.7,0.8
+on,diameter,given,1,1.0,,False,89282,12746,0,0,9,submit:4 test:11,1.0,1.0,1.0,1.0,1.0
+off,diameter,given,1,0.875,,True,12874,2765,0,0,0,submit:3,0.75,0.7333,0.8667,0.75,0.8
+on,diameter,given,2,0.875,,False,78992,10030,0,0,9,submit:3 test:11,0.75,0.7333,0.8667,0.75,0.8
+off,diameter,given,2,0.875,,True,11449,2781,0,0,0,submit:3,0.75,0.7333,0.8667,0.75,0.8
+on,diameter,hidden,0,0.0,WRONG,False,193530,47898,0,0,15,None:4 compile:1 test:19,0.0,0.0,0.0,0.0,0.0
+off,diameter,hidden,0,0.0,WRONG,True,34945,11972,0,0,0,None:2 submit:3,0.05,0.0,0.0,0.0,0.0
+on,diameter,hidden,1,0.03,WRONG,False,132751,44674,0,0,14,None:2 submit:2 test:17,0.05,0.0333,0.0,0.0,0.0
+off,diameter,hidden,1,0.005,WRONG,True,35226,17143,0,0,0,None:3 submit:3,0.025,0.0,0.0,0.0,0.0
+on,diameter,hidden,2,0.01,WRONG,False,114676,35618,0,0,9,None:5 submit:1 test:13,0.025,0.0667,0.0,0.0,0.0
+off,diameter,hidden,2,0.0,WRONG,True,19509,6944,0,0,0,None:1 submit:3,0.0,0.0,0.0,0.0,0.0
+on,common_neighbors,given,0,1.0,,False,45492,3423,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,common_neighbors,given,0,1.0,,True,13939,2591,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,common_neighbors,given,1,1.0,,False,35684,3233,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,common_neighbors,given,1,1.0,,True,10860,2523,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,common_neighbors,given,2,1.0,,False,46457,3431,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,common_neighbors,given,2,1.0,,True,14222,2613,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,common_neighbors,hidden,0,1.0,EQUIVALENT,False,33869,6088,0,0,3,submit:3 test:3,1.0,1.0,1.0,1.0,1.0
+off,common_neighbors,hidden,0,0.0,WRONG,True,19531,8951,3,3,0,None:1 submit:3,0.0,0.0,0.0,0.0,0.0
+on,common_neighbors,hidden,1,1.0,EQUIVALENT,False,40011,11146,0,0,2,None:2 submit:3 test:2,1.0,1.0,1.0,1.0,1.0
+off,common_neighbors,hidden,1,0.38,WRONG,True,19668,7012,0,0,0,None:1 submit:3,0.65,0.6333,0.5333,0.6,0.6
+on,common_neighbors,hidden,2,1.0,EQUIVALENT,False,35174,3885,0,0,3,submit:3 test:3,1.0,1.0,1.0,1.0,1.0
+off,common_neighbors,hidden,2,1.0,WRONG,True,20663,6488,0,0,0,None:1 submit:3,1.0,1.0,1.0,1.0,1.0
+on,triangle_count,given,0,1.0,,False,42346,5375,0,0,4,submit:3 test:6,1.0,1.0,0.9333,1.0,1.0
+off,triangle_count,given,0,1.0,,True,10877,2832,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,triangle_count,given,1,1.0,,False,46238,4728,0,0,4,submit:3 test:6,1.0,1.0,0.9333,1.0,1.0
+off,triangle_count,given,1,1.0,,True,12057,2890,1,1,0,submit:3,1.0,1.0,0.9,1.0,1.0
+on,triangle_count,given,2,1.0,,False,50789,6485,0,0,4,submit:3 test:6,1.0,1.0,0.9333,1.0,1.0
+off,triangle_count,given,2,1.0,,True,13341,4606,0,0,0,submit:3,1.0,1.0,0.9333,1.0,1.0
+on,triangle_count,hidden,0,0.005,EQUIVALENT,False,131102,32944,0,0,13,None:1 submit:1 test:19,0.025,0.0,0.0,0.0,0.0
+off,triangle_count,hidden,0,0.255,WRONG,True,21496,6693,0,0,0,None:1 submit:3,0.5,0.4333,0.4,0.5,0.6
+on,triangle_count,hidden,1,0.34,EQUIVALENT,False,88524,35602,0,0,5,None:6 submit:2 test:6,0.5,0.4333,0.4,0.5,0.6
+off,triangle_count,hidden,1,0.0,WRONG,True,11200,2547,0,0,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,triangle_count,hidden,2,0.34,WRONG,False,151512,46020,0,0,10,None:6 submit:1 test:15,0.5,0.4333,0.4,0.5,0.6
+off,triangle_count,hidden,2,0.34,WRONG,True,12325,2774,0,0,0,submit:3,0.5,0.4333,0.4,0.5,0.6
+on,bipartite_check,given,0,1.0,,False,38554,3671,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,bipartite_check,given,0,1.0,,True,11394,2943,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,bipartite_check,given,1,1.0,,False,34350,3893,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,bipartite_check,given,1,1.0,,True,9596,2815,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,bipartite_check,given,2,1.0,,False,32953,2865,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,bipartite_check,given,2,1.0,,True,9080,2808,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,bipartite_check,hidden,0,1.0,EQUIVALENT,False,56123,13660,0,0,6,None:1 submit:3 test:7,1.0,1.0,1.0,1.0,1.0
+off,bipartite_check,hidden,0,0.36,WRONG,True,9868,4614,0,0,0,submit:3,0.45,0.4333,0.5667,0.55,0.4
+on,bipartite_check,hidden,1,0.42,WRONG,False,111612,36519,0,0,12,None:3 submit:2 test:13,0.6,0.5333,0.4,0.55,0.9
+off,bipartite_check,hidden,1,0.36,WRONG,True,10204,3000,0,0,0,submit:3,0.475,0.5333,0.6,0.55,0.4
+on,bipartite_check,hidden,2,0.42,WRONG,False,29044,13538,0,0,3,submit:3 test:3,0.5,0.4,0.5333,0.55,0.4
+off,bipartite_check,hidden,2,0.0,WRONG,True,9378,2854,0,0,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,mst_weight,given,0,1.0,,False,41696,3143,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,mst_weight,given,0,1.0,,True,11836,2850,1,1,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,mst_weight,given,1,1.0,,False,53049,3062,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,mst_weight,given,1,1.0,,True,15768,2709,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,mst_weight,given,2,1.0,,False,50708,3106,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,mst_weight,given,2,1.0,,True,15387,3024,0,0,0,submit:3,1.0,1.0,1.0,1.0,1.0
+on,mst_weight,hidden,0,0.17,WRONG,False,225236,57331,0,0,10,None:10 test:14,0.325,0.2,0.1667,0.25,0.3
+off,mst_weight,hidden,0,0.0,WRONG,True,18548,2710,0,0,0,submit:3,0.0,0.0,0.0,0.0,0.0
+on,mst_weight,hidden,1,0.255,WRONG,False,129970,39980,0,0,10,None:5 submit:3 test:10,0.325,0.2,0.1667,0.25,0.3
+off,mst_weight,hidden,1,0.255,WRONG,True,13062,2135,0,0,0,submit:3,0.325,0.2,0.1667,0.25,0.3
+on,mst_weight,hidden,2,0.255,WRONG,False,106535,25731,0,0,7,None:3 submit:2 test:11,0.325,0.2,0.1667,0.25,0.3
+off,mst_weight,hidden,2,0.255,EQUIVALENT,True,82418,34316,1,0,0,None:8 submit:2,0.325,0.2,0.1667,0.25,0.3
+on,max_flow,given,0,1.0,,False,63317,4740,0,0,4,submit:3 test:6,1.0,0.5333,0.2,0.3,0.1
+off,max_flow,given,0,1.0,,True,16897,3395,0,0,0,submit:3,1.0,1.0,1.0,1.0,0.3
+on,max_flow,given,1,1.0,,False,63321,5067,0,0,4,submit:3 test:6,1.0,1.0,1.0,1.0,1.0
+off,max_flow,given,1,1.0,,True,16717,3190,0,0,0,submit:3,1.0,1.0,1.0,1.0,0.3
+on,max_flow,given,2,1.0,,False,56077,3890,0,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0
+off,max_flow,given,2,1.0,,True,16334,3384,0,0,0,submit:3,1.0,1.0,1.0,1.0,0.3
+on,max_flow,hidden,0,1.0,EQUIVALENT,False,86082,13442,0,0,5,None:1 submit:3 test:6,1.0,1.0,1.0,1.0,1.0
+off,max_flow,hidden,0,0.035,WRONG,True,18688,3728,0,0,0,submit:3,0.2,0.1333,0.1,0.2,0.2
+on,max_flow,hidden,1,0.035,WRONG,False,218892,53503,0,0,8,None:11 test:13,0.2,0.1333,0.1,0.2,0.2
+off,max_flow,hidden,1,0.035,EQUIVALENT,True,18230,3321,1,1,0,submit:3,0.2,0.1333,0.1,0.2,0.2
+on,max_flow,hidden,2,0.05,WRONG,False,161552,30644,0,0,8,None:3 submit:2 test:17,0.25,0.2667,0.2333,0.4,0.3
+off,max_flow,hidden,2,0.05,WRONG,True,68005,33280,0,0,0,None:7 submit:3,0.25,0.2667,0.2333,0.4,0.3

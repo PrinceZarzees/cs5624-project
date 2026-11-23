@@ -105,3 +105,8 @@ experiments/hda/optimizers/*.err
 experiments/hda/optimizers/final/**/score/
 experiments/hda/optimizers/final/**/final/
 experiments/hda/optimizers/final/**/error.txt
+experiments/hda/nocompiler*/**/score/
+experiments/hda/nocompiler*/**/final/
+experiments/hda/nocompiler*/**/vllm*.log
+experiments/hda/nocompiler*.out
+experiments/hda/nocompiler*.err

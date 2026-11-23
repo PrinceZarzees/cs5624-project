@@ -1,0 +1,7 @@
+seed,task,condition,val_acc,no_compiler,tokens_prompt,tokens_completion,compile_fail_submissions,tool_events,actions,test_small,test_medium,test_large,test_xl,test_stress,arm
+0,max_flow,given,1.0,False,63317,4740,0,4,submit:3 test:6,1.0,0.5333,0.2,0.3,0.1,on
+0,max_flow,given,1.0,True,16873,3383,0,0,submit:3,1.0,1.0,1.0,1.0,0.3,off
+1,max_flow,given,1.0,False,63321,5067,0,4,submit:3 test:6,1.0,1.0,1.0,1.0,1.0,on
+1,max_flow,given,1.0,True,16900,3598,0,0,submit:3,1.0,1.0,1.0,1.0,1.0,off
+2,max_flow,given,1.0,False,56077,3890,0,3,submit:3 test:5,1.0,1.0,1.0,1.0,1.0,on
+2,max_flow,given,1.0,True,16256,3259,0,0,submit:3,1.0,1.0,1.0,1.0,0.3,off

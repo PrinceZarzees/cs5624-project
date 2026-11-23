@@ -1,0 +1,25 @@
+{
+  "task": "connected_components",
+  "condition": "given",
+  "k": 5,
+  "seed": 0,
+  "no_compiler": true,
+  "best_it": 3,
+  "best_val_acc": 0.0,
+  "final_statement": "Given an undirected graph, print the number of connected components (an isolated node is its own component).",
+  "val_curve": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "statements": [
+    "Given an undirected graph, print the number of connected components (an isolated node is its own component).",
+    "Given an undirected graph, print the number of connected components (an isolated node is its own component).",
+    "Given an undirected graph, print the number of connected components (an isolated node is its own component)."
+  ],
+  "tokens": {
+    "prompt": 13235,
+    "completion": 2923
+  },
+  "test": {}
+}

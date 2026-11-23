@@ -1,0 +1,26 @@
+{
+  "task": "common_neighbors",
+  "condition": "hidden",
+  "k": 5,
+  "seed": 0,
+  "no_compiler": true,
+  "best_it": 3,
+  "best_val_acc": 0.0,
+  "final_statement": "The answer is the number of query pairs (s,t) that are in the same connected component of the undirected graph.",
+  "val_curve": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "statements": [
+    "(not yet stated)",
+    "The answer is the number of query pairs (s,t) that are in the same connected component of the undirected graph.",
+    "The answer is the number of query pairs (s,t) that are in the same connected component of the undirected graph."
+  ],
+  "tokens": {
+    "prompt": 19531,
+    "completion": 8951
+  },
+  "statement_judge": "WRONG",
+  "test": {}
+}

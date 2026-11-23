@@ -43,3 +43,10 @@ The final grid requested 13 tasks (the `hda.grid` default). Only the ten
 phase-1 tasks exist in `data/hda`; the three phase-2 tasks produced `error.txt`
 with no `final.json`, as expected for this phase-1 study. The 60 phase-1 runs
 all completed.
+
+### Compiler-tool ablation
+
+| Job ID | Script | Purpose | Elapsed | Status | Output |
+|---|---|---|---|---|---|
+| 927115 | `run_nocompiler_grid_falcon.sbatch` | pilot: max_flow/given, seeds 0-2, no compiler | 387 s | COMPLETED | `experiments/hda/nocompiler_pilot/max_flow_given` |
+| 927197 | `run_nocompiler_grid_falcon.sbatch` | 10 tasks x given/hidden x seeds 0-2, no compiler | 1190 s | COMPLETED | `experiments/hda/nocompiler_grid_all10` |
