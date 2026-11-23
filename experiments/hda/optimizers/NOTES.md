@@ -61,3 +61,40 @@ No optimizer accepted an edit, so `gepa`, `skillopt`, `meta_harness` and
 runbook, only the `unoptimized` final grid is run; the other four are recorded
 as "unchanged, same as unoptimized". Script:
 `hda_pipeline/scripts/run_final_grid_falcon.sbatch`.
+
+## O4 final outcome (falcon a30, 2026-11-22)
+
+All four optimizers returned the empty prompt: **0 accepted edits**.
+
+| Optimizer | Rounds/calls | Validator rejects | Valid children | Best child |
+|---|---:|---:|---:|---:|
+| GEPA | 8 | 7 | 1 | 0.784 |
+| SkillOpt | 4 | 1 | 3 | 0.825 |
+| Meta-Harness | 4 | 4 | 0 | — |
+| EvoSkill | 4 | 4 | 0 | — |
+
+Rejection reasons across all runs: `reachability` 15, `Dijkstra` 14,
+`shortest path` 13, `connected component` 7, plus one each for
+cycle detection, common neighbors, bipartite, triangle and Kosaraju.
+
+## Noise floor from rerunning the empty prompt
+
+The same empty prompt was rerun by each optimizer job:
+
+- seed 200: baseline 0.859; SkillOpt 0.825; Meta-Harness 0.890; EvoSkill 0.925.
+- seeds 201/202 rechecks: baseline 0.815; SkillOpt 0.748; Meta 0.840; Evo 0.817.
+
+Run-to-run SD is about 0.04-0.06, above the 0.02 acceptance margin. This is the
+main methodological finding: the 20-instance single-seed set cannot resolve a
+small real gain. Correcting the parent from the 3-seed 0.8296 to the seed-200
+0.8588 would not change any decision (0.825 and 0.784 are below both).
+
+## O5/O6/O7
+
+- Final grid: 60 phase-1 runs, seeds 0-2, all test splits. Given 0.983/0.967/
+  0.958/0.960/0.957; hidden 0.584/0.564/0.551/0.573/0.580 on
+  small/medium/large/xl/stress.
+- Cost: 4.87 GPU-h total; see `experiments/hda/optimizers/cost.csv`.
+- Tables: `report/tables/hda_optimizers/`; figures:
+  `report/figures/hda_optimizers/`; standalone loop PDF:
+  `report/hda_optimizer_loop.pdf`.

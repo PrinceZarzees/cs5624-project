@@ -20,7 +20,10 @@
 
 ## Frozen HDA config (`configs/opt_hda.json`)
 
-- Model: Qwen3-4B-Instruct-2507 Q4_K_M (llama.cpp), base URL `127.0.0.1:8002/v1`
+- GPU/O3-O5: Qwen3-4B-Instruct-2507 BF16 (vLLM), model `qwen3-4b`, base URL
+  `127.0.0.1:8011/v1`
+- CPU dry runs: Qwen3-4B-Instruct-2507 Q4_K_M (llama.cpp), base URL
+  `127.0.0.1:8002/v1`
 - k=5, n_iter=3, steps=8, temperature=0.2, max_tokens=4096, context 32768
 - data `data/hda`, optimization seed 200
 - Test evaluation off: pass `--test-splits` with no values (argparse `nargs="*"` → `[]`)

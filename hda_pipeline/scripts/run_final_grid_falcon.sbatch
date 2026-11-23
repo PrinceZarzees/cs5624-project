@@ -25,7 +25,7 @@ mkdir -p "$OUT/final"
   --dtype bfloat16 --max-model-len 32768 --gpu-memory-utilization 0.90 --max-num-seqs 32 \
   --disable-log-requests > "$OUT/final/vllm_${SLURM_JOB_ID}.log" 2>&1 &
 PID=$!
-scripts/final/wait_for_vllm.sh 127.0.0.1 8011 420 || { tail -60 "$OUT/final/vllm_${SLURM_JOB_ID}.log"; exit 1; }
+scripts/final/wait_for_vllm.sh 127.0.0.1 8011 1200 || { tail -60 "$OUT/final/vllm_${SLURM_JOB_ID}.log"; exit 1; }
 cd hda_pipeline
 for P in ${HDA_PROMPTS:-unoptimized}; do
   echo "=== prompt $P ==="

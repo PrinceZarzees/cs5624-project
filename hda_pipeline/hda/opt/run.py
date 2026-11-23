@@ -236,11 +236,15 @@ def main():
     fn = {"gepa":run_gepa,"skillopt":run_skillopt,"meta_harness":run_meta,"evoskill":run_evoskill}[a.optimizer]
     best, best_mean = fn(a, chat, out, {}, parent_rows, parent_mean, base, rng)
     save_candidate(best, out/"best.json")
-    # 3-seed re-check (seeds 201,202; seed 200 comes from the best A score)
-    inst = ([("shortest_path","given",201)]
-            if a.dry_run else [(t,c,s) for t in TASKS for c in ("given","hidden") for s in (201,202)])
-    rows, m, _ = evaluate(best, a.cfg, out, instances=inst, workers=a.workers, tag="recheck")
-    payload = dict(best_fields=best, best_A=best_mean, recheck_mean=m, n=len(rows),
+    # 3-seed re-check (seeds 201,202); skip when no edit was accepted
+    if any(str(v or "").strip() for v in best.values()):
+        inst = ([("shortest_path","given",201)]
+                if a.dry_run else [(t,c,s) for t in TASKS for c in ("given","hidden") for s in (201,202)])
+        rows, m, _ = evaluate(best, a.cfg, out, instances=inst, workers=a.workers, tag="recheck")
+        recheck_n = len(rows)
+    else:
+        m, recheck_n = None, 0
+    payload = dict(best_fields=best, best_A=best_mean, recheck_mean=m, n=recheck_n,
                    proposer_calls=chat.calls, proposer_prompt_tokens=chat.prompt_tokens,
                    proposer_completion_tokens=chat.completion_tokens)
     (out/"final_optimizer.json").write_text(json.dumps(payload,indent=2)+"\n")
