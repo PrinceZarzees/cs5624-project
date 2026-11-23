@@ -113,6 +113,73 @@ Answer with one word: EQUIVALENT (same output on every valid input), PARTIAL (sa
 of it), or WRONG. Then one sentence of justification."""
 
 
+# ---------------------------------------------------------------- no-compiler ablation
+# Same contract and input format, but the interactive compiler loop is removed.
+# The evaluator still compiles the submitted program; the agent gets no
+# compiler, test, run or stress tool and no compiler diagnostics.
+def _derive_no_compiler(text, replacements):
+    out = text
+    for old, new in replacements:
+        assert old in out, f"no-compiler replacement not found: {old[:60]!r}"
+        out = out.replace(old, new)
+    return out
+
+
+SYSTEM_NO_COMPILER = _derive_no_compiler(SYSTEM, [
+    ("""7. Before you submit, call <action>test</action> at least once and fix every compiler error. Do not submit code that
+   does not compile. A submission with a compiler error scores zero.""",
+     """7. The compiler is disabled in this run: you cannot call compile, test, run or stress. Write the complete program
+   carefully and submit it. A submission that does not compile scores zero."""),
+    ("""8. Do not spend more than two steps reading examples. Read at most one `.in` and one `.out`, then write the program.
+   <action>test</action> already shows the expected output for every example.""",
+     """8. The examples are shown in the prompt. Read them carefully, then write the program. No tool can run them for you."""),
+    ("""11. Every <action>compile</action>, <action>test</action>, <action>run</action> or <action>stress</action> reply MUST
+    contain the full ```cpp block in that same reply. A bare action with no code is invalid and will be rejected; the
+    router does not silently reuse an older program.""",
+     """11. Every reply MUST contain the full ```cpp block in that same reply once you have code. A bare action with no code
+    is invalid and will be rejected; the router does not silently reuse an older program."""),
+    ("""Tools. End EVERY reply with exactly one action tag:
+  <action>compile</action>   compile your latest ```cpp block with g++ and return the compiler diagnostics only.
+  <action>test</action>      compile your latest ```cpp block and run it on every example seen so far (verdict + output).
+  <action>run</action>       compile your latest ```cpp block and run it on your own input given in a ```input block.
+  <action>stress</action>    compile your latest ```cpp block and a generator program given in a ```gen block
+                             (C++17, prints one input to stdout); report the solution's CPU time and output.
+  <action>submit</action>    submit your latest ```cpp block for scoring. This ends the iteration; code that does not
+                             compile is rejected.
+
+Compiler loop. You have a real g++ compiler. Each reply is one turn: write the full program in a ```cpp block and
+end with one action. The compiler result comes back as the next user message. Use <action>compile</action> to see
+errors, edit the program, and repeat. Use <action>test</action> to compile and check every example at once. You may
+use up to 8 turns per iteration; do not wait until the last turn to compile.""",
+     """Tools. End EVERY reply with exactly one action tag:
+  <action>submit</action>    submit your latest ```cpp block for scoring. This ends the iteration; code that does not
+                             compile is rejected.
+
+No compiler loop. You have no compiler, no test runner and no execution tool in this run. Each reply is one turn:
+write the full program in a ```cpp block and submit it. There is no compiler feedback before scoring."""),
+])
+
+STATEMENT_HIDDEN_NO_COMPILER = _derive_no_compiler(STATEMENT_HIDDEN, [
+    ("""2. Argue for and against each candidate, checking each one against EVERY example. Try them one at a time: write a
+   small checker/program for a candidate, run it with <action>run</action> or <action>test</action>, and eliminate
+   candidates that disagree with any example.""",
+     """2. Argue for and against each candidate, checking each one by hand against EVERY example, and eliminate
+   candidates that disagree with any example. No compiler or run tool is available."""),
+])
+
+EXAMPLES_NO_COMPILER = _derive_no_compiler(EXAMPLES, [
+    ("""arguments (not a type code); for k=2, query[0] and query[1] are the two nodes. <action>test</action> compiles
+your program and runs all {total} examples seen so far, returning verdict, output and expected output.""",
+     """arguments (not a type code); for k=2, query[0] and query[1] are the two nodes. No compiler or test tool is
+available; read the examples and write the program."""),
+])
+
+ITERATION_NO_COMPILER = _derive_no_compiler(ITERATION, [
+    ("Write or improve the program, compile it, test it on the examples, then <action>submit</action>.",
+     "Write or improve the program, then <action>submit</action>."),
+])
+
+
 # ---------------------------------------------------------------- prompt override
 # The prompt optimizer writes a JSON file with three optional fields. The fixed
 # contract (system rules, tool protocol, input format, task statements) is not

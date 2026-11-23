@@ -28,6 +28,8 @@ def main():
     ap.add_argument("--max-tokens", type=int, default=16000)
     ap.add_argument("--feedback", default="aggregate", choices=["aggregate", "none"])
     ap.add_argument("--parallel", type=int, default=8)
+    ap.add_argument("--no-compiler", action="store_true",
+                    help="ablation: disable compile/test/run/stress tools")
     a = ap.parse_args()
     jobs = [(t, c, s) for t in a.tasks for c in a.conditions for s in a.seeds]
     def one(job):
@@ -39,7 +41,8 @@ def main():
             cl = OpenAIClient(a.model, a.base_url, a.temperature, a.max_tokens, a.reasoning_effort)
             judge = OpenAIClient(a.model, a.base_url, 0.0, 2000, "low")
             return run(RunConfig(task=t, condition=c, k=a.k, n_iter=a.n_iter, steps=a.steps, seed=s,
-                                 data=a.data, out=str(out), feedback=a.feedback), cl, judge)
+                                 data=a.data, out=str(out), feedback=a.feedback,
+                                 no_compiler=a.no_compiler), cl, judge)
         except Exception:
             out.mkdir(parents=True, exist_ok=True)
             (out / "error.txt").write_text(traceback.format_exc())

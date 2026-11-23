@@ -48,3 +48,31 @@ def test_hidden_prompt_omits_statement(tmp_path):
     blob = prompts[0]["system"] + prompts[0]["user"]
     assert TASKS["shortest_path"].statement not in blob
     assert "HIDDEN" in prompts[0]["user"]
+
+
+def test_no_compiler_prompt_and_tool(tmp_path):
+    from hda.prompts import SYSTEM, SYSTEM_NO_COMPILER
+    from hda.agent import tool
+
+    # the default prompt keeps the compiler; the ablation removes every compiler action
+    assert "<action>compile</action>" in SYSTEM
+    assert "<action>compile</action>" not in SYSTEM_NO_COMPILER
+    assert "<action>test</action>" not in SYSTEM_NO_COMPILER
+    assert "compiler is disabled" in SYSTEM_NO_COMPILER.lower()
+
+    out = tool("compile", "```cpp\nint main(){}\n```\n<action>compile</action>", "int main(){}",
+               [], tmp_path, lambda *a, **k: None, 1, 1, no_compiler=True)
+    assert "disabled" in out.lower()
+
+    cfg = RunConfig(task="triangle_count", condition="given", k=2, n_iter=1, steps=2,
+                    data=str(ROOT / "data/pilot"), out=str(tmp_path / "nc"),
+                    test_splits=[], no_compiler=True)
+    replies = [f"```cpp\n{REF}```\n<action>compile</action>", "<action>submit</action>"]
+    final = run(cfg, ScriptedClient(replies))
+    assert final["no_compiler"] is True
+    assert final["val_curve"] == [1.0]
+    prompts = [json.loads(l) for l in open(tmp_path / "nc" / "log.jsonl") if '"prompt"' in l]
+    assert "<action>compile</action>" not in prompts[0]["system"]
+    assert "compiler is disabled" in prompts[0]["system"].lower()
+    kinds = [json.loads(l)["kind"] for l in open(tmp_path / "nc" / "log.jsonl")]
+    assert "tool" not in kinds
